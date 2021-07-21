@@ -1,0 +1,76 @@
+<h4>Endpoint information</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Path params</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ get_name_from_obj(request.scope.endpoint) }}</td>
+      <td>
+        {% if request.path_params %}
+          {% for k, v in request.path_params.items() %}
+            {{ k }}={{ v }}{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+{% macro pprint_vars(variables) %}
+<table>
+  <colgroup>
+    <col class="fastdt-width-20">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, value in variables %}
+      <tr>
+        <td><code>{{ key|pprint }}</code></td>
+        <td><code>{{ value|pprint }}</code></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}
+
+
+<h4>Cookies</h4>
+{% if request.cookies %}
+  {{ pprint_vars(request.cookies.items()) }}
+{% else %}
+  <p>No cookies</p>
+{% endif %}
+
+<h4>Session data</h4>
+{% if session %}
+  {{ pprint_vars(session) }}
+{% else %}
+  <p>No session data</p>
+{% endif %}
+
+<h4>GET data</h4>
+{% if request.query_params %}
+  {{ pprint_vars(request.query_params.multi_items()) }}
+{% else %}
+  <p>No GET data</p>
+{% endif %}
+
+<h4>POST data</h4>
+{% if form %}
+  {{ pprint_vars(form.multi_items()) }}
+{% else %}
+  <p>No POST data</p>
+{% endif %}

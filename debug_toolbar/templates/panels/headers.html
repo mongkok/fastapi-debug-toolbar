@@ -1,0 +1,56 @@
+<h4>Request headers</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, value in request_headers.items()|sort %}
+      <tr>
+        <td>{{ key|escape }}</td>
+        <td>{{ value|escape }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h4>Response headers</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, value in response_headers.items()|sort %}
+      <tr>
+        <td>{{ key|escape }}</td>
+        <td>{{ value|escape }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h4>ASGI environ</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, value in environ.items()|sort %}
+      <tr>
+        <td>{{ key|escape }}</td>
+        <td>{{ value|escape }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

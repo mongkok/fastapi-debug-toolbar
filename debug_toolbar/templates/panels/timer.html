@@ -1,0 +1,40 @@
+<h4>Resource usage</h4>
+<table>
+  <colgroup>
+    <col class="fastdt-width-20">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Resource</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, value in rows %}
+      <tr>
+        <td>{{ key|escape }}</td>
+        <td>{{ value|escape }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div id="fastDebugBrowserTiming" class="fastdt-hidden">
+  <h4>Browser timing</h4>
+  <table>
+    <colgroup>
+      <col class="fastdt-width-20">
+      <col class="fastdt-width-60">
+      <col class="fastdt-width-20">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Timing attribute</th>
+        <th>Timeline</th>
+        <th>Milliseconds since navigation start (+length)</th>
+      </tr>
+    </thead>
+    <tbody id="fastDebugBrowserTimingTableBody"></tbody>
+  </table>
+</div>

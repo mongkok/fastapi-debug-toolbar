@@ -1,0 +1,23 @@
+{% if templates %}
+  {% for template in templates %}
+    <h4>{{ template.template.name }}</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for k, v in template.context|dictsort %}
+        <tr>
+          <td>{{ k }}</td>
+          <td>{{ v|printable }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endfor %}
+{% else %}
+  <p>No template rendered</p>
+{% endif %}

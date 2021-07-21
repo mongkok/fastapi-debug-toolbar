@@ -1,0 +1,27 @@
+<table>
+  <colgroup>
+    <col class="fastdt-width-20">
+    <col class="fastdt-width-20">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Methods</th>
+      <th>Path</th>
+      <th>Endpoint</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for route in routes|sort(attribute='name') %}
+      <tr>
+        <td>{{ route.name }}</td>
+        <td>{% if route.methods %}{{ route.methods|sort|join(', ') }}{% endif %}</td>
+        <td>{{ route.path }}</td>
+        <td>{{ get_name_from_obj(route.endpoint) }}</td>
+        <td>{{ route.description }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

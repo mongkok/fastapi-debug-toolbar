@@ -1,0 +1,26 @@
+{% if records %}
+  <table>
+    <thead>
+      <tr>
+        <th>Level</th>
+        <th>Time</th>
+        <th>Channel</th>
+        <th>Message</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in records %}
+        <tr>
+          <td>{{ record.level }}</td>
+          <td>{{ record.time.strftime('%H:%M:%S %m/%d/%Y') }}</td>
+          <td>{{ record.channel|default('-') }}</td>
+          <td>{{ record.message }}</td>
+          <td>{{ record.file }}:{{ record.line }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No messages logged.</p>
+{% endif %}

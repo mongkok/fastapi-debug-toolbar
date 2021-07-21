@@ -1,0 +1,16 @@
+{% if panel.has_content and panel.enabled %}
+  <div id="{{ panel.panel_id }}" class="fastdt-panelContent fastdt-hidden">
+    <div class="fastDebugPanelTitle">
+      <button type="button" class="fastDebugClose">×</button>
+        <h3>{{ panel.title }}</h3>
+    </div>
+    <div class="fastDebugPanelContent">
+      {% if toolbar.store_id %}
+        <div class="fastdt-loader"></div>
+        <div class="fastdt-scroll"></div>
+      {% else %}
+        <div class="fastdt-scroll">{{ panel.content|safe }}</div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

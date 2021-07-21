@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <th>Setting</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for name, value in toolbar.settings %}
+      <tr>
+        <td>{{ name }}</td>
+        <td><code>{{ value|pprint|escape }}</code></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

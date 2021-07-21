@@ -1,0 +1,623 @@
+/* Debug Toolbar CSS Reset, adapted from Eric Meyer's CSS Reset */
+#fastDebug {
+    color: #000;
+    background: #fff;
+}
+#fastDebug,
+#fastDebug div,
+#fastDebug span,
+#fastDebug applet,
+#fastDebug object,
+#fastDebug iframe,
+#fastDebug h1,
+#fastDebug h2,
+#fastDebug h3,
+#fastDebug h4,
+#fastDebug h5,
+#fastDebug h6,
+#fastDebug p,
+#fastDebug blockquote,
+#fastDebug pre,
+#fastDebug a,
+#fastDebug abbr,
+#fastDebug acronym,
+#fastDebug address,
+#fastDebug big,
+#fastDebug cite,
+#fastDebug code,
+#fastDebug del,
+#fastDebug dfn,
+#fastDebug em,
+#fastDebug font,
+#fastDebug img,
+#fastDebug ins,
+#fastDebug kbd,
+#fastDebug q,
+#fastDebug s,
+#fastDebug samp,
+#fastDebug small,
+#fastDebug strike,
+#fastDebug strong,
+#fastDebug sub,
+#fastDebug sup,
+#fastDebug tt,
+#fastDebug var,
+#fastDebug b,
+#fastDebug u,
+#fastDebug i,
+#fastDebug center,
+#fastDebug dl,
+#fastDebug dt,
+#fastDebug dd,
+#fastDebug ol,
+#fastDebug ul,
+#fastDebug li,
+#fastDebug fieldset,
+#fastDebug form,
+#fastDebug label,
+#fastDebug legend,
+#fastDebug table,
+#fastDebug caption,
+#fastDebug tbody,
+#fastDebug tfoot,
+#fastDebug thead,
+#fastDebug tr,
+#fastDebug th,
+#fastDebug td,
+#fastDebug button {
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+    width: auto;
+    border: 0;
+    outline: 0;
+    font-size: 12px;
+    line-height: 1.5em;
+    color: #000;
+    vertical-align: baseline;
+    background-color: transparent;
+    font-family: sans-serif;
+    text-align: left;
+    text-shadow: none;
+    white-space: normal;
+    transition: none;
+}
+
+#fastDebug button {
+    background-color: #eee;
+    background-image: linear-gradient(to bottom, #eee, #cccccc);
+    border: 1px solid #ccc;
+    border-bottom: 1px solid #bbb;
+    border-radius: 3px;
+    color: #333;
+    line-height: 1;
+    padding: 0 8px;
+    text-align: center;
+    text-shadow: 0 1px 0 #eee;
+}
+
+#fastDebug button:hover {
+    background-color: #ddd;
+    background-image: linear-gradient(to bottom, #ddd, #bbb);
+    border-color: #bbb;
+    border-bottom-color: #999;
+    cursor: pointer;
+    text-shadow: 0 1px 0 #ddd;
+}
+
+#fastDebug button:active {
+    border: 1px solid #aaa;
+    border-bottom: 1px solid #888;
+    box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
+}
+
+#fastDebug #fastDebugToolbar {
+    background-color: #111;
+    width: 220px;
+    z-index: 100000000;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0.9;
+    overflow-y: auto;
+}
+
+#fastDebug #fastDebugToolbar small {
+    color: #999;
+}
+
+#fastDebug #fastDebugToolbar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#fastDebug #fastDebugToolbar li {
+    border-bottom: 1px solid #222;
+    color: #fff;
+    display: block;
+    font-weight: bold;
+    float: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: auto;
+}
+
+#fastDebug #fastDebugToolbar input[type="checkbox"] {
+    float: right;
+    margin: 10px;
+}
+
+#fastDebug #fastDebugToolbar li > a,
+#fastDebug #fastDebugToolbar li > div.fastdt-contentless {
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    padding: 10px 10px 5px 25px;
+    color: #fff;
+}
+#fastDebug #fastDebugToolbar li > div.fastdt-disabled {
+    font-style: italic;
+    color: #999;
+}
+
+#fastDebug #fastDebugToolbar li a:hover {
+    color: #111;
+    background-color: #ffc;
+}
+
+#fastDebug #fastDebugToolbar li.fastdt-active {
+    background: #333;
+}
+
+#fastDebug #fastDebugToolbar li.fastdt-active:before {
+    content: "▶";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #eee;
+    font-size: 150%;
+}
+
+#fastDebug #fastDebugToolbar li.fastdt-active a:hover {
+    color: #b36a60;
+    background-color: transparent;
+}
+
+#fastDebug #fastDebugToolbar li small {
+    font-size: 12px;
+    color: #999;
+    font-style: normal;
+    text-decoration: none;
+}
+
+#fastDebug #fastDebugToolbarHandle {
+    position: fixed;
+    transform: translateY(-100%) rotate(-90deg);
+    transform-origin: right bottom;
+    background-color: #fff;
+    border: 1px solid #111;
+    border-bottom: 0;
+    top: 0;
+    right: 0;
+    z-index: 100000000;
+    opacity: 0.75;
+}
+
+#fastDebug #fastShowToolBarButton {
+    padding: 0 5px;
+    border: 4px solid #fff;
+    border-bottom-width: 0;
+    color: #fff;
+    font-size: 22px;
+    font-weight: bold;
+    background: #000;
+    opacity: 0.5;
+}
+
+#fastDebug #fastShowToolBarButton:hover {
+    background-color: #111;
+    border-color: #ffe761;
+    cursor: move;
+    opacity: 1;
+}
+
+#fastDebug #fastShowToolBarD {
+    color: #cf9;
+    font-size: 22px;
+}
+
+#fastDebug #fastShowToolBarJ {
+    color: #cf9;
+    font-size: 16px;
+}
+
+#fastDebug code {
+    display: block;
+    font-family: Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console",
+        monospace;
+    font-size: 12px;
+    white-space: pre;
+    overflow: auto;
+}
+
+#fastDebug .fastdt-panelContent {
+    position: fixed;
+    margin: 0;
+    top: 0;
+    right: 220px;
+    bottom: 0;
+    left: 0px;
+    background-color: #eee;
+    color: #666;
+    z-index: 100000000;
+}
+
+#fastDebug .fastdt-panelContent > div {
+    border-bottom: 1px solid #ddd;
+}
+
+#fastDebug .fastDebugPanelTitle {
+    position: absolute;
+    background-color: #ffc;
+    color: #666;
+    padding-left: 20px;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 50px;
+}
+
+#fastDebug .fastDebugPanelTitle code {
+    display: inline;
+    font-size: inherit;
+}
+
+#fastDebug .fastDebugPanelContent {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: auto;
+    padding: 5px 0 0 20px;
+}
+
+#fastDebug .fastDebugPanelContent .fastdt-loader {
+    margin: 80px auto;
+    border: 6px solid white;
+    border-radius: 50%;
+    border-top: 6px solid #ffe761;
+    width: 38px;
+    height: 38px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#fastDebug .fastDebugPanelContent .fastdt-scroll {
+    height: 100%;
+    overflow: auto;
+    display: block;
+    padding: 0 10px 0 0;
+}
+
+#fastDebug h3 {
+    font-size: 24px;
+    font-weight: normal;
+    line-height: 50px;
+}
+
+#fastDebug h4 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 0.8em;
+}
+
+#fastDebug .fastdt-panelContent table {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #fff;
+    display: table;
+    margin-top: 0.8em;
+    overflow: auto;
+}
+#fastDebug .fastdt-panelContent tbody > tr:nth-child(odd) {
+    background-color: #f5f5f5;
+}
+#fastDebug .fastdt-panelContent tbody td,
+#fastDebug .fastdt-panelContent tbody th {
+    vertical-align: top;
+    padding: 2px 3px;
+}
+#fastDebug .fastdt-panelContent tbody td.fastdt-time {
+    text-align: center;
+}
+
+#fastDebug .fastdt-panelContent thead th {
+    padding: 1px 6px 1px 3px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 14px;
+    white-space: nowrap;
+}
+#fastDebug .fastdt-panelContent tbody th {
+    width: 12em;
+    text-align: right;
+    color: #666;
+    padding-right: 0.5em;
+}
+
+#fastDebug .fastTemplateContext {
+    background-color: #fff;
+}
+
+#fastDebug .fastdt-panelContent .fastDebugClose {
+    position: absolute;
+    top: 4px;
+    right: 15px;
+    height: 16px;
+    width: 16px;
+    line-height: 16px;
+    padding: 5px;
+    border: 6px solid #ddd;
+    border-radius: 50%;
+    background: #fff;
+    color: #ddd;
+    text-align: center;
+    font-weight: 900;
+    font-size: 20px;
+    box-sizing: content-box;
+}
+
+#fastDebug .fastdt-panelContent .fastDebugClose:hover {
+    background: #c0695d;
+}
+
+#fastDebug .fastdt-panelContent dt,
+#fastDebug .fastdt-panelContent dd {
+    display: block;
+}
+
+#fastDebug .fastdt-panelContent dt {
+    margin-top: 0.75em;
+}
+
+#fastDebug .fastdt-panelContent dd {
+    margin-left: 10px;
+}
+
+#fastDebug a.toggleTemplate {
+    padding: 4px;
+    background-color: #bbb;
+    border-radius: 3px;
+}
+
+#fastDebug a.toggleTemplate:hover {
+    padding: 4px;
+    background-color: #444;
+    color: #ffe761;
+    border-radius: 3px;
+}
+
+#fastDebug .fastDebugCollapsed {
+    color: #333;
+}
+
+#fastDebug .fastDebugUncollapsed {
+    color: #333;
+}
+
+#fastDebug .fastUnselected {
+    display: none;
+}
+
+#fastDebug tr.fastSelected {
+    display: table-row;
+}
+
+#fastDebug .fastDebugSql {
+    overflow-wrap: anywhere;
+}
+
+#fastDebug .fastSQLDetailsDiv tbody th {
+    text-align: left;
+}
+
+#fastDebug span.fastDebugLineChart {
+    background-color: #777;
+    height: 3px;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    display: block;
+    z-index: 1000000001;
+}
+#fastDebug span.fastDebugLineChartWarning {
+    background-color: #900;
+}
+
+#fastDebug .highlight {
+    color: #000;
+}
+#fastDebug .highlight .err {
+    color: #000;
+} /* Error */
+#fastDebug .highlight .g {
+    color: #000;
+} /* Generic */
+#fastDebug .highlight .k {
+    color: #000;
+    font-weight: bold;
+} /* Keyword */
+#fastDebug .highlight .o {
+    color: #000;
+} /* Operator */
+#fastDebug .highlight .n {
+    color: #000;
+} /* Name */
+#fastDebug .highlight .mi {
+    color: #000;
+    font-weight: bold;
+} /* Literal.Number.Integer */
+#fastDebug .highlight .l {
+    color: #000;
+} /* Literal */
+#fastDebug .highlight .x {
+    color: #000;
+} /* Other */
+#fastDebug .highlight .p {
+    color: #000;
+} /* Punctuation */
+#fastDebug .highlight .m {
+    color: #000;
+    font-weight: bold;
+} /* Literal.Number */
+#fastDebug .highlight .s {
+    color: #333;
+} /* Literal.String */
+#fastDebug .highlight .w {
+    color: #888888;
+} /* Text.Whitespace */
+#fastDebug .highlight .il {
+    color: #000;
+    font-weight: bold;
+} /* Literal.Number.Integer.Long */
+#fastDebug .highlight .na {
+    color: #333;
+} /* Name.Attribute */
+#fastDebug .highlight .nt {
+    color: #000;
+    font-weight: bold;
+} /* Name.Tag */
+#fastDebug .highlight .nv {
+    color: #333;
+} /* Name.Variable */
+#fastDebug .highlight .s2 {
+    color: #333;
+} /* Literal.String.Double */
+#fastDebug .highlight .cp {
+    color: #333;
+} /* Comment.Preproc */
+
+#fastDebug svg.fastDebugLineChart {
+    width: 100%;
+    height: 1.5em;
+}
+
+#fastDebug svg.fastDebugLineChartWarning rect {
+    fill: #900;
+}
+
+#fastDebug svg.fastDebugLineChartInTransaction rect {
+    fill: #d3ff82;
+}
+#fastDebug svg.fastDebugLineChart line {
+    stroke: #94b24d;
+}
+
+#fastDebug .fastDebugRowWarning .fastdt-time {
+    color: red;
+}
+#fastDebug .fastdt-panelContent table .fastdt-toggle {
+    width: 14px;
+    padding-top: 3px;
+}
+#fastDebug .fastdt-panelContent table .fastdt-actions {
+    min-width: 70px;
+    white-space: nowrap;
+}
+#fastDebug .fastdt-color:after {
+    content: "\00a0";
+}
+#fastDebug .fastToggleSwitch {
+    box-sizing: content-box;
+    padding: 0;
+    border: 1px solid #999;
+    border-radius: 0;
+    width: 12px;
+    color: #777;
+    background: linear-gradient(to bottom, #fff, #dcdcdc);
+}
+#fastDebug .fastNoToggleSwitch {
+    height: 14px;
+    width: 14px;
+    display: inline-block;
+}
+
+#fastDebug .fastSQLDetailsDiv {
+    margin-top: 0.8em;
+}
+#fastDebug pre {
+    white-space: pre-wrap;
+    color: #555;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    background-color: #fff;
+    display: block;
+    overflow: auto;
+    padding: 2px 3px;
+    margin-bottom: 3px;
+    font-family: Consolas, Monaco, "Bitstream Vera Sans Mono", "Lucida Console",
+        monospace;
+}
+#fastDebug .fastdt-stack span {
+    color: #000;
+    font-weight: bold;
+}
+#fastDebug .fastdt-stack span.fastdt-path,
+#fastDebug .fastdt-stack pre.fastdt-locals,
+#fastDebug .fastdt-stack pre.fastdt-locals span {
+    color: #777;
+    font-weight: normal;
+}
+#fastDebug .fastdt-stack span.fastdt-code {
+    font-weight: normal;
+}
+#fastDebug .fastdt-stack pre.fastdt-locals {
+    margin: 0 27px 27px 27px;
+}
+
+#fastDebug .fastdt-width-20 {
+    width: 20%;
+}
+#fastDebug .fastdt-width-30 {
+    width: 30%;
+}
+#fastDebug .fastdt-width-60 {
+    width: 60%;
+}
+#fastDebug .fastdt-max-height-100 {
+    max-height: 100%;
+}
+#fastDebug .fastdt-highlighted {
+    background-color: lightgrey;
+}
+.fastdt-hidden {
+    display: none;
+}
+
+#ProfilingPanel .fastDebugPanelContent {
+    padding: 0; 
+}
+#ProfilingPanel .fastDebugPanelContent .fastdt-scroll {
+    padding: 0; 
+}
+iframe#profilingContent {
+    width: 100%;
+    height: 100%;
+}

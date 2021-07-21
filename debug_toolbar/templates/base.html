@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="{{ url_for('debug_toolbar.static', path='css/print.css') }}" media="print">
+<link rel="stylesheet" href="{{ url_for('debug_toolbar.static', path='css/toolbar.css') }}">
+
+<script type="module" src="{{ url_for('debug_toolbar.static', path='js/toolbar.js') }}" async></script>
+
+<div id="fastDebug" class="fastdt-hidden" dir="ltr"
+     {% if toolbar.store_id %}data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{{ url_for('debug_toolbar.render_panel') }}"{% endif %}
+     data-default-show="{% if toolbar.settings.SHOW_COLLAPSE %}false{% else %}true{% endif %}"
+     {{ toolbar.settings.ROOT_TAG_EXTRA_ATTRS|safe }}>
+  <div class="fastdt-hidden" id="fastDebugToolbar">
+    <ul id="fastDebugPanelList">
+      <li><a id="fastHideToolBarButton" href="#" title="Hide toolbar">Hide »</a></li>
+      {% for panel in toolbar.panels %}
+        {% include "includes/panel_button.html" %}
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="fastdt-hidden" id="fastDebugToolbarHandle">
+    <div title="Show toolbar" id="fastShowToolBarButton">
+      <span id="fastShowToolBarD">🐞</span><span id="fastShowToolBarJ"></span>DEBUG
+    </div>
+  </div>
+
+  {% for panel in toolbar.panels %}
+    {% include "includes/panel_content.html" %}
+  {% endfor %}
+  <div id="fastDebugWindow" class="fastdt-panelContent fastdt-hidden"></div>
+</div>
