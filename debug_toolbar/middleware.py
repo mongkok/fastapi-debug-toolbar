@@ -59,10 +59,9 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
 
         toolbar = DebugToolbar(request, call_next, self.settings)
         response = await toolbar.process_request(request)
+        is_html = response.headers.get("Content-Type", "").startswith("text/html")
 
-        if "gzip" in response.headers.get(
-            "Accept-Encoding", ""
-        ) or not response.headers.get("Content-Type", "").startswith("text/html"):
+        if not is_html or "gzip" in response.headers.get("Accept-Encoding", ""):
             return response
 
         await toolbar.record_stats(response)
