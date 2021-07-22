@@ -65,7 +65,7 @@ itsdangerous = "*"
 mypy = "*"
 pytest = "*"
 pytest-cov = "*"
-python-multipar = "*"
+python-multipart = "*"
 types-setuptools = "*"
 
 [tool.black]
