@@ -5,8 +5,6 @@ on:
 
   pull_request:
     branches: ['main']
-    paths-ignore:
-      - 'docs/**'
 
 jobs:
   tests:
@@ -30,8 +28,6 @@ jobs:
 
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2.1.2
-        with:
-          poetry-version: 1.1.7
 
       - name: Install dependencies
         run: poetry install
