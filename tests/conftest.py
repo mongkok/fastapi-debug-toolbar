@@ -20,8 +20,12 @@ def panels() -> t.Sequence[str]:
 def app(panels: t.Sequence[str]) -> FastAPI:
     DebugToolbar._panel_classes = None
 
+    settings = {
+        "panels": panels,
+        "disable_panels": [],
+    }
     _app = FastAPI(debug=True)
-    _app.add_middleware(DebugToolbarMiddleware, panels=panels)
+    _app.add_middleware(DebugToolbarMiddleware, **settings)
     return _app
 
 
