@@ -12,7 +12,7 @@ from debug_toolbar.panels import Panel
 
 def is_async_endpoint(request: Request) -> bool:
     for route in request.app.routes:
-        match, child_scope = route.matches(request.scope)
+        match, _ = route.matches(request.scope)
         if match == Match.FULL:
             return asyncio.iscoroutinefunction(route.endpoint)
     return True
