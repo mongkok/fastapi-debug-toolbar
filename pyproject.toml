@@ -61,16 +61,19 @@ black = "*"
 codecov = "*"
 flake8 = "*"
 isort = "*"
+itsdangerous = "*"
 mypy = "*"
 pytest = "*"
 pytest-cov = "*"
+python-multipar = "*"
 types-setuptools = "*"
 
 [tool.black]
 extend-exclude = '''
 /(
+  | .dist
+  | .htmlcov
   | .mypy_cache
-  | .tox
 )/
 '''
 
