@@ -16,6 +16,9 @@
 <a href="https://pypi.org/project/fastapi-debug-toolbar" target="_blank">
     <img src="https://img.shields.io/pypi/v/fastapi-debug-toolbar" alt="Package version">
 </a>
+<a href="https://fastapi.tiangolo.com/tutorial/debugging/" target="_blank">
+    <img src="https://img.shields.io/badge/debug-True-orange" alt="Debug">
+</a>
 
 ## Installation
 
