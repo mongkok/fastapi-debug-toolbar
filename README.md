@@ -13,11 +13,11 @@
 <a href="https://codecov.io/gh/mongkok/fastapi-debug-toolbar" target="_blank">
     <img src="https://img.shields.io/codecov/c/github/mongkok/fastapi-debug-toolbar" alt="Coverage">
 </a>
+<a href="https://www.codacy.com/gh/mongkok/fastapi-debug-toolbar/dashboard" target="_blank">
+    <img src="https://app.codacy.com/project/badge/Grade/e9d8ba3973264424a3296016063b4ab5" alt="Codacy">
+</a>
 <a href="https://pypi.org/project/fastapi-debug-toolbar" target="_blank">
     <img src="https://img.shields.io/pypi/v/fastapi-debug-toolbar" alt="Package version">
-</a>
-<a href="https://fastapi.tiangolo.com/tutorial/debugging/" target="_blank">
-    <img src="https://img.shields.io/badge/debug-True-orange" alt="Debug">
 </a>
 
 ## Installation
