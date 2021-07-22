@@ -1,5 +1,6 @@
 import typing as t
 
+from fastapi import status
 from starlette.requests import Request
 from starlette.responses import Response
 
@@ -28,6 +29,6 @@ class RedirectsPanel(Panel):
 
                 response = StreamingHTMLResponse(
                     content=content(),
-                    status_code=200,
+                    status_code=status.HTTP_200_OK,
                 )
         return response

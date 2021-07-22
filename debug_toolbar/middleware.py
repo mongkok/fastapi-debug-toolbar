@@ -2,7 +2,7 @@ import functools
 import re
 import typing as t
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
@@ -95,7 +95,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         @functools.wraps(f)
         def decorator(request: Request, *args: t.Any, **kwargs: t.Any) -> t.Any:
             if not self.show_toolbar(request, self.settings):
-                raise HTTPException(status_code=404)
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
             return f(request, *args, **kwargs)
 
         return decorator
