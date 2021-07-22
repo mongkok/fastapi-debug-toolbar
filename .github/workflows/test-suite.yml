@@ -33,9 +33,7 @@ jobs:
         run: poetry install
 
       - name: Tests
-        run: |
-          poetry run mypy --install-types
-          poetry run scripts/test.sh
+        run: poetry run scripts/test.sh
 
       - name: Upload coverage
         uses: codecov/codecov-action@v1

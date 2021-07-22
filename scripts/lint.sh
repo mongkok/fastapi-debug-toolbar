@@ -3,7 +3,7 @@
 set -e
 set -x
 
-mypy debug_toolbar tests
+mypy debug_toolbar tests --install-type
 flake8 debug_toolbar tests
 black debug_toolbar tests --check
 isort debug_toolbar tests --check-only
