@@ -1,6 +1,7 @@
 *.*~
 *.DS_Store
 *.box
+*.log
 *.pyc
 
 __pycache__/
