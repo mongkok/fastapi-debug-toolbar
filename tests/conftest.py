@@ -1,17 +1,27 @@
+import typing as t
+
 import pytest
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 
 from debug_toolbar.middleware import DebugToolbarMiddleware
+from debug_toolbar.toolbar import DebugToolbar
 
 from .templates import Jinja2Templates
 from .testclient import TestClient
 
 
 @pytest.fixture
-def app() -> FastAPI:
+def panels() -> t.Sequence[str]:
+    return []
+
+
+@pytest.fixture
+def app(panels: t.Sequence[str]) -> FastAPI:
+    DebugToolbar._panel_classes = None
+
     _app = FastAPI(debug=True)
-    _app.add_middleware(DebugToolbarMiddleware)
+    _app.add_middleware(DebugToolbarMiddleware, panels=panels)
     return _app
 
 

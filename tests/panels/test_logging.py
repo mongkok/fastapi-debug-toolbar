@@ -5,6 +5,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.logger import logger
 from fastapi.responses import HTMLResponse
 
+from ..decorators import override_panels
 from ..templates import Jinja2Templates
 from ..testclient import TestClient
 
@@ -20,6 +21,7 @@ def client(app: FastAPI, templates: Jinja2Templates) -> TestClient:
 
 
 @pytest.mark.parametrize("level", ["ERROR", "WARNING"])
+@override_panels(["debug_toolbar.panels.logging.LoggingPanel"])
 def test_logging(client: TestClient, level: str) -> None:
     store_id = client.get_store_id(f"/log?level={level}")
     response = client.render_panel(store_id, "LoggingPanel")
