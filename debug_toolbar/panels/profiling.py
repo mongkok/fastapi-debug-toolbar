@@ -10,19 +10,12 @@ from starlette.routing import Match
 from debug_toolbar.panels import Panel
 
 
-def is_async_endpoint(request: Request) -> bool:
+def matched_endpoint(request: Request) -> t.Optional[t.Callable]:
     for route in request.app.routes:
         match, _ = route.matches(request.scope)
         if match == Match.FULL:
-            return asyncio.iscoroutinefunction(route.endpoint)
-    return True
-
-
-async def call_profiler(func: t.Callable, is_async: bool) -> None:
-    if not is_async:
-        await run_in_threadpool(func)
-    else:
-        func()
+            return getattr(route, "endpoint", None)
+    return None
 
 
 class ProfilingPanel(Panel):
@@ -31,11 +24,19 @@ class ProfilingPanel(Panel):
 
     async def process_request(self, request: Request) -> Response:
         self.profiler = Profiler(**self.toolbar.settings.PROFILER_OPTIONS)
-        is_async = is_async_endpoint(request)
+        endpoint = matched_endpoint(request)
 
-        await call_profiler(self.profiler.start, is_async)
+        if endpoint is None:
+            return await super().process_request(request)
+
+        is_async = asyncio.iscoroutinefunction(endpoint)
+
+        async def call(func: t.Callable) -> None:
+            await run_in_threadpool(func) if not is_async else func()
+
+        await call(self.profiler.start)
         response = await super().process_request(request)
-        await call_profiler(self.profiler.stop, is_async)
+        await call(self.profiler.stop)
         return response
 
     async def generate_stats(
