@@ -17,13 +17,16 @@ def panels() -> t.Sequence[str]:
 
 
 @pytest.fixture
-def app(panels: t.Sequence[str]) -> FastAPI:
-    DebugToolbar._panel_classes = None
-
-    settings = {
+def settings(panels: t.Sequence[str]) -> t.Dict[str, t.Any]:
+    return {
         "panels": panels,
         "disable_panels": [],
     }
+
+
+@pytest.fixture
+def app(settings: t.Dict[str, t.Any]) -> FastAPI:
+    DebugToolbar._panel_classes = None
     _app = FastAPI(debug=True)
     _app.add_middleware(DebugToolbarMiddleware, **settings)
     return _app
