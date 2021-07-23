@@ -40,11 +40,11 @@ def templates() -> Jinja2Templates:
 @pytest.fixture
 def client(app: FastAPI, templates: Jinja2Templates) -> TestClient:
     @app.get("/sync", response_class=HTMLResponse)
-    def get_sync(request: Request) -> str:
+    def get_index(request: Request) -> str:
         return templates.TemplateResponse("index.html", {"request": request})
 
     @app.get("/async", response_class=HTMLResponse)
     async def get_async(request: Request) -> str:
-        return templates.TemplateResponse("index.html", {"request": request})
+        return get_index(request)
 
     return TestClient(app)

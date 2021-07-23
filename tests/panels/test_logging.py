@@ -12,18 +12,23 @@ from ..testclient import TestClient
 
 @pytest.fixture
 def client(app: FastAPI, templates: Jinja2Templates) -> TestClient:
-    @app.get("/log", response_class=HTMLResponse)
-    async def get_log(request: Request, level: str) -> str:
+    @app.get("/log/sync", response_class=HTMLResponse)
+    def get_log(request: Request, level: str) -> str:
         logger.log(logging._nameToLevel[level], "")
         return templates.TemplateResponse("index.html", {"request": request})
+
+    @app.get("/log/async", response_class=HTMLResponse)
+    async def get_log_async(request: Request, level: str) -> str:
+        return get_log(request, level)
 
     return TestClient(app)
 
 
+@pytest.mark.parametrize("path", ["sync", "async"])
 @pytest.mark.parametrize("level", ["ERROR", "WARNING"])
 @override_panels(["debug_toolbar.panels.logging.LoggingPanel"])
-def test_logging(client: TestClient, level: str) -> None:
-    store_id = client.get_store_id(f"/log?level={level}")
+def test_logging(client: TestClient, path: str, level: str) -> None:
+    store_id = client.get_store_id(f"/log/{path}?level={level}")
     response = client.render_panel(store_id, "LoggingPanel")
 
     assert response.status_code == status.HTTP_200_OK
