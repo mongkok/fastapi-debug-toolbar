@@ -1,4 +1,5 @@
 import logging
+import typing as t
 
 import pytest
 from fastapi import FastAPI, Request, status
@@ -6,17 +7,16 @@ from fastapi.logger import logger
 from fastapi.responses import HTMLResponse
 
 from ..decorators import override_panels
-from ..templates import Jinja2Templates
 from ..mark import skip_py37
 from ..testclient import TestClient
 
 
 @pytest.fixture
-def client(app: FastAPI, templates: Jinja2Templates) -> TestClient:
+def client(app: FastAPI, get_index: t.Callable) -> TestClient:
     @app.get("/log/sync", response_class=HTMLResponse)
     def get_log(request: Request, level: str) -> str:
         logger.log(logging._nameToLevel[level], "")
-        return templates.TemplateResponse("index.html", {"request": request})
+        return get_index(request)
 
     @app.get("/log/async", response_class=HTMLResponse)
     async def get_log_async(request: Request, level: str) -> str:

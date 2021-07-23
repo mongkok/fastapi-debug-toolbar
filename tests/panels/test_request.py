@@ -1,21 +1,22 @@
 import pytest
+import typing as t
+
 from fastapi import FastAPI, Request, status
 from fastapi.responses import HTMLResponse
 from starlette.middleware.sessions import SessionMiddleware
 
 from ..decorators import override_panels
-from ..templates import Jinja2Templates
 from ..testclient import TestClient
 
 
 @pytest.fixture
-def client(app: FastAPI, templates: Jinja2Templates) -> TestClient:
+def client(app: FastAPI, get_index: t.Callable) -> TestClient:
     app.add_middleware(SessionMiddleware, secret_key="")
 
     @app.get("/session", response_class=HTMLResponse)
     async def get_session(request: Request) -> str:
         request.session["debug"] = True
-        return templates.TemplateResponse("index.html", {"request": request})
+        return get_index(request)
 
     return TestClient(app)
 
