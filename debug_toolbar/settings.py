@@ -6,7 +6,7 @@ from pydantic import BaseSettings, root_validator
 
 
 class DebugToolbarSettings(BaseSettings):
-    PANELS: t.Sequence[str] = [
+    DEFAULT_PANELS: t.List[str] = [
         "debug_toolbar.panels.versions.VersionsPanel",
         "debug_toolbar.panels.timer.TimerPanel",
         "debug_toolbar.panels.settings.SettingsPanel",
@@ -17,6 +17,7 @@ class DebugToolbarSettings(BaseSettings):
         "debug_toolbar.panels.profiling.ProfilingPanel",
         "debug_toolbar.panels.redirects.RedirectsPanel",
     ]
+    PANELS: t.List[str] = []
     DISABLE_PANELS: t.Sequence[str] = [
         "debug_toolbar.panels.redirects.RedirectsPanel",
     ]

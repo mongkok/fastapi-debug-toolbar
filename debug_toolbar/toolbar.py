@@ -28,7 +28,9 @@ class DebugToolbar:
         self.settings = settings
         panels = []
 
-        for panel_class in self.get_panel_classes(settings.PANELS)[::-1]:
+        for panel_class in self.get_panel_classes(
+            settings.DEFAULT_PANELS + settings.PANELS,
+        )[::-1]:
             panel = panel_class(self, call_next)
             panels.append(panel)
 

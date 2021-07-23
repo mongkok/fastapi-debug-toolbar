@@ -20,6 +20,7 @@ def settings() -> t.Dict[str, t.Any]:
 
 @pytest.fixture
 def app(settings: t.Dict[str, t.Any]) -> FastAPI:
+    settings.setdefault("default_panels", [])
     settings.setdefault("disable_panels", [])
     DebugToolbar._panel_classes = None
 
