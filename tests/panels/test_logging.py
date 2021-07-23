@@ -24,8 +24,8 @@ def client(app: FastAPI, templates: Jinja2Templates) -> TestClient:
     return TestClient(app)
 
 
+@pytest.mark.parametrize("level", ["ERROR"])
 @pytest.mark.parametrize("path", ["sync", "async"])
-@pytest.mark.parametrize("level", ["ERROR", "WARNING"])
 @override_panels(["debug_toolbar.panels.logging.LoggingPanel"])
 def test_logging(client: TestClient, path: str, level: str) -> None:
     store_id = client.get_store_id(f"/log/{path}?level={level}")
