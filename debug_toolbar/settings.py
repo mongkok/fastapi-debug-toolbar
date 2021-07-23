@@ -25,8 +25,8 @@ class DebugToolbarSettings(BaseSettings):
     JINJA_ENV: Environment = Environment()
     JINJA_LOADERS: t.List[BaseLoader] = []
     JINJA_EXTENSIONS: t.Sequence[t.Union[str, t.Type[Extension]]] = []
-    STATIC_URL: str = "/_debug_toolbar/static"
     API_URL: str = "/_debug_toolbar"
+    STATIC_URL: str = f"{API_URL}/static"
     SHOW_TOOLBAR_CALLBACK: str = "debug_toolbar.middleware.show_toolbar"
     INSERT_BEFORE: str = "</body>"
     SHOW_COLLAPSE: bool = False
