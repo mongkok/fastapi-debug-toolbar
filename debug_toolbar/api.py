@@ -1,7 +1,7 @@
 import html
 import typing as t
 
-from starlette.requests import Request
+from fastapi import Request
 
 from debug_toolbar.toolbar import DebugToolbar
 

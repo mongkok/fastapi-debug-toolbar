@@ -1,10 +1,9 @@
 import asyncio
 import typing as t
 
+from fastapi import Request, Response
 from pyinstrument import Profiler
 from starlette.concurrency import run_in_threadpool
-from starlette.requests import Request
-from starlette.responses import Response
 from starlette.routing import Match
 
 from debug_toolbar.panels import Panel

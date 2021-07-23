@@ -2,11 +2,9 @@ import functools
 import re
 import typing as t
 
-from fastapi import HTTPException, status
+from fastapi import HTTPException, Request, Response, status
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
-from starlette.requests import Request
-from starlette.responses import Response
 from starlette.routing import NoMatchFound
 from starlette.types import ASGIApp
 

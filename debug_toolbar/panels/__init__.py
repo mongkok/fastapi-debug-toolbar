@@ -1,8 +1,7 @@
 import typing as t
 
+from fastapi import Request, Response
 from starlette.middleware.base import RequestResponseEndpoint
-from starlette.requests import Request
-from starlette.responses import Response
 
 from debug_toolbar.utils import get_name_from_obj
 

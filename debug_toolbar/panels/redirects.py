@@ -1,8 +1,6 @@
 import typing as t
 
-from fastapi import status
-from starlette.requests import Request
-from starlette.responses import Response
+from fastapi import Request, Response, status
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.responses import StreamingHTMLResponse

@@ -3,9 +3,8 @@ import typing as t
 import uuid
 from collections import OrderedDict
 
+from fastapi import Request, Response
 from starlette.middleware.base import RequestResponseEndpoint
-from starlette.requests import Request
-from starlette.responses import Response
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.settings import DebugToolbarSettings

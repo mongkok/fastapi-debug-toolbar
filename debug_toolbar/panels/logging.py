@@ -3,9 +3,8 @@ import datetime
 import logging
 import typing as t
 
+from fastapi import Request, Response
 from starlette.concurrency import run_in_threadpool
-from starlette.requests import Request
-from starlette.responses import Response
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.utils import pluralize
