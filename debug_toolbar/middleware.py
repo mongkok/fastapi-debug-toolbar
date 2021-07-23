@@ -69,23 +69,23 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         await toolbar.record_server_timing(response)
         toolbar.generate_server_timing_header(response)
 
-        async for chunk in response.body_iterator:  # type: ignore
-            if isinstance(chunk, bytes):
-                chunk = chunk.decode(response.charset)
+        async for body in response.body_iterator:  # type: ignore
+            if not isinstance(body, bytes):
+                body = body.encode(response.charset)
 
-        rendered = toolbar.render_toolbar()
+        decoded = body.decode(response.charset)
         pattern = re.escape(self.settings.INSERT_BEFORE)
-        bits = re.split(pattern, chunk, flags=re.IGNORECASE)
+        bits = re.split(pattern, decoded, flags=re.IGNORECASE)
 
         if len(bits) > 1:
-            bits[-2] += rendered
+            bits[-2] += toolbar.render_toolbar()
             body = self.settings.INSERT_BEFORE.join(bits).encode(response.charset)
-
-            async def stream() -> t.AsyncGenerator[bytes, None]:
-                yield body
-
             response.headers["Content-Length"] = str(len(body))
-            response.body_iterator = stream()  # type: ignore
+
+        async def stream() -> t.AsyncGenerator[bytes, None]:
+            yield body
+
+        response.body_iterator = stream()  # type: ignore
         return response
 
     def require_show_toolbar(
