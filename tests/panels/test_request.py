@@ -1,6 +1,6 @@
-import pytest
 import typing as t
 
+import pytest
 from fastapi import FastAPI, Request, status
 from fastapi.responses import HTMLResponse
 from starlette.middleware.sessions import SessionMiddleware
