@@ -2,7 +2,7 @@ import functools
 import re
 import typing as t
 
-from fastapi import HTTPException, Request, Response, status
+from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.routing import NoMatchFound
@@ -26,19 +26,22 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         super().__init__(app)
         self.settings = DebugToolbarSettings(**settings)
         self.show_toolbar = import_string(self.settings.SHOW_TOOLBAR_CALLBACK)
+        self.router: APIRouter = app  # type: ignore
 
+        while not isinstance(self.router, APIRouter):
+            self.router = self.router.app
         try:
-            app.app.url_path_for(name="debug_toolbar.render_panel")  # type: ignore
+            self.router.url_path_for(name="debug_toolbar.render_panel")
         except NoMatchFound:
             self.init_toolbar()
 
     def init_toolbar(self) -> None:
-        self.app.app.get(  # type: ignore
+        self.router.get(
             self.settings.API_URL,
             name="debug_toolbar.render_panel",
         )(self.require_show_toolbar(render_panel))
 
-        self.app.app.mount(  # type: ignore
+        self.router.mount(
             self.settings.STATIC_URL,
             StaticFiles(packages=[__package__]),
             name="debug_toolbar.static",
