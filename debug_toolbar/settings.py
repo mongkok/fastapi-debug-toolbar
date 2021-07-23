@@ -33,6 +33,7 @@ class DebugToolbarSettings(BaseSettings):
     ROOT_TAG_EXTRA_ATTRS: str = ""
     RESULTS_CACHE_SIZE: int = 25
     PROFILER_OPTIONS: t.Dict[str, t.Any] = {"interval": 0.0001}
+    SETTINGS: t.Dict[str, t.Any] = {}
 
     def __init__(self, **settings: t.Any) -> None:
         super().__init__(**settings)

@@ -1,16 +1,20 @@
+{% for name, settings in app_settings.items()|sort %}
+<h4>{{ name }}</h4>
+
 <table>
   <thead>
     <tr>
-      <th>Setting</th>
+      <th>Key</th>
       <th>Value</th>
     </tr>
   </thead>
   <tbody>
-    {% for name, value in toolbar.settings %}
+    {% for key, value in settings %}
       <tr>
-        <td>{{ name }}</td>
+        <td>{{ key|escape }}</td>
         <td><code>{{ value|pprint|escape }}</code></td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
+{% endfor %}
