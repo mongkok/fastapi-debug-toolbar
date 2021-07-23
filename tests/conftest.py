@@ -13,9 +13,7 @@ from .testclient import TestClient
 
 @pytest.fixture
 def settings() -> t.Dict[str, t.Any]:
-    return {
-        "panels": [],
-    }
+    return {}
 
 
 @pytest.fixture
