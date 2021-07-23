@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
+export SOURCE_FILES="debug_toolbar tests"
+
 set -e
 set -x
 
-mypy debug_toolbar tests --install-type --non-interactive
-flake8 debug_toolbar tests
-black debug_toolbar tests --check
-isort debug_toolbar tests --check-only
+flake8 $SOURCE_FILES
+black --check $SOURCE_FILES
+isort --check-only $SOURCE_FILES
+mypy --install-type --non-interactive $SOURCE_FILES
