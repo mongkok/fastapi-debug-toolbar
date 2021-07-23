@@ -51,10 +51,10 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.6"
 
-fastapi = "^0.51.0"
-aiofiles = "^0.2.1"
-Jinja2 = "^2.9"
-pyinstrument = "^3.0.0"
+fastapi = ">= 0.51.0"
+aiofiles = ">= 0.2.1"
+Jinja2 = ">= 2.9"
+pyinstrument = ">= 3.0.0"
 
 [tool.poetry.dev-dependencies]
 black = "*"
