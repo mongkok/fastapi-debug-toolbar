@@ -1,7 +1,7 @@
 import pytest
 from fastapi import status
 
-from ..decorators import override_panels
+from ..mark import override_panels
 from ..testclient import TestClient
 
 

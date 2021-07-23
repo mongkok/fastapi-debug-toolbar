@@ -1,6 +1,6 @@
 from fastapi import status
 
-from .decorators import override_panels, override_settings
+from .mark import override_panels, override_settings
 from .testclient import TestClient
 
 

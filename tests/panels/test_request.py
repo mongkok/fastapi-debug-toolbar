@@ -5,7 +5,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.responses import HTMLResponse
 from starlette.middleware.sessions import SessionMiddleware
 
-from ..decorators import override_panels
+from ..mark import override_panels
 from ..testclient import TestClient
 
 

@@ -2,7 +2,7 @@ import pytest
 from fastapi import FastAPI, status
 from fastapi.responses import RedirectResponse
 
-from ..decorators import override_panels
+from ..mark import override_panels
 from ..testclient import TestClient
 
 

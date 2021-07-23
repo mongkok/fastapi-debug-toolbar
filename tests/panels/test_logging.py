@@ -6,8 +6,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.logger import logger
 from fastapi.responses import HTMLResponse
 
-from ..decorators import override_panels
-from ..mark import skip_py37
+from ..mark import override_panels, skip_py37
 from ..testclient import TestClient
 
 
