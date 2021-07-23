@@ -12,21 +12,17 @@ from .testclient import TestClient
 
 
 @pytest.fixture
-def panels() -> t.Sequence[str]:
-    return []
-
-
-@pytest.fixture
-def settings(panels: t.Sequence[str]) -> t.Dict[str, t.Any]:
+def settings() -> t.Dict[str, t.Any]:
     return {
-        "panels": panels,
-        "disable_panels": [],
+        "panels": [],
     }
 
 
 @pytest.fixture
 def app(settings: t.Dict[str, t.Any]) -> FastAPI:
+    settings.setdefault("disable_panels", [])
     DebugToolbar._panel_classes = None
+
     _app = FastAPI(debug=True)
     _app.add_middleware(DebugToolbarMiddleware, **settings)
     return _app

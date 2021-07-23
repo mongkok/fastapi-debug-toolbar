@@ -9,4 +9,4 @@ def override_settings(**settings: t.Any) -> MarkDecorator:
 
 
 def override_panels(panels: t.Sequence[str]) -> MarkDecorator:
-    return pytest.mark.parametrize("panels", [panels])
+    return override_settings(panels=panels)
