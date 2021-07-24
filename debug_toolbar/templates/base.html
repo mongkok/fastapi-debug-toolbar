@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="{{ url_for('debug_toolbar.static', path='css/toolbar.css') }}">
 
 <script type="module" src="{{ url_for('debug_toolbar.static', path='js/toolbar.js') }}" async></script>
+<script type="module" src="{{ url_for('debug_toolbar.static', path='js/refresh.js') }}" async></script>
 
 <div id="fastDebug" class="fastdt-hidden" dir="ltr"
      {% if toolbar.store_id %}data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{{ url_for('debug_toolbar.render_panel') }}"{% endif %}

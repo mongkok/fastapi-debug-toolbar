@@ -95,6 +95,18 @@ class DebugToolbar:
         ]
         await asyncio.gather(*tasks)
 
+    def refresh(self) -> "OrderedDict[str, t.Any]":
+        data: OrderedDict[str, t.Any] = OrderedDict([("panels", OrderedDict())])
+
+        for panel in self.enabled_panels:
+            data["panels"][panel.panel_id] = {
+                "title": panel.title,
+                "subtitle": panel.nav_subtitle,
+            }
+        self.store()
+        data["storeId"] = self.store_id
+        return data
+
     def generate_server_timing_header(self, response: Response) -> None:
         data = []
 

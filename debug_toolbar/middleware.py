@@ -1,6 +1,8 @@
 import functools
+import json
 import re
 import typing as t
+from collections import OrderedDict
 
 from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.staticfiles import StaticFiles
@@ -60,9 +62,15 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
 
         toolbar = DebugToolbar(request, call_next, self.settings)
         response = await toolbar.process_request(request)
-        is_html = response.headers.get("Content-Type", "").startswith("text/html")
+        content_type = response.headers.get("Content-Type", "")
+        is_html = content_type.startswith("text/html")
+        is_json = content_type == "application/json"
 
-        if not is_html or "gzip" in response.headers.get("Accept-Encoding", ""):
+        if (
+            not (is_html or is_json)
+            or "gzip" in response.headers.get("Accept-Encoding", "")
+            or request.scope.get("endpoint") is None
+        ):
             return response
 
         await toolbar.record_stats(response)
@@ -74,18 +82,24 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
                 body = body.encode(response.charset)
 
         decoded = body.decode(response.charset)
-        pattern = re.escape(self.settings.INSERT_BEFORE)
-        bits = re.split(pattern, decoded, flags=re.IGNORECASE)
 
-        if len(bits) > 1:
-            bits[-2] += toolbar.render_toolbar()
-            body = self.settings.INSERT_BEFORE.join(bits).encode(response.charset)
-            response.headers["Content-Length"] = str(len(body))
+        if is_html:
+            pattern = re.escape(self.settings.INSERT_BEFORE)
+            bits = re.split(pattern, decoded, flags=re.IGNORECASE)
+
+            if len(bits) > 1:
+                bits[-2] += toolbar.render_toolbar()
+                body = self.settings.INSERT_BEFORE.join(bits).encode(response.charset)
+        else:
+            data = json.loads(decoded, object_pairs_hook=OrderedDict)
+            data["debugToolbar"] = toolbar.refresh()
+            body = json.dumps(data).encode(response.charset)
 
         async def stream() -> t.AsyncGenerator[bytes, None]:
             yield body
 
         response.body_iterator = stream()  # type: ignore
+        response.headers["Content-Length"] = str(len(body))
         return response
 
     def require_show_toolbar(

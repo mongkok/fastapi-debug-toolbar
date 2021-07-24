@@ -3,6 +3,7 @@ import typing as t
 from fastapi import Request, Response
 
 from debug_toolbar.panels import Panel
+from debug_toolbar.utils import get_name_from_obj
 
 
 class RequestPanel(Panel):
@@ -11,7 +12,7 @@ class RequestPanel(Panel):
 
     @property
     def nav_subtitle(self) -> str:
-        return self.endpoint.__name__
+        return get_name_from_obj(self.endpoint)
 
     async def generate_stats(
         self,
