@@ -35,6 +35,10 @@ class DebugToolbarSettings(BaseSettings):
     PROFILER_OPTIONS: t.Dict[str, t.Any] = {"interval": 0.0001}
     SETTINGS: t.Dict[str, BaseSettings] = {}
 
+    class Config:
+        env_prefix = "DT_"
+        case_sensitive = True
+
     def __init__(self, **settings: t.Any) -> None:
         super().__init__(**settings)
         loaders = self.JINJA_LOADERS + [PackageLoader("debug_toolbar", "templates")]
