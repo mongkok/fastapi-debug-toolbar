@@ -64,10 +64,9 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         response = await toolbar.process_request(request)
         content_type = response.headers.get("Content-Type", "")
         is_html = content_type.startswith("text/html")
-        is_json = content_type == "application/json"
 
         if (
-            not (is_html or is_json)
+            not (is_html or content_type == "application/json")
             or "gzip" in response.headers.get("Accept-Encoding", "")
             or request.scope.get("endpoint") is None
         ):
