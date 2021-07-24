@@ -54,7 +54,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
     ) -> Response:
         if (
             not self.show_toolbar(request, self.settings)
-            or self.settings.STATIC_URL in request.url.path
+            or self.settings.API_URL in request.url.path
         ):
             return await call_next(request)
 
