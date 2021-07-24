@@ -2,7 +2,7 @@ import typing as t
 
 from jinja2 import BaseLoader, ChoiceLoader, Environment, PackageLoader
 from jinja2.ext import Extension
-from pydantic import BaseSettings, root_validator
+from pydantic import BaseSettings, IPvAnyAddress, root_validator
 
 
 class DebugToolbarSettings(BaseSettings):
@@ -21,7 +21,7 @@ class DebugToolbarSettings(BaseSettings):
     DISABLE_PANELS: t.Sequence[str] = [
         "debug_toolbar.panels.redirects.RedirectsPanel",
     ]
-    ALLOWED_IPS: t.Optional[t.Sequence[str]] = None
+    ALLOWED_IPS: t.Optional[t.Sequence[IPvAnyAddress]] = None
     JINJA_ENV: Environment = Environment()
     JINJA_LOADERS: t.List[BaseLoader] = []
     JINJA_EXTENSIONS: t.Sequence[t.Union[str, t.Type[Extension]]] = []
@@ -33,7 +33,7 @@ class DebugToolbarSettings(BaseSettings):
     ROOT_TAG_EXTRA_ATTRS: str = ""
     RESULTS_CACHE_SIZE: int = 25
     PROFILER_OPTIONS: t.Dict[str, t.Any] = {"interval": 0.0001}
-    SETTINGS: t.Dict[str, t.Any] = {}
+    SETTINGS: t.Dict[str, BaseSettings] = {}
 
     def __init__(self, **settings: t.Any) -> None:
         super().__init__(**settings)
