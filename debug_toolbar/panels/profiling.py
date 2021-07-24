@@ -1,20 +1,11 @@
-import asyncio
 import typing as t
 
 from fastapi import Request, Response
 from pyinstrument import Profiler
 from starlette.concurrency import run_in_threadpool
-from starlette.routing import Match
 
 from debug_toolbar.panels import Panel
-
-
-def matched_endpoint(request: Request) -> t.Optional[t.Callable]:
-    for route in request.app.routes:
-        match, _ = route.matches(request.scope)
-        if match == Match.FULL:
-            return getattr(route, "endpoint", None)
-    return None
+from debug_toolbar.utils import is_coroutine, matched_endpoint
 
 
 class ProfilingPanel(Panel):
@@ -28,7 +19,7 @@ class ProfilingPanel(Panel):
         if endpoint is None:
             return await super().process_request(request)
 
-        is_async = asyncio.iscoroutinefunction(endpoint)
+        is_async = is_coroutine(endpoint)
 
         async def call(func: t.Callable) -> None:
             await run_in_threadpool(func) if not is_async else func()

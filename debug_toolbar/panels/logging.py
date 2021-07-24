@@ -1,4 +1,3 @@
-import asyncio
 import datetime
 import logging
 import typing as t
@@ -7,7 +6,7 @@ from fastapi import Request, Response
 from starlette.concurrency import run_in_threadpool
 
 from debug_toolbar.panels import Panel
-from debug_toolbar.utils import pluralize
+from debug_toolbar.utils import is_coroutine, matched_endpoint, pluralize
 
 try:
     import threading
@@ -85,7 +84,17 @@ class LoggingPanel(Panel):
         return f"{record_count} message{pluralize(record_count)}"
 
     async def process_request(self, request: Request) -> Response:
-        collector.clear_collection()
+        endpoint = matched_endpoint(request)
+
+        if endpoint is None:
+            return await super().process_request(request)
+
+        if is_coroutine(endpoint):
+            self.current_thread = threading.current_thread()
+        else:
+            self.current_thread = await run_in_threadpool(threading.current_thread)
+
+        collector.clear_collection(thread=self.current_thread)
         return await super().process_request(request)
 
     async def generate_stats(
@@ -93,12 +102,7 @@ class LoggingPanel(Panel):
         request: Request,
         response: Response,
     ) -> t.Optional[t.Dict[str, t.Any]]:
-        if asyncio.iscoroutinefunction(request.scope["endpoint"]):
-            current_thread = threading.current_thread()
-        else:
-            current_thread = await run_in_threadpool(threading.current_thread)
-
-        records = collector.get_collection(thread=current_thread)
-        self._records[current_thread] = records
-        collector.clear_collection()
+        records = collector.get_collection(thread=self.current_thread)
+        self._records[self.current_thread] = records
+        collector.clear_collection(thread=self.current_thread)
         return {"records": records}

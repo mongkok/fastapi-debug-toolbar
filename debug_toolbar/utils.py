@@ -1,5 +1,11 @@
+import asyncio
+import functools
+import inspect
 import sys
 import typing as t
+
+from fastapi import Request
+from starlette.routing import Match
 
 
 def import_string(import_name: str) -> t.Any:
@@ -29,6 +35,24 @@ def get_name_from_obj(obj: t.Any) -> str:
         module = obj.__module__
         name = f"{module}.{name}"
     return name
+
+
+def matched_endpoint(request: Request) -> t.Optional[t.Callable]:
+    for route in request.app.routes:
+        match, _ = route.matches(request.scope)
+        if match == Match.FULL:
+            return getattr(route, "endpoint", None)
+    return None
+
+
+def is_coroutine(endpoint: t.Callable) -> bool:
+    handler = endpoint
+
+    while isinstance(handler, functools.partial):
+        handler = handler.func
+    if not (inspect.ismethod(handler) or inspect.isfunction(handler)):
+        handler = handler.__call__  # type: ignore
+    return asyncio.iscoroutinefunction(handler)
 
 
 def pluralize(value: float, arg: str = "s") -> str:
