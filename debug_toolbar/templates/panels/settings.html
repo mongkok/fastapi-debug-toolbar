@@ -1,5 +1,5 @@
-{% for name, settings in toolbar.settings.SETTINGS.items()|sort %}
-<h4>{{ name }}</h4>
+{% for settings in toolbar.settings.SETTINGS|sort %}
+{% if settings.__config__.title %}<h4>{{ settings.__config__.title }}</h4>{% endif %}
 
 <table>
   <thead>
@@ -19,7 +19,7 @@
 </table>
 {% endfor %}
 
-<h4>Debug Toolbar</h4>
+<h4>{{ toolbar.settings.__config__.title }}</h4>
 
 <table>
   <thead>

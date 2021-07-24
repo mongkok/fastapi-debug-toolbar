@@ -33,9 +33,10 @@ class DebugToolbarSettings(BaseSettings):
     ROOT_TAG_EXTRA_ATTRS: str = ""
     RESULTS_CACHE_SIZE: int = 25
     PROFILER_OPTIONS: t.Dict[str, t.Any] = {"interval": 0.0001}
-    SETTINGS: t.Dict[str, BaseSettings] = {}
+    SETTINGS: t.Sequence[BaseSettings] = []
 
     class Config:
+        title = "Debug Toolbar"
         env_prefix = "DT_"
         case_sensitive = True
 
