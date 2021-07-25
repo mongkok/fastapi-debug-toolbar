@@ -1,49 +1,52 @@
 import { $$ } from "./utils.js";
 
 function insertBrowserTiming() {
-    const timingOffset = performance.timing.navigationStart,
-        timingEnd = performance.timing.loadEventEnd,
-        totalTime = timingEnd - timingOffset;
+    const timing = performance.timing,
+        timingOffset = timing.navigationStart,
+        totalTime = timing.loadEventEnd - timingOffset;
+
     function getLeft(stat) {
-        return ((performance.timing[stat] - timingOffset) / totalTime) * 100.0;
+        return ((timing[stat] - timingOffset) / totalTime) * 100.0;
     }
     function getCSSWidth(stat, endStat) {
-        let width =
-            ((performance.timing[endStat] - performance.timing[stat]) /
-                totalTime) *
-            100.0;
-        // Calculate relative percent (same as sql panel logic)
+        let width = ((timing[endStat] - timing[stat]) / totalTime) * 100.0;
+        // Calculate relative percent
         width = (100.0 * width) / (100.0 - getLeft(stat));
-        return width < 1 ? "2px" : width + "%";
+        return width < 1 ? "2px" : `${width}%`;
     }
     function addRow(tbody, stat, endStat) {
         const row = document.createElement("tr");
         if (endStat) {
             // Render a start through end bar
-            row.innerHTML =
-                "<td>" +
-                stat.replace("Start", "") +
-                "</td>" +
-                '<td><svg class="fastDebugLineChart" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none"><rect y="0" height="5" fill="#ccc" /></svg></td>' +
-                "<td>" +
-                (performance.timing[stat] - timingOffset) +
-                " (+" +
-                (performance.timing[endStat] - performance.timing[stat]) +
-                ")</td>";
-            row.querySelector("rect").setAttribute(
-                "width",
-                getCSSWidth(stat, endStat)
-            );
+            row.innerHTML = `
+            <td>${stat.replace("Start", "")}</td>
+            <td>
+                <svg class="fastDebugLineChart"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewbox="0 0 100 5"
+                    preserveAspectRatio="none">
+                    <rect y="0" height="5" fill="#ccc" />
+                </svg>
+            </td>
+            <td>
+                ${timing[stat] - timingOffset}
+                (${timing[endStat] - timing[stat]})
+            </td>`;
+            row.querySelector("rect")
+                .setAttribute("width", getCSSWidth(stat, endStat));
         } else {
             // Render a point in time
-            row.innerHTML =
-                "<td>" +
-                stat +
-                "</td>" +
-                '<td><svg class="fastDebugLineChart" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none"><rect y="0" height="5" fill="#ccc" /></svg></td>' +
-                "<td>" +
-                (performance.timing[stat] - timingOffset) +
-                "</td>";
+            row.innerHTML = `
+            <td>${stat}</td>
+            <td>
+                <svg class="fastDebugLineChart"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewbox="0 0 100 5"
+                    preserveAspectRatio="none">
+                    <rect y="0" height="5" fill="#ccc" />
+                </svg>
+            </td>
+            <td>${timing[stat] - timingOffset}</td>`;
             row.querySelector("rect").setAttribute("width", 2);
         }
         row.querySelector("rect").setAttribute("x", getLeft(stat));
@@ -54,7 +57,8 @@ function insertBrowserTiming() {
     // Determine if the browser timing section has already been rendered.
     if (browserTiming.classList.contains("fastdt-hidden")) {
         const tbody = document.getElementById("fastDebugBrowserTimingTableBody");
-        // This is a reasonably complete and ordered set of timing periods (2 params) and events (1 param)
+        // This is a reasonably complete and ordered set of
+        // timing periods (2 params) and events (1 param)
         addRow(tbody, "domainLookupStart", "domainLookupEnd");
         addRow(tbody, "connectStart", "connectEnd");
         addRow(tbody, "requestStart", "responseEnd"); // There is no requestEnd

@@ -9,7 +9,7 @@
         Object.entries(data.debugToolbar.panels).map(([id, panel]) => {
             if (panel.subtitle) {
                 document
-                    .getElementById("fastdt-" + id)
+                    .getElementById(`fastdt-${id}`)
                     .querySelector("small").textContent = panel.subtitle;
             }
             const panelContent = document.getElementById(id);

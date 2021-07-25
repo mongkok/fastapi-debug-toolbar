@@ -93,10 +93,11 @@ function ajax(url, init) {
         })
         .catch(function (error) {
             const win = document.getElementById("fastDebugWindow");
-            win.innerHTML =
-                '<div class="fastDebugPanelTitle"><button type="button" class="fastDebugClose">»</button><h3>' +
-                error.message +
-                "</h3></div>";
+            win.innerHTML = `
+                <div class="fastDebugPanelTitle">
+                    <button type="button" class="fastDebugClose">»</button>
+                    <h3>${error.message}</h3>
+                </div>`;
             $$.show(win);
             throw error;
         });
