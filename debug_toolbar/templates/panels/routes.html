@@ -15,8 +15,8 @@
   </thead>
   <tbody>
     {% for route in routes|sort(attribute='path') %}
-      <tr>
-        <td>{{ route.name }}</td>
+      <tr{% if route.endpoint == endpoint %} class="fastdt-match"{% endif %}>
+        <td>{{ route.name|default('', true) }}</td>
         <td>{% if route.methods %}{{ route.methods|sort|join(', ') }}{% endif %}</td>
         <td>{{ route.path }}</td>
         <td>{{ get_name_from_obj(route.endpoint) }}</td>

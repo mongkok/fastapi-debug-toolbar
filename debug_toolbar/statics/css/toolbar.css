@@ -621,3 +621,9 @@ iframe#profilingContent {
     width: 100%;
     height: 100%;
 }
+
+#RoutesPanel tbody > tr.fastdt-match {
+    font-weight: bold;
+    background-color: rgba(135, 206, 235, .2) !important;
+}
+

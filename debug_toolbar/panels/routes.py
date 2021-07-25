@@ -14,4 +14,7 @@ class RoutesPanel(Panel):
         request: Request,
         response: Response,
     ) -> t.Optional[t.Dict[str, t.Any]]:
-        return {"routes": request.app.routes}
+        return {
+            "routes": request.app.routes,
+            "endpoint": request.scope["endpoint"],
+        }
