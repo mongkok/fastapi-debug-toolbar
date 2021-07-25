@@ -30,7 +30,7 @@
   </thead>
   <tbody>
     {% for key, value in toolbar.settings %}
-      {% if key != "SETTINGS" %}
+      {% if key != 'SETTINGS' %}
       <tr>
         <td>{{ key|escape }}</td>
         <td><code>{{ value|pprint|escape }}</code></td>
