@@ -6,6 +6,7 @@ import typing as t
 
 from fastapi import Request
 from starlette.routing import Match
+from starlette.staticfiles import StaticFiles
 
 
 def import_string(import_name: str) -> t.Any:
@@ -41,7 +42,13 @@ def matched_endpoint(request: Request) -> t.Optional[t.Callable]:
     for route in request.app.routes:
         match, _ = route.matches(request.scope)
         if match == Match.FULL:
-            return getattr(route, "endpoint", None)
+            endpoint = getattr(route, "endpoint", None)
+
+            if endpoint is not None:
+                return endpoint
+            if not isinstance(route.app, StaticFiles):
+                return route.app
+            break
     return None
 
 
