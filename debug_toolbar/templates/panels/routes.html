@@ -14,7 +14,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for route in routes|sort(attribute='name') %}
+    {% for route in routes|sort(attribute='path') %}
       <tr>
         <td>{{ route.name }}</td>
         <td>{% if route.methods %}{{ route.methods|sort|join(', ') }}{% endif %}</td>
