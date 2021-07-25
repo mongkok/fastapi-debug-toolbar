@@ -1,5 +1,9 @@
 # ChangeLog
 
+### 0.0.3
+
+* Sorted routes by path
+
 ### 0.0.2
 
 * Added mounted apps support (e.g. ariadne.asgi.GraphQL)
