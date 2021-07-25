@@ -11,7 +11,7 @@
     </thead>
     <tbody>
       {% for record in records %}
-        <tr>
+        <tr style="background-color: {{ toolbar.settings.LOGGING_COLORS[record.level] }};">
           <td>{{ record.level }}</td>
           <td>{{ record.time.strftime('%H:%M:%S %m/%d/%Y') }}</td>
           <td>{{ record.channel|default('-') }}</td>

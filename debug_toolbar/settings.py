@@ -3,6 +3,7 @@ import typing as t
 from jinja2 import BaseLoader, ChoiceLoader, Environment, PackageLoader
 from jinja2.ext import Extension
 from pydantic import BaseSettings, IPvAnyAddress, root_validator
+from pydantic.color import Color
 
 
 class DebugToolbarSettings(BaseSettings):
@@ -34,6 +35,13 @@ class DebugToolbarSettings(BaseSettings):
     RESULTS_CACHE_SIZE: int = 25
     PROFILER_OPTIONS: t.Dict[str, t.Any] = {"interval": 0.0001}
     SETTINGS: t.Sequence[BaseSettings] = []
+    LOGGING_COLORS: t.Dict[str, Color] = {
+        "CRITICAL": Color("rgba(255, 0, 0, .4)"),
+        "ERROR": Color("rgba(255, 0, 0, .2)"),
+        "WARNING": Color("rgba(255, 165, 0, .2)"),
+        "INFO": Color("rgba(135, 206, 235, .2)"),
+        "DEBUG": Color("rgba(128, 128, 128, .2)"),
+    }
 
     class Config:
         title = "Debug Toolbar"
