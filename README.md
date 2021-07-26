@@ -1,7 +1,7 @@
 # FastAPI Debug Toolbar
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/5514990/126918549-a91e88e3-b32a-4550-99fe-f0a42980f01c.gif" alt="FastAPI Debug Toolbar">
+    <img src="https://user-images.githubusercontent.com/5514990/126985752-8590a402-d287-4428-9bf4-8d9b2e2f7d78.gif" alt="FastAPI Debug Toolbar">
 </p>
 <p align="center">
     <em>🐞A debug toolbar for FastAPI based on the original django-debug-toolbar.🐞</em>
