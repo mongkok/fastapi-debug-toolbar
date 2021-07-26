@@ -13,6 +13,12 @@ class VersionsPanel(Panel):
     def nav_subtitle(self) -> str:
         return f"FastAPI {__version__}"
 
+    @property
+    def scripts(self) -> t.List[str]:
+        scripts = super().scripts
+        scripts.append(self.url_for("debug_toolbar.static", path="js/versions.js"))
+        return scripts
+
     async def generate_stats(
         self,
         request: Request,

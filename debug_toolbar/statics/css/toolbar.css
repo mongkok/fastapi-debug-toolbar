@@ -611,6 +611,7 @@
     display: none;
 }
 
+
 #ProfilingPanel .fastDebugPanelContent {
     padding: 0; 
 }
@@ -627,3 +628,15 @@ iframe#profilingContent {
     background-color: rgba(135, 206, 235, .2) !important;
 }
 
+#VersionsPanel tbody td code {
+    display: inline;
+}
+#VersionsPanel tbody td span.fast-date {
+    font-size: 10px;
+}
+#VersionsPanel tbody tr.fastdt-pypi-outdated {
+    background-color: rgba(255, 140, 0, .2) !important;
+}
+#VersionsPanel .fastdt-hidden {
+    display: none !important;;
+}

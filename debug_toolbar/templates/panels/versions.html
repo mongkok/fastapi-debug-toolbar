@@ -1,4 +1,6 @@
-<table>
+<div class="fastdt-loader"></div>
+
+<table class="fastdt-hidden">
   <colgroup>
     <col class="fastdt-width-20">
     <col class="fastdt-width-20">
@@ -8,13 +10,25 @@
     <tr>
       <th>Package</th>
       <th>Version</th>
+      <th>Latest version</th>
+      <th>Python</th>
+      <th>Status</th>
+      <th>Home page</th>
     </tr>
   </thead>
   <tbody>
     {% for package in packages %}
       <tr>
-        <td>{{ package.project_name }}</td>
-        <td>{{ package.version }}</td>
+        <td>
+          <a href="https://pypi.org/project/{{ package.project_name }}/" target="_blank">
+            {{ package.project_name|truncate(25) }}
+          </a>
+        </td>
+        <td><code>{{ package.version }}</code></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     {% endfor %}
   </tbody>
