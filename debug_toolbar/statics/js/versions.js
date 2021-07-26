@@ -11,9 +11,9 @@ function pypiIndex() {
     }
     function link(url) {
         return `
-        <a href="${url}" target="_blank">
-            ${$$.truncatechars(url, 40)}
-        </a>`;
+            <a href="${url}" target="_blank">
+                ${$$.truncatechars(url, 40)}
+            </a>`;
     }
     function render(row, data) {
         let rowVersion = row.children.item(1);
