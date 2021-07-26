@@ -78,6 +78,9 @@ const $$ = {
                 element.parentNode.replaceChild(script, element);
         });
     },
+    truncatechars(text, n) {
+        return (text.length > n) ? `${text.slice(0, n)}...` : text;
+    },
 };
 
 function ajax(url, init) {

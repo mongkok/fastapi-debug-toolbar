@@ -1,9 +1,7 @@
 import { $$ } from "./utils.js";
 
 function pypiIndex() {
-    function truncatechars(text, n) {
-        return (text.length > n) ? `${text.slice(0, n)}...` : text;
-    }
+    
     function versionInfo(releases, version) {
         return `
             <code>${version}</code>
@@ -12,7 +10,10 @@ function pypiIndex() {
             </span>`;
     }
     function link(url) {
-        return `<a href="${url}" target="_blank">${truncatechars(url, 40)}</a>`;
+        return `
+        <a href="${url}" target="_blank">
+            ${$$.truncatechars(url, 40)}
+        </a>`;
     }
     function render(row, data) {
         let rowVersion = row.children.item(1);
