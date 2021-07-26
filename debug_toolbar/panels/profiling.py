@@ -25,8 +25,11 @@ class ProfilingPanel(Panel):
             await run_in_threadpool(func) if not is_async else func()
 
         await call(self.profiler.start)
-        response = await super().process_request(request)
-        await call(self.profiler.stop)
+
+        try:
+            response = await super().process_request(request)
+        finally:
+            await call(self.profiler.stop)
         return response
 
     async def generate_stats(
