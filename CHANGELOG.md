@@ -1,5 +1,12 @@
 # ChangeLog
 
+### 0.0.4
+
+* Added pypi details to VersionsPanel
+* Improved assets
+* Added LOGGING_COLORS
+* Highlighted matched endpoint
+
 ### 0.0.3
 
 * Sorted routes by path
