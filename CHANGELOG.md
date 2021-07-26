@@ -2,7 +2,7 @@
 
 ### 0.0.5
 
-* Fixed multiple profilers on the same thead
+* Fixed multiple profilers on the same thread
 * Fixed VersionsPanel Pypi url
 
 ### 0.0.4
