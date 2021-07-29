@@ -1,7 +1,6 @@
 import { $$ } from "./utils.js";
 
 function pypiIndex() {
-    
     function versionInfo(releases, version) {
         return `
             <code>${version}</code>
@@ -15,24 +14,23 @@ function pypiIndex() {
                 ${$$.truncatechars(url, 40)}
             </a>`;
     }
-    function render(row, data) {
-        let rowVersion = row.children.item(1);
-
-        if (rowVersion.textContent != data.version) {
-            row.classList.add("fastdt-pypi-outdated");
+    function render(rowVersion, data) {
+        if (rowVersion.textContent !== data.version) {
+            rowVersion.parentNode.classList.add("fastdt-pypi-outdated");
         }
-        row.children.item(2).innerHTML =
-            versionInfo(data.releases, data.version);
+        if (data.releases[rowVersion.textContent] !== null) {
+            rowVersion.innerHTML =
+                versionInfo(data.releases, rowVersion.textContent);
+        }
+        let lastVersion = rowVersion.nextElementSibling;
+        lastVersion.innerHTML = versionInfo(data.releases, data.version);
 
-        rowVersion.innerHTML =
-            versionInfo(data.releases, rowVersion.textContent);
+        let python = lastVersion.nextElementSibling;
+        python.innerHTML = data.requires_python;
 
-        row.children.item(3).innerHTML = data.requires_python;
-
-        row.children.item(4).innerHTML =
-            data.status ? data.status.slice(26) : "";
-
-        row.children.item(5).innerHTML = link(data.home_page);
+        let status = python.nextElementSibling;
+        status.innerHTML = data.status ? data.status.slice(26) : "";
+        status.nextElementSibling.innerHTML = link(data.home_page);
     }
     function getData(pypi) {
         return {
@@ -54,23 +52,32 @@ function pypiIndex() {
         };
     }
     function updateRow(row) {
-        const name = row.firstElementChild.textContent.trim();
-        const data = localStorage.getItem(`pypi-${name}`);
+        return new Promise((resolve) => {
+            const name = row.firstElementChild.textContent.trim();
+            const data = JSON.parse(localStorage.getItem(`pypi-${name}`));
+            let rowVersion = row.children.item(1);
 
-        if (data === null) {
-            fetch(`https://pypi.org/pypi/${name}/json`)
-                .then(function (response) {
-                    if (response.ok) {
-                        response.json().then(function (pypi) {
-                            const data = getData(pypi);
-                            localStorage.setItem(`pypi-${name}`, JSON.stringify(data));
-                            render(row, data);
-                        });
-                    }
-                });
-        } else {
-            render(row, JSON.parse(data));
-        }
+            if (data === null || !(rowVersion.textContent in data.releases)) {
+                fetch(`https://pypi.org/pypi/${name}/json`)
+                    .then(function (response) {
+                        if (response.ok) {
+                            response.json().then(function (pypi) {
+                                const data = getData(pypi);
+
+                                if (!(rowVersion.textContent in data.releases)) {
+                                    data.releases[rowVersion.textContent] = null;
+                                }
+                                localStorage.setItem(`pypi-${name}`, JSON.stringify(data));
+                                render(rowVersion, data);
+                                resolve();
+                            });
+                        }
+                    });
+            } else {
+                render(rowVersion, data);
+                resolve();
+            }
+        });
     }
     const loader = document
         .getElementById("VersionsPanel")
@@ -78,11 +85,16 @@ function pypiIndex() {
 
     if (loader) {
         const table = loader.nextElementSibling;
-        table.querySelectorAll("tbody > tr").forEach(row => updateRow(row));
+        const queryResult = table.querySelectorAll("tbody > tr");
+        let promises = [];
 
-        // TODO
-        loader.remove();
-        table.classList.remove("fastdt-hidden");
+        for (let i = 0; i < queryResult.length; i++) {
+            promises.push(updateRow(queryResult[i]));
+        }
+        Promise.all(promises).then(() => {
+            loader.remove();
+            table.classList.remove("fastdt-hidden");
+        });
     }
 }
 
