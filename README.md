@@ -21,7 +21,15 @@
     <img src="https://img.shields.io/pypi/v/fastapi-debug-toolbar" alt="Package version">
 </a>
 
+---
+
+**Documentation**: [https://fastapi-dt.domake.io](https://fastapi-dt.domake.io)
+
+---
+
 ## Installation
+
+Add `DebugToolbarMiddleware` middleware to your FastAPI application:
 
 ```sh
 pip install fastapi-debug-toolbar
