@@ -23,7 +23,7 @@
 
 ---
 
-**Documentation**: [https://fastapi-dt.domake.io](https://fastapi-dt.domake.io)
+**Documentation**: [https://fastapi-debug-toolbar.domake.io](https://fastapi-debug-toolbar.domake.io)
 
 ---
 
