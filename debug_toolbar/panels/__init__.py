@@ -10,7 +10,7 @@ if t.TYPE_CHECKING:
 
 
 class Panel:
-    has_content = True
+    has_content: bool = True
 
     def __init__(
         self,
