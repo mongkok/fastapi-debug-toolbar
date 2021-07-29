@@ -1,0 +1,51 @@
+.md-header,
+.md-nav__source,
+.md-footer {
+    background-color: #24292e;
+}
+
+.md-content__inner img.panel {
+    margin-top: -20px;
+    margin-left: -30px;
+}
+
+.md-header .md-ellipsis > span {
+    font-size: .6em;
+}
+
+.md-nav--primary {
+    font-size: 1.8em;
+}
+
+.md-nav--secondary li > a[href^="#debug_toolbar.settings"] {
+    text-transform: lowercase;
+}
+
+.md-nav__title,
+h3[id^="debug_toolbar.setting"] .doc-properties {
+    display: none;
+}
+
+h3[id^="debug_toolbar"] > code :first-child {
+    font-weight: bold;
+    text-transform: lowercase;
+}
+
+.doc > code span:nth-child(n+2) {
+    font-size: .8em;
+}
+
+.doc-contents > p {
+    padding-left: 30px;
+    font-style: italic;
+    font-size: .9em;
+    color: #383838;
+}
+
+.md-typeset p > code {
+    font-weight: bold;
+    color: var(--md-primary-fg-color);
+    background-color: #f7f7f9;
+    padding: 2px 4px;
+    border: 1px solid #e1e1e8;
+}
