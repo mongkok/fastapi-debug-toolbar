@@ -227,14 +227,9 @@
     opacity: 1;
 }
 
-#fastDebug #fastShowToolBarD {
-    color: #cf9;
-    font-size: 22px;
-}
-
-#fastDebug #fastShowToolBarJ {
-    color: #cf9;
-    font-size: 16px;
+#fastDebug #fastShowToolBarLogo img {
+    height: 1.8em;
+    vertical-align: text-bottom;
 }
 
 #fastDebug code {
