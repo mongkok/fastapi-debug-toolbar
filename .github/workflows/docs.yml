@@ -1,0 +1,22 @@
+name: Docs
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2.1.2
+
+      - name: Install dependencies
+        run: poetry install --with docs
+
+      - name: Deploy to GitHub Pages
+        run: mkdocs gh-deploy
