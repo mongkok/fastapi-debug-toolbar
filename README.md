@@ -29,13 +29,13 @@
 
 ## Installation
 
-Add `DebugToolbarMiddleware` middleware to your FastAPI application:
-
 ```sh
 pip install fastapi-debug-toolbar
 ```
 
 ## Quickstart
+
+Add `DebugToolbarMiddleware` middleware to your FastAPI application:
 
 ```py
 from debug_toolbar.middleware import DebugToolbarMiddleware
