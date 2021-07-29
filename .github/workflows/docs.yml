@@ -19,4 +19,4 @@ jobs:
         run: poetry install
 
       - name: Deploy to GitHub Pages
-        run: poetry run mkdocs gh-deploy
+        run: poetry run mkdocs gh-deploy --force
