@@ -1,4 +1,9 @@
-# ChangeLog
+# Changelog
+
+### 0.0.6
+
+* Improved `VersionsPanel` script
+* Added docs
 
 ### 0.0.5
 
@@ -7,9 +12,9 @@
 
 ### 0.0.4
 
-* Added pypi details to VersionsPanel
+* Added pypi details to `VersionsPanel`
 * Improved assets
-* Added LOGGING_COLORS
+* Added `LOGGING_COLORS`
 * Highlighted matched endpoint
 
 ### 0.0.3

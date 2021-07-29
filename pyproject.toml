@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "fastapi-debug-toolbar"
-version = "0.0.5"
+version = "0.0.6"
 description = "A debug toolbar for FastAPI."
 license = "BSD"
 authors = ["Dani <dani@domake.io>"]
