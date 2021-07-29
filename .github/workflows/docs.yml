@@ -16,7 +16,7 @@ jobs:
         uses: abatilo/actions-poetry@v2.1.2
 
       - name: Install dependencies
-        run: poetry install --with docs
+        run: poetry install
 
       - name: Deploy to GitHub Pages
         run: mkdocs gh-deploy

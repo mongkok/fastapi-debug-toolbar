@@ -67,10 +67,6 @@ pytest-cov = "*"
 python-multipart = "*"
 types-setuptools = "*"
 
-[tool.poetry.group.docs]
-optional = true
-
-[tool.poetry.group.docs.dependencies]
 mkdocs = "*"
 mkdocs-material = "*"
 markdown-include = "*"
