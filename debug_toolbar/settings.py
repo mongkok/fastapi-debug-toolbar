@@ -47,7 +47,7 @@ class DebugToolbarSettings(BaseSettings):
     )
     JINJA_ENV: Environment = Field(
         Environment(),
-        description="The Jinja environment instance used to render the toolbar."
+        description="The Jinja environment instance used to render the toolbar.",
     )
     JINJA_LOADERS: t.List[BaseLoader] = Field(
         [],
@@ -108,7 +108,7 @@ class DebugToolbarSettings(BaseSettings):
         description=(
             "pydantic's `BaseSettings` instances to be "
             "displayed on the `SettingsPanel`."
-        )
+        ),
     )
     LOGGING_COLORS: t.Dict[str, Color] = Field(
         {
@@ -118,7 +118,7 @@ class DebugToolbarSettings(BaseSettings):
             "INFO": Color("rgba(135, 206, 235, .2)"),
             "DEBUG": Color("rgba(128, 128, 128, .2)"),
         },
-        description="Color palette used to apply colors based on the log level."
+        description="Color palette used to apply colors based on the log level.",
     )
 
     class Config:
