@@ -120,6 +120,13 @@ class DebugToolbarSettings(BaseSettings):
         },
         description="Color palette used to apply colors based on the log level.",
     )
+    SQL_WARNING_THRESHOLD: int = Field(
+        500,
+        description=(
+            "The SQL panel highlights queries that took more that this amount of "
+            "time, in milliseconds, to execute."
+        ),
+    )
 
     class Config:
         title = "Debug Toolbar"
@@ -130,6 +137,9 @@ class DebugToolbarSettings(BaseSettings):
         super().__init__(**settings)
         loaders = self.JINJA_LOADERS + [PackageLoader("debug_toolbar", "templates")]
         self.JINJA_ENV.loader = ChoiceLoader(loaders)
+        self.JINJA_ENV.trim_blocks = True
+        self.JINJA_ENV.lstrip_blocks = True
+
         for extension in self.JINJA_EXTENSIONS:
             self.JINJA_ENV.add_extension(extension)
 

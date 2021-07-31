@@ -5,6 +5,7 @@ import sys
 import typing as t
 
 from fastapi import Request
+from fastapi.routing import APIRoute
 from starlette.routing import Match
 from starlette.staticfiles import StaticFiles
 
@@ -38,17 +39,23 @@ def get_name_from_obj(obj: t.Any) -> str:
     return name
 
 
-def matched_endpoint(request: Request) -> t.Optional[t.Callable]:
+def matched_route(request: Request) -> t.Optional[APIRoute]:
     for route in request.app.routes:
         match, _ = route.matches(request.scope)
         if match == Match.FULL:
-            endpoint = getattr(route, "endpoint", None)
+            return route
+    return None
 
-            if endpoint is not None:
-                return endpoint
-            if not isinstance(route.app, StaticFiles):
-                return route.app
-            break
+
+def matched_endpoint(request: Request) -> t.Optional[t.Callable]:
+    route = matched_route(request)
+    if route is not None:
+        endpoint = getattr(route, "endpoint", None)
+
+        if endpoint is not None:
+            return endpoint
+        if not isinstance(route.app, StaticFiles):
+            return route.app
     return None
 
 
@@ -76,3 +83,27 @@ def pluralize(value: float, arg: str = "s") -> str:
     if float(value) == 1:
         return singular_suffix
     return plural_suffix
+
+
+def color_generator() -> t.Generator[t.Tuple[int, ...], None, None]:
+    triples = [
+        (1, 0, 0),
+        (0, 1, 1),
+        (1, 1, 0),
+        (1, 0, 1),
+        (1, 1, 1),
+        (0, 1, 0),
+        (0, 0, 1),
+    ]
+    n = 1 << 7
+    so_far = [[0, 0, 0]]
+    while True:
+        if n == 0:
+            yield (0, 0, 0)
+        copy_so_far = list(so_far)
+        for triple in triples:
+            for previous in copy_so_far:
+                rgb = [n * triple[i] + previous[i] for i in range(3)]
+                so_far.append(rgb)
+                yield tuple(rgb)
+        n >>= 1

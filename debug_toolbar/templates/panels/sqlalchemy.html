@@ -1,0 +1,93 @@
+{% if queries %}
+  <ul>
+    {% for alias, info in databases.items() %}
+      <li>
+        <strong><span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ info.rgb_color }}"></span> {{ alias }}</strong>
+        {{ '%0.3f'|format(info.time_spent|float) }} ms ({% if info.num_queries == 1 %}{{ info.num_queries }} query{% else %}{{ info.num_queries }} queries{% endif %}
+        {% if info.similar_count %}
+            including <abbr title="Similar queries are queries with the same SQL, but potentially different parameters.">{{ info.similar_count }} similar</abbr>
+          {% if info.dup_count %}
+              and <abbr title="Duplicate queries are identical to each other: they execute exactly the same SQL and parameters.">{{ info.dup_count }} duplicates</abbr>
+          {% endif %}
+        {% endif %})
+      </li>
+    {% endfor %}
+  </ul>
+
+  <table>
+    <colgroup>
+      <col>
+      <col>
+      <col>
+      <col class="fastdt-width-30">
+      <col>
+      <col>
+    </colgroup>
+    <thead>
+      <tr>
+        <th></th>
+        <th colspan="2">Query</th>
+        <th>Timeline</th>
+        <th>Time (ms)</th>
+        {# TODO: <th>Action</th> #}
+      </tr>
+    </thead>
+    <tbody>
+      {% for alias, query in queries %}
+        <tr class="{% if query.is_slow %} fastDebugRowWarning{% endif %}" id="sqlMain_{{ loop.index }}">
+          <td><span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ databases[alias].rgb_color }}"></span></td>
+          <td class="fastdt-toggle">
+            <button type="button" class="fastToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ loop.index }}">+</button>
+          </td>
+          <td>
+            <div class="fastDebugSql">
+                <span class="fastDebugCollapsed fastdt-hidden">{{ query.sql_formatted|safe }}</span>
+                <span class="fastDebugUncollapsed">{{ query.sql_simple|safe }}</span>
+            </div>
+            {% if query.similar_count %}
+              <strong>
+                <span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ query.similar_color }}"></span>
+                {{ query.similar_count }} similar queries.
+              </strong>
+            {% endif %}
+            {% if query.dup_count %}
+              <strong>
+                <span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ query.trace_color }}"></span>
+                Duplicated {{ query.dup_count }} times.
+              </strong>
+            {% endif %}
+          </td>
+          <td>
+            <svg class="fastDebugLineChart{% if query.is_slow %} fastDebugLineChartWarning{% endif %}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none" aria-label="{{ query.width_ratio }}%">
+              <rect x="{{ query.start_offset }}" y="0" height="5" width="{{ query.width_ratio }}" fill="rgb{{ query.trace_color }}" />
+            </svg>
+          </td>
+          <td class="fastdt-time">
+            {{ '%0.3f'|format(query.duration|float) }}
+          </td>
+          {# TODO: SELECT actions
+          <td class="fastdt-actions">
+            {% if query.params and query.is_select %}
+              <form method="post">
+                {{ query.form }}
+                <button formaction="{% url_for('debug_toolbar.sqlalchemy_select') %}" class="remoteCall">Sel</button>
+                <button formaction="{% url_for('debug_toolbar.sqlalchemy_explain') %}" class="remoteCall">Expl</button>
+              </form>
+              {% endif %}
+          </td>
+        </tr>
+        #}
+        <tr class="fastUnselected {% if query.is_slow %} fastDebugRowWarning{% endif %} fastToggleDetails_{{ loop.index }}" id="sqlDetails_{{ loop.index }}">
+          <td colspan="2"></td>
+          <td colspan="4">
+            <div class="fastSQLDetailsDiv">
+              <p><strong>Connection:</strong> {{ alias }}</p>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No SQL queries were recorded during this request.</p>
+{% endif %}

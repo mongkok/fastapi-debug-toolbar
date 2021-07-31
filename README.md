@@ -1,7 +1,7 @@
 # FastAPI Debug Toolbar
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/5514990/127530804-7c076554-6cf2-4a7f-923f-e40b7f949441.gif" alt="FastAPI Debug Toolbar">
+    <img src="https://user-images.githubusercontent.com/5514990/127749737-1a2b5ce7-a191-4f8b-96e4-fe94e0a08f6f.gif" alt="FastAPI Debug Toolbar">
 </p>
 <p align="center">
     <em>🐞A debug toolbar for FastAPI based on the original django-debug-toolbar.🐞</em>
@@ -43,4 +43,15 @@ from fastapi import FastAPI
 
 app = FastAPI(debug=True)
 app.add_middleware(DebugToolbarMiddleware)
+```
+
+## SQLAlchemy
+
+Please make sure to use the *"Dependency Injection"* as described in the [FastAPI docs](https://fastapi.tiangolo.com/tutorial/sql-databases/#create-a-dependency) and add the SQLAlchemy panel to the argument list of the Debug Toolbar middleware:
+
+```py
+app.add_middleware(
+    DebugToolbarMiddleware,
+    panels=["debug_toolbar.panels.sqlalchemy.SQLAlchemyPanel"],
+)
 ```

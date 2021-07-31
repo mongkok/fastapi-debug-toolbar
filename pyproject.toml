@@ -54,6 +54,7 @@ fastapi = ">= 0.62.0"
 aiofiles = ">= 0.2.1"
 Jinja2 = ">= 2.9"
 pyinstrument = ">= 3.0.0"
+sqlparse = ">= 0.2.0"
 
 [tool.poetry.dev-dependencies]
 black = "*"
