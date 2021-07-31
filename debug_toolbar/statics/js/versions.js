@@ -1,6 +1,10 @@
 import { $$ } from "./utils.js";
 
 function pypiIndex() {
+    const loader = document
+        .getElementById("VersionsPanel")
+        .querySelector(".fastdt-loader");
+
     function versionInfo(releases, version) {
         return `
             <code>${version}</code>
@@ -16,7 +20,8 @@ function pypiIndex() {
     }
     function render(rowVersion, data) {
         if (rowVersion.textContent !== data.version) {
-            rowVersion.parentNode.classList.add("fastdt-pypi-outdated");
+            rowVersion.parentNode.style.backgroundColor =
+                loader.nextElementSibling.dataset.warningColor;
         }
         if (data.releases[rowVersion.textContent] !== null) {
             rowVersion.innerHTML =
@@ -79,10 +84,6 @@ function pypiIndex() {
             }
         });
     }
-    const loader = document
-        .getElementById("VersionsPanel")
-        .querySelector(".fastdt-loader");
-
     if (loader) {
         const table = loader.nextElementSibling;
         const queryResult = table.querySelectorAll("tbody > tr");

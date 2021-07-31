@@ -518,9 +518,6 @@
     fill: #900;
 }
 
-#fastDebug svg.fastDebugLineChartInTransaction rect {
-    fill: #d3ff82;
-}
 #fastDebug svg.fastDebugLineChart line {
     stroke: #94b24d;
 }
@@ -607,9 +604,7 @@
 }
 
 
-#ProfilingPanel .fastDebugPanelContent {
-    padding: 0; 
-}
+#ProfilingPanel .fastDebugPanelContent,
 #ProfilingPanel .fastDebugPanelContent .fastdt-scroll {
     padding: 0; 
 }
@@ -618,19 +613,11 @@ iframe#profilingContent {
     height: 100%;
 }
 
-#RoutesPanel tbody > tr.fastdt-match {
-    font-weight: bold;
-    background-color: rgba(135, 206, 235, .2) !important;
-}
-
 #VersionsPanel tbody td code {
     display: inline;
 }
 #VersionsPanel tbody td span.fast-date {
     font-size: 10px;
-}
-#VersionsPanel tbody tr.fastdt-pypi-outdated {
-    background-color: rgba(255, 140, 0, .2) !important;
 }
 #VersionsPanel .fastdt-hidden {
     display: none !important;;

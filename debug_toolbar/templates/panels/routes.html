@@ -15,7 +15,7 @@
   </thead>
   <tbody>
     {% for route in routes|sort(attribute='path') %}
-      <tr{% if route.endpoint == endpoint %} class="fastdt-match"{% endif %}>
+      <tr{% if route.endpoint == endpoint %} data-fastdt-styles="backgroundColor: {{ toolbar.settings.LOGGING_COLORS.INFO }}; font-weight: bold;"{% endif %}>
         <td>{{ route.name|default('', true) }}</td>
         <td>{% if route.methods %}{{ route.methods|sort|join(', ') }}{% endif %}</td>
         <td>{{ route.path }}</td>
