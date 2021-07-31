@@ -20,7 +20,8 @@ theme:
 
 nav:
   - Introduction: index.md
-  - Built-in panels: panels/built-in.md
+  - Default panels: panels/default.md
+  - SQL panels: panels/sql.md
   - Development: panels/dev.md
   - Settings: settings.md
   - Changelog: changelog.md
