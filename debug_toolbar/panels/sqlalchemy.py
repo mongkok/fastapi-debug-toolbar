@@ -111,9 +111,8 @@ class SQLAlchemyPanel(Panel):
             route = t.cast(APIRoute, route)
 
             for sub_dependant in route.dependant.dependencies:
-                call: t.Callable[..., t.Any] = t.cast(
-                    t.Callable[..., t.Any], sub_dependant.call
-                )
+                call = t.cast(t.Callable[..., t.Any], sub_dependant.call)
+
                 if is_gen_callable(call) or is_async_gen_callable(call):
                     solved = await solve_generator(
                         call=call,
