@@ -4,11 +4,6 @@
     background-color: #24292e;
 }
 
-.md-content__inner img.panel {
-    margin-top: -20px;
-    margin-left: -30px;
-}
-
 .md-header .md-ellipsis > span {
     font-size: .6em;
 }
