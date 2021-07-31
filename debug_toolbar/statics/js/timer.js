@@ -12,7 +12,7 @@ function insertBrowserTiming() {
         let width = ((timing[endStat] - timing[stat]) / totalTime) * 100.0;
         // Calculate relative percent
         width = (100.0 * width) / (100.0 - getLeft(stat));
-        return width < 1 ? "2px" : `${width}%`;
+        return width < 1 ? "2px" : `${width||0}%`;
     }
     function addRow(tbody, stat, endStat) {
         const row = document.createElement("tr");
