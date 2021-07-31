@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.1.0
+
+* Added SQLAlchemy panel
+* Added LOGGING_COLORS to panel templates
+* Minor improvements
+
 ### 0.0.6
 
 * Improved `VersionsPanel` script
