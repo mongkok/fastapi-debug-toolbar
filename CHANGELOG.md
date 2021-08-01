@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.1.1
+
+* Improved dependency resolution
+* Added minor improvements
+
 ### 0.1.0
 
 * Added SQLAlchemy panel
