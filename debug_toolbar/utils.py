@@ -87,7 +87,6 @@ def pluralize(value: float, arg: str = "s") -> str:
 
 def color_generator() -> t.Generator[t.Tuple[int, ...], None, None]:
     triples = [
-        (1, 0, 0),
         (0, 1, 1),
         (1, 1, 0),
         (1, 0, 1),
