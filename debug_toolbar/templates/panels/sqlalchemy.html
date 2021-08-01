@@ -6,10 +6,10 @@
         {{ '%0.3f'|format(info.time_spent|float) }} ms ({% if info.num_queries == 1 %}{{ info.num_queries }} query{% else %}{{ info.num_queries }} queries{% endif %}
         {% if info.similar_count %}
             including <abbr title="Similar queries are queries with the same SQL, but potentially different parameters.">{{ info.similar_count }} similar</abbr>
-          {% if info.dup_count %}
+          {%- if info.dup_count %}
               and <abbr title="Duplicate queries are identical to each other: they execute exactly the same SQL and parameters.">{{ info.dup_count }} duplicates</abbr>
-          {% endif %}
-        {% endif %})
+          {%- endif %}
+        {%- endif %})
       </li>
     {% endfor %}
   </ul>
@@ -75,8 +75,8 @@
               </form>
               {% endif %}
           </td>
+          #}
         </tr>
-        #}
         <tr class="fastUnselected {% if query.is_slow %} fastDebugRowWarning{% endif %} fastToggleDetails_{{ loop.index }}" id="sqlDetails_{{ loop.index }}">
           <td colspan="2"></td>
           <td colspan="4">
