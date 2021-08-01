@@ -3,11 +3,7 @@ from collections import defaultdict
 from time import perf_counter
 
 from fastapi import Request, Response
-from fastapi.dependencies.utils import (
-    is_async_gen_callable,
-    is_gen_callable,
-    solve_generator,
-)
+from fastapi.dependencies.utils import solve_dependencies
 from fastapi.routing import APIRoute
 from sqlalchemy import event
 from sqlalchemy.engine import Connection, Engine
@@ -39,16 +35,8 @@ class SQLAlchemyPanel(Panel):
         )
 
     def register(self, engine: Engine) -> None:
-        event.listen(
-            engine,
-            "before_cursor_execute",
-            self.before_cursor_execute,
-        )
-        event.listen(
-            engine,
-            "after_cursor_execute",
-            self.after_cursor_execute,
-        )
+        event.listen(engine, "before_cursor_execute", self.before_cursor_execute)
+        event.listen(engine, "after_cursor_execute", self.after_cursor_execute)
 
     def before_cursor_execute(
         self,
@@ -105,23 +93,18 @@ class SQLAlchemyPanel(Panel):
 
     async def process_request(self, request: Request) -> Response:
         route = matched_route(request)
-        stack = request.scope.get("fastapi_astack")
 
-        if stack is not None and hasattr(route, "dependant"):
+        if hasattr(route, "dependant"):
             route = t.cast(APIRoute, route)
 
-            for sub_dependant in route.dependant.dependencies:
-                call = t.cast(t.Callable[..., t.Any], sub_dependant.call)
-
-                if is_gen_callable(call) or is_async_gen_callable(call):
-                    solved = await solve_generator(
-                        call=call,
-                        stack=stack,
-                        sub_values={},
-                    )
-                    if isinstance(solved, Session):
-                        engine = solved.get_bind()
-                        self.register(engine)
+            solved_result = await solve_dependencies(
+                request=request,
+                dependant=route.dependant,
+                dependency_overrides_provider=route.dependency_overrides_provider,
+            )
+            for value in solved_result[0].values():
+                if isinstance(value, Session):
+                    self.register(value.get_bind())
 
         return await super().process_request(request)
 
