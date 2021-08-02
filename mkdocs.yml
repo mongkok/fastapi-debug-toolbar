@@ -1,6 +1,6 @@
 site_name: <span>FastAPI</span> Debug Toolbar
 site_description: A debug toolbar for FastAPI.
-site_url: https://debug-toolbar.domake.io
+site_url: https://fastapi-debug-toolbar.domake.io
 
 repo_name: mongkok/fastapi-debug-toolbar
 repo_url: https://github.com/mongkok/fastapi-debug-toolbar
