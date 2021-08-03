@@ -1,5 +1,5 @@
-import time
 import typing as t
+from time import perf_counter
 
 from fastapi import Request, Response
 
@@ -50,7 +50,7 @@ class TimerPanel(Panel):
         return scripts
 
     async def process_request(self, request: Request) -> Response:
-        self._start_time = time.time()
+        self._start_time = perf_counter()
         if self.has_content:
             self._start_ru = resource.getrusage(resource.RUSAGE_SELF)
         return await super().process_request(request)
@@ -61,7 +61,7 @@ class TimerPanel(Panel):
         response: Response,
     ) -> t.Optional[t.Dict[str, t.Any]]:
         stats = {
-            "elapsed": (time.time() - self._start_time) * 1000,
+            "elapsed": (perf_counter() - self._start_time) * 1000,
         }
         if hasattr(self, "_start_ru"):
             self._end_ru = resource.getrusage(resource.RUSAGE_SELF)
