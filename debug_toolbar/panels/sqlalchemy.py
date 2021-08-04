@@ -1,3 +1,4 @@
+import json
 import typing as t
 from collections import defaultdict
 from time import perf_counter
@@ -51,9 +52,9 @@ class SQLAlchemyPanel(Panel):
         context: DefaultExecutionContext,
         executemany: bool,
     ) -> None:
-        context._start_time = perf_counter()
+        conn.info.setdefault("start_time", []).append(perf_counter())
 
-    def after_cursor_execute(
+    def after_execute(
         self,
         conn: Connection,
         cursor: t.Any,
@@ -62,25 +63,17 @@ class SQLAlchemyPanel(Panel):
         context: DefaultExecutionContext,
         executemany: bool,
     ) -> None:
-        end_time = perf_counter()
-        duration = (end_time - context._start_time) * 1000
-        compiled = context.invoked_statement.compile(
-            compile_kwargs={"literal_binds": True}
-        )
-        sql = str(compiled)
+        duration = (perf_counter() - conn.info["start_time"].pop(-1)) * 1000
         alias = str(conn.engine.url)
 
         query = {
-            "statement": statement,
+            "sql": statement,
             "params": parameters,
-            "start_time": context._start_time,
-            "end_time": end_time,
             "duration": duration,
-            "sql_raw": sql,
-            "sql_formatted": parse_sql(sql, aligned_indent=True),
-            "sql_simple": simplify(parse_sql(sql, aligned_indent=False)),
+            "sql_formatted": parse_sql(statement, aligned_indent=True),
+            "sql_simple": simplify(parse_sql(statement, aligned_indent=False)),
             "is_slow": duration > self.toolbar.settings.SQL_WARNING_THRESHOLD,
-            "is_select": sql.lower().strip().startswith("select"),
+            "is_select": context.invoked_statement.is_select,
         }
         if alias not in self._databases:
             self._databases[alias] = {
@@ -96,6 +89,7 @@ class SQLAlchemyPanel(Panel):
         self._queries.append((alias, query))
 
     async def process_request(self, request: Request) -> Response:
+        engines: t.List[Engine] = []
         route = matched_route(request)
 
         if hasattr(route, "dependant"):
@@ -123,20 +117,21 @@ class SQLAlchemyPanel(Panel):
         request: Request,
         response: Response,
     ) -> t.Optional[t.Dict[str, t.Any]]:
-        trace_colors: t.Dict[str, t.Tuple[int, ...]] = defaultdict(
+        trace_colors: t.Dict[t.Tuple[str, str], t.Tuple[int, ...]] = defaultdict(
             lambda: next(self._colors)
         )
-        query_dups: t.Dict[str, t.Dict[str, int]] = defaultdict(
+        duplicates: t.Dict[str, t.Dict[t.Tuple[str, str], int]] = defaultdict(
             lambda: defaultdict(int)
         )
-        query_similar: t.Dict[str, t.Dict[str, t.Any]] = defaultdict(
-            lambda: defaultdict(int)
-        )
+        similar: t.Dict[str, t.Dict[str, t.Any]] = defaultdict(lambda: defaultdict(int))
         width_ratio_tally = 0
 
+        def query_key(query: t.Dict[str, t.Any]) -> t.Tuple[str, str]:
+            return (query["sql"], json.dumps(query["params"]))
+
         for alias, query in self._queries:
-            query_dups[alias][query["sql_raw"]] += 1
-            query_similar[alias][query["statement"]] += 1
+            duplicates[alias][query_key(query)] += 1
+            similar[alias][query["sql"]] += 1
             try:
                 width_ratio = (query["duration"] / self._sql_time) * 100
             except ZeroDivisionError:
@@ -144,7 +139,7 @@ class SQLAlchemyPanel(Panel):
 
             query.update(
                 {
-                    "trace_color": trace_colors[query["sql_raw"]],
+                    "trace_color": trace_colors[query_key(query)],
                     "start_offset": width_ratio_tally,
                     "end_offset": width_ratio + width_ratio_tally,
                     "width_ratio": width_ratio,
@@ -152,35 +147,27 @@ class SQLAlchemyPanel(Panel):
             )
             width_ratio_tally += width_ratio
 
-        query_dups = {
-            alias: {
-                query: dup_count
-                for query, dup_count in queries.items()
-                if dup_count >= 2
-            }
-            for alias, queries in query_dups.items()
+        duplicates = {
+            alias: {query: c for query, c in queries.items() if c > 1}
+            for alias, queries in duplicates.items()
         }
-        query_similar = {
+        similar = {
             alias: {
-                query: (similar_count, next(self._colors))
-                for query, similar_count in queries.items()
-                if similar_count >= 2
+                query: (c, next(self._colors)) for query, c in queries.items() if c > 1
             }
-            for alias, queries in query_similar.items()
+            for alias, queries in similar.items()
         }
         for alias, query in self._queries:
             try:
-                (query["similar_count"], query["similar_color"]) = query_similar[alias][
-                    query["statement"]
-                ]
-                query["dup_count"] = query_dups[alias][query["sql_raw"]]
+                query["sim_count"], query["sim_color"] = similar[alias][query["sql"]]
+                query["dup_count"] = duplicates[alias][query_key(query)]
             except KeyError:
                 continue
 
         for alias, info in self._databases.items():
             try:
-                info["similar_count"] = sum(c for c, _ in query_similar[alias].values())
-                info["dup_count"] = sum(c for c in query_dups[alias].values())
+                info["sim_count"] = sum(c for c, _ in similar[alias].values())
+                info["dup_count"] = sum(c for c in duplicates[alias].values())
             except KeyError:
                 continue
 

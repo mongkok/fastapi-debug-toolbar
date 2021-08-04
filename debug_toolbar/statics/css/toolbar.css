@@ -622,3 +622,8 @@ iframe#profilingContent {
 #VersionsPanel .fastdt-hidden {
     display: none !important;;
 }
+
+#fastDebug .fastSQLDetailsDiv code {
+    display: inline;
+    font-size: 11px;
+}
