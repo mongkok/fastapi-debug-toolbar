@@ -18,12 +18,13 @@ class BoldKeywordFilter:
     def process(
         self,
         stream: t.Generator[t.Tuple[T._TokenType, str], None, None],
-    ) -> t.Generator[t.Tuple[t.Type[T.Text], str], None, None]:
+    ) -> t.Generator[t.Tuple[t.Type[T._TokenType], str], None, None]:
         for token_type, value in stream:
-            if token_type.is_keyword:
+            is_keyword = token_type in T.Keyword
+            if is_keyword:
                 yield T.Text, "<strong>"
             yield token_type, html.escape(value)
-            if token_type.is_keyword:
+            if is_keyword:
                 yield T.Text, "</strong>"
 
 
@@ -31,7 +32,7 @@ class RawFilter:
     def process(
         self,
         stream: t.Generator[t.Tuple[T._TokenType, str], None, None],
-    ) -> t.Generator[t.Tuple[t.Type[T.Text], str], None, None]:
+    ) -> t.Generator[t.Tuple[t.Type[T._TokenType], str], None, None]:
         for token_type, value in stream:
             if token_type not in T.Number and token_type != T.String.Single:
                 yield token_type, value
@@ -39,15 +40,14 @@ class RawFilter:
 
 def simplify(sql: str) -> str:
     expr = r"SELECT</strong> (...........*?) <strong>FROM"
-    sub = r"SELECT</strong> &#8226;&#8226;&#8226; <strong>FROM"
-    return re.sub(expr, sub, sql)
+    return re.sub(expr, "SELECT</strong> &#8226;&#8226;&#8226; <strong>FROM", sql)
 
 
 def parse_sql(sql: str, aligned_indent: bool = False) -> str:
     stack = sqlparse.engine.FilterStack()
-    stack.enable_grouping()
 
     if aligned_indent:
+        stack.enable_grouping()
         stack.stmtprocess.append(
             sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
         )
@@ -58,7 +58,6 @@ def parse_sql(sql: str, aligned_indent: bool = False) -> str:
 
 def raw_sql(sql: str) -> str:
     stack = sqlparse.engine.FilterStack()
-    stack.enable_grouping()
     stack.preprocess.append(RawFilter())
     stack.postprocess.append(sqlparse.filters.SerializerUnicode())
     return "".join(stack.run(sql))
