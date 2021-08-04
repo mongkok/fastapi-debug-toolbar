@@ -4,6 +4,7 @@
 
 * Removed SQL compiled query in favor of statement params
 * Added SQLAlchemy unregister
+* Added SQLPanel base class
 
 ### 0.1.1
 
