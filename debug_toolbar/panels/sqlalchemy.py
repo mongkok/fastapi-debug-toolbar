@@ -15,7 +15,6 @@ from debug_toolbar.utils import matched_route
 
 class SQLAlchemyPanel(SQLPanel):
     title = "SQLAlchemy"
-    template = "panels/sql.html"
 
     def register(self, engine: Engine) -> None:
         event.listen(engine, "before_cursor_execute", self.before_execute)
@@ -46,9 +45,9 @@ class SQLAlchemyPanel(SQLPanel):
         executemany: bool,
     ) -> None:
         query = {
+            "duration": (perf_counter() - conn.info["start_time"].pop(-1)) * 1000,
             "sql": statement,
             "params": parameters,
-            "duration": (perf_counter() - conn.info["start_time"].pop(-1)) * 1000,
             "is_select": context.invoked_statement.is_select,
         }
         self.add_query(str(conn.engine.url), query)

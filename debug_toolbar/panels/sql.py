@@ -65,6 +65,8 @@ def raw_sql(sql: str) -> str:
 
 
 class SQLPanel(Panel):
+    template = "panels/sql.html"
+
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
         self._sql_time: int = 0

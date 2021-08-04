@@ -48,7 +48,6 @@ class DBWrapper:
 
 class TortoisePanel(SQLPanel):
     title = "Tortoise ORM"
-    template = "panels/sql.html"
 
     @contextmanager
     def on_execute(
