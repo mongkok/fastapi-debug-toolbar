@@ -35,10 +35,14 @@ class SQLAlchemyPanel(Panel):
         )
 
     def register(self, engine: Engine) -> None:
-        event.listen(engine, "before_cursor_execute", self.before_cursor_execute)
-        event.listen(engine, "after_cursor_execute", self.after_cursor_execute)
+        event.listen(engine, "before_cursor_execute", self.before_execute)
+        event.listen(engine, "after_cursor_execute", self.after_execute)
 
-    def before_cursor_execute(
+    def unregister(self, engine: Engine) -> None:
+        event.remove(engine, "before_cursor_execute", self.before_execute)
+        event.remove(engine, "after_cursor_execute", self.after_execute)
+
+    def before_execute(
         self,
         conn: Connection,
         cursor: t.Any,
@@ -104,9 +108,15 @@ class SQLAlchemyPanel(Panel):
             )
             for value in solved_result[0].values():
                 if isinstance(value, Session):
-                    self.register(value.get_bind())
-
-        return await super().process_request(request)
+                    engine = value.get_bind()
+                    engines.append(engine)
+                    self.register(engine)
+        try:
+            response = await super().process_request(request)
+        finally:
+            for engine in engines:
+                self.unregister(engine)
+        return response
 
     async def generate_stats(
         self,
