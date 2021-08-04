@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.1.2
+
+* Removed SQL compiled query in favor of statement params
+* Added SQLAlchemy unregister
+
 ### 0.1.1
 
 * Improved dependency resolution
