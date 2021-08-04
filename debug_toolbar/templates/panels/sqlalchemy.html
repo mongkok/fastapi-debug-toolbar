@@ -3,7 +3,7 @@
     {% for alias, info in databases.items() %}
       <li>
         <strong><span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ info.rgb_color }}"></span> {{ alias }}</strong>
-        {{ '%0.3f'|format(info.time_spent|float) }} ms ({% if info.num_queries == 1 %}{{ info.num_queries }} query{% else %}{{ info.num_queries }} queries{% endif %}
+        {{ '%0.2f'|format(info.time_spent|float) }} ms ({% if info.num_queries == 1 %}{{ info.num_queries }} query{% else %}{{ info.num_queries }} queries{% endif %}
         {% if info.similar_count %}
             including <abbr title="Similar queries are queries with the same SQL, but potentially different parameters.">{{ info.similar_count }} similar</abbr>
           {%- if info.dup_count %}
@@ -63,7 +63,7 @@
             </svg>
           </td>
           <td class="fastdt-time">
-            {{ '%0.3f'|format(query.duration|float) }}
+            {{ '%0.2f'|format(query.duration|float) }}
           </td>
           {# TODO: SELECT actions
           <td class="fastdt-actions">
