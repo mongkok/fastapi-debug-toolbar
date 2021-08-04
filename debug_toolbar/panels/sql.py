@@ -11,7 +11,7 @@ from sqlparse import tokens as T
 from debug_toolbar.panels import Panel
 from debug_toolbar.utils import color_generator
 
-__all__ = ["SQLPanel"]
+__all__ = ["SQLPanel", "parse_sql", "raw_sql"]
 
 
 class BoldKeywordFilter:
@@ -20,12 +20,21 @@ class BoldKeywordFilter:
         stream: t.Generator[t.Tuple[T._TokenType, str], None, None],
     ) -> t.Generator[t.Tuple[t.Type[T.Text], str], None, None]:
         for token_type, value in stream:
-            is_keyword = token_type in T.Keyword
-            if is_keyword:
+            if token_type.is_keyword:
                 yield T.Text, "<strong>"
             yield token_type, html.escape(value)
-            if is_keyword:
+            if token_type.is_keyword:
                 yield T.Text, "</strong>"
+
+
+class RawFilter:
+    def process(
+        self,
+        stream: t.Generator[t.Tuple[T._TokenType, str], None, None],
+    ) -> t.Generator[t.Tuple[t.Type[T.Text], str], None, None]:
+        for token_type, value in stream:
+            if token_type not in T.Number and token_type != T.String.Single:
+                yield token_type, value
 
 
 def simplify(sql: str) -> str:
@@ -43,6 +52,14 @@ def parse_sql(sql: str, aligned_indent: bool = False) -> str:
             sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
         )
     stack.preprocess.append(BoldKeywordFilter())
+    stack.postprocess.append(sqlparse.filters.SerializerUnicode())
+    return "".join(stack.run(sql))
+
+
+def raw_sql(sql: str) -> str:
+    stack = sqlparse.engine.FilterStack()
+    stack.enable_grouping()
+    stack.preprocess.append(RawFilter())
     stack.postprocess.append(sqlparse.filters.SerializerUnicode())
     return "".join(stack.run(sql))
 
@@ -75,7 +92,6 @@ class SQLPanel(Panel):
                 "is_slow": duration > self.toolbar.settings.SQL_WARNING_THRESHOLD,
             }
         )
-
         if alias not in self._databases:
             self._databases[alias] = {
                 "time_spent": duration,
@@ -103,12 +119,15 @@ class SQLPanel(Panel):
         similar: t.Dict[str, t.Dict[str, t.Any]] = defaultdict(lambda: defaultdict(int))
         width_ratio_tally = 0
 
-        def query_key(query: t.Dict[str, t.Any]) -> t.Tuple[str, str]:
+        def dup_key(query: t.Dict[str, t.Any]) -> t.Tuple[str, str]:
             return (query["sql"], json.dumps(query["params"]))
 
+        def sim_key(query: t.Dict[str, t.Any]) -> str:
+            return query.get("raw", query.get("sql"))
+
         for alias, query in self._queries:
-            duplicates[alias][query_key(query)] += 1
-            similar[alias][query["sql"]] += 1
+            duplicates[alias][dup_key(query)] += 1
+            similar[alias][sim_key(query)] += 1
             try:
                 width_ratio = (query["duration"] / self._sql_time) * 100
             except ZeroDivisionError:
@@ -116,7 +135,7 @@ class SQLPanel(Panel):
 
             query.update(
                 {
-                    "trace_color": trace_colors[query_key(query)],
+                    "trace_color": trace_colors[dup_key(query)],
                     "start_offset": width_ratio_tally,
                     "end_offset": width_ratio + width_ratio_tally,
                     "width_ratio": width_ratio,
@@ -136,8 +155,8 @@ class SQLPanel(Panel):
         }
         for alias, query in self._queries:
             try:
-                query["sim_count"], query["sim_color"] = similar[alias][query["sql"]]
-                query["dup_count"] = duplicates[alias][query_key(query)]
+                query["sim_count"], query["sim_color"] = similar[alias][sim_key(query)]
+                query["dup_count"] = duplicates[alias][dup_key(query)]
             except KeyError:
                 continue
 

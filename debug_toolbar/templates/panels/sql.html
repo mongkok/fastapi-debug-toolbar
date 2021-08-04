@@ -4,8 +4,8 @@
       <li>
         <strong><span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ info.rgb_color }}"></span> {{ alias }}</strong>
         {{ '%0.2f'|format(info.time_spent|float) }} ms ({% if info.num_queries == 1 %}{{ info.num_queries }} query{% else %}{{ info.num_queries }} queries{% endif %}
-        {% if info.similar_count %}
-            including <abbr title="Similar queries are queries with the same SQL, but potentially different parameters.">{{ info.similar_count }} similar</abbr>
+        {% if info.sim_count %}
+            including <abbr title="Similar queries are queries with the same SQL, but potentially different parameters.">{{ info.sim_count }} similar</abbr>
           {%- if info.dup_count %}
               and <abbr title="Duplicate queries are identical to each other: they execute exactly the same SQL and parameters.">{{ info.dup_count }} duplicates</abbr>
           {%- endif %}
@@ -44,10 +44,10 @@
                 <span class="fastDebugCollapsed fastdt-hidden">{{ query.sql_formatted|safe }}</span>
                 <span class="fastDebugUncollapsed">{{ query.sql_simple|safe }}</span>
             </div>
-            {% if query.similar_count %}
+            {% if query.sim_count %}
               <strong>
-                <span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ query.similar_color }}"></span>
-                {{ query.similar_count }} similar queries.
+                <span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ query.sim_color }}"></span>
+                {{ query.sim_count }} similar queries.
               </strong>
             {% endif %}
             {% if query.dup_count %}
@@ -81,7 +81,7 @@
           <td colspan="2"></td>
           <td colspan="4">
             <div class="fastSQLDetailsDiv">
-              <p><strong>Params:</strong> <code>{{ query.params }}</code></p>
+              {% if query.params %}<p><strong>Params:</strong> <code>{{ query.params }}</code></p>{% endif %}
               <p><strong>Connection:</strong> {{ alias }}</p>
             </div>
           </td>

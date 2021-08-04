@@ -15,7 +15,7 @@ from debug_toolbar.utils import matched_route
 
 class SQLAlchemyPanel(SQLPanel):
     title = "SQLAlchemy"
-    template = "panels/sqlalchemy.html"
+    template = "panels/sql.html"
 
     def register(self, engine: Engine) -> None:
         event.listen(engine, "before_cursor_execute", self.before_execute)
