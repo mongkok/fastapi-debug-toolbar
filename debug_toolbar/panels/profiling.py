@@ -5,6 +5,7 @@ from pyinstrument import Profiler
 from starlette.concurrency import run_in_threadpool
 
 from debug_toolbar.panels import Panel
+from debug_toolbar.types import Stats
 from debug_toolbar.utils import is_coroutine, matched_endpoint
 
 
@@ -32,9 +33,5 @@ class ProfilingPanel(Panel):
             await call(self.profiler.stop)
         return response
 
-    async def generate_stats(
-        self,
-        request: Request,
-        response: Response,
-    ) -> t.Optional[t.Dict[str, t.Any]]:
+    async def generate_stats(self, request: Request, response: Response) -> Stats:
         return {"content": self.profiler.output_html()}

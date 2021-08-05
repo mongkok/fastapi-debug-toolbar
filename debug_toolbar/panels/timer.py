@@ -4,6 +4,7 @@ from time import perf_counter
 from fastapi import Request, Response
 
 from debug_toolbar.panels import Panel
+from debug_toolbar.types import ServerTiming, Stats
 
 try:
     import resource
@@ -55,11 +56,7 @@ class TimerPanel(Panel):
             self._start_ru = resource.getrusage(resource.RUSAGE_SELF)
         return await super().process_request(request)
 
-    async def generate_stats(
-        self,
-        request: Request,
-        response: Response,
-    ) -> t.Optional[t.Dict[str, t.Any]]:
+    async def generate_stats(self, request: Request, response: Response) -> Stats:
         stats = {
             "elapsed": (perf_counter() - self._start_time) * 1000,
         }
@@ -83,7 +80,7 @@ class TimerPanel(Panel):
         self,
         request: Request,
         response: Response,
-    ) -> t.Optional[t.Sequence[t.Sequence[t.Union[str, float]]]]:
+    ) -> ServerTiming:
         stats = self.get_stats()
 
         return [

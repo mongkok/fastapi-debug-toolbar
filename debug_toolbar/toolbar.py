@@ -8,6 +8,7 @@ from starlette.middleware.base import RequestResponseEndpoint
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.settings import DebugToolbarSettings
+from debug_toolbar.types import ServerTiming, Stats
 from debug_toolbar.utils import get_name_from_obj, import_string
 
 DT = t.TypeVar("DT", bound="DebugToolbar")
@@ -43,8 +44,8 @@ class DebugToolbar:
             panel = panels.pop()
             self._panels[panel.panel_id] = panel
 
-        self.stats: t.Dict[str, t.Any] = {}
-        self.server_timing_stats: t.Dict[str, t.Any] = {}
+        self.stats: Stats = {}
+        self.server_timing_stats: t.Dict[str, ServerTiming] = {}
         self.store_id: t.Optional[str] = None
 
     @classmethod

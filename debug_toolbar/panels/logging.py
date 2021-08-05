@@ -6,6 +6,7 @@ from fastapi import Request, Response
 from starlette.concurrency import run_in_threadpool
 
 from debug_toolbar.panels import Panel
+from debug_toolbar.types import Stats
 from debug_toolbar.utils import is_coroutine, matched_endpoint, pluralize
 
 try:
@@ -97,11 +98,7 @@ class LoggingPanel(Panel):
         collector.clear_collection(thread=self.current_thread)
         return await super().process_request(request)
 
-    async def generate_stats(
-        self,
-        request: Request,
-        response: Response,
-    ) -> t.Optional[t.Dict[str, t.Any]]:
+    async def generate_stats(self, request: Request, response: Response) -> Stats:
         records = collector.get_collection(thread=self.current_thread)
         self._records[self.current_thread] = records
         collector.clear_collection(thread=self.current_thread)

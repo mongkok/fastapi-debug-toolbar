@@ -3,6 +3,7 @@ import typing as t
 from fastapi import Request, Response
 from starlette.middleware.base import RequestResponseEndpoint
 
+from debug_toolbar.types import ServerTiming, Stats
 from debug_toolbar.utils import get_name_from_obj
 
 if t.TYPE_CHECKING:
@@ -77,14 +78,10 @@ class Panel:
     async def process_request(self, request: Request) -> Response:
         return await self.call_next(request)
 
-    async def generate_stats(
-        self,
-        request: Request,
-        response: Response,
-    ) -> t.Optional[t.Dict[str, t.Any]]:
+    async def generate_stats(self, request: Request, response: Response) -> Stats:
         pass
 
-    def get_stats(self) -> t.Dict[str, t.Any]:
+    def get_stats(self) -> Stats:
         return self.toolbar.stats.get(self.panel_id, {})
 
     async def record_stats(self, request: Request, response: Response) -> None:
@@ -97,10 +94,10 @@ class Panel:
         self,
         request: Request,
         response: Response,
-    ) -> t.Optional[t.Sequence[t.Sequence[t.Union[str, float]]]]:
+    ) -> ServerTiming:
         pass
 
-    def get_server_timing_stats(self) -> t.Sequence[t.Sequence[t.Union[str, float]]]:
+    def get_server_timing_stats(self) -> ServerTiming:
         return self.toolbar.server_timing_stats.get(self.panel_id, [])
 
     async def record_server_timing(self, request: Request, response: Response) -> None:

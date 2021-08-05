@@ -9,16 +9,16 @@ from fastapi import Request, Response
 from sqlparse import tokens as T
 
 from debug_toolbar.panels import Panel
+from debug_toolbar.types import Stats
 from debug_toolbar.utils import color_generator
 
 __all__ = ["SQLPanel", "parse_sql", "raw_sql"]
 
+Stream = t.Generator[t.Tuple[T._TokenType, str], None, None]
+
 
 class BoldKeywordFilter:
-    def process(
-        self,
-        stream: t.Generator[t.Tuple[T._TokenType, str], None, None],
-    ) -> t.Generator[t.Tuple[t.Type[T._TokenType], str], None, None]:
+    def process(self, stream: Stream) -> Stream:
         for token_type, value in stream:
             is_keyword = token_type in T.Keyword
             if is_keyword:
@@ -29,10 +29,7 @@ class BoldKeywordFilter:
 
 
 class RawFilter:
-    def process(
-        self,
-        stream: t.Generator[t.Tuple[T._TokenType, str], None, None],
-    ) -> t.Generator[t.Tuple[t.Type[T._TokenType], str], None, None]:
+    def process(self, stream: Stream) -> Stream:
         for token_type, value in stream:
             if token_type not in T.Number and token_type != T.String.Single:
                 yield token_type, value
@@ -87,7 +84,6 @@ class SQLPanel(Panel):
 
         query.update(
             {
-                "duration": duration,
                 "sql_formatted": parse_sql(sql, aligned_indent=True),
                 "sql_simple": simplify(parse_sql(sql, aligned_indent=False)),
                 "is_slow": duration > self.toolbar.settings.SQL_WARNING_THRESHOLD,
@@ -106,11 +102,7 @@ class SQLPanel(Panel):
         self._sql_time += duration
         self._queries.append((alias, query))
 
-    async def generate_stats(
-        self,
-        request: Request,
-        response: Response,
-    ) -> t.Optional[t.Dict[str, t.Any]]:
+    async def generate_stats(self, request: Request, response: Response) -> Stats:
         trace_colors: t.Dict[t.Tuple[str, str], t.Tuple[int, ...]] = defaultdict(
             lambda: next(self._colors)
         )
