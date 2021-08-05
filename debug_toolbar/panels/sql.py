@@ -40,8 +40,14 @@ def simplify(sql: str) -> str:
     return re.sub(expr, "SELECT</strong> &#8226;&#8226;&#8226; <strong>FROM", sql)
 
 
+class FilterStack(sqlparse.engine.FilterStack):
+    def run(self, sql: str) -> str:
+        self.postprocess.append(sqlparse.filters.SerializerUnicode())
+        return "".join(super().run(sql))
+
+
 def parse_sql(sql: str, aligned_indent: bool = False) -> str:
-    stack = sqlparse.engine.FilterStack()
+    stack = FilterStack()
 
     if aligned_indent:
         stack.enable_grouping()
@@ -49,15 +55,13 @@ def parse_sql(sql: str, aligned_indent: bool = False) -> str:
             sqlparse.filters.AlignedIndentFilter(char="&nbsp;", n="<br/>")
         )
     stack.preprocess.append(BoldKeywordFilter())
-    stack.postprocess.append(sqlparse.filters.SerializerUnicode())
-    return "".join(stack.run(sql))
+    return stack.run(sql)
 
 
 def raw_sql(sql: str) -> str:
-    stack = sqlparse.engine.FilterStack()
+    stack = FilterStack()
     stack.preprocess.append(RawFilter())
-    stack.postprocess.append(sqlparse.filters.SerializerUnicode())
-    return "".join(stack.run(sql))
+    return stack.run(sql)
 
 
 class SQLPanel(Panel):
