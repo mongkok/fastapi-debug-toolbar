@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.3
+
+* Added TortoisePanel
+
 ### 0.1.2
 
 * Removed SQL compiled query in favor of statement params
