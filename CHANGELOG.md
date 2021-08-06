@@ -2,13 +2,13 @@
 
 ### 0.1.3
 
-* Added TortoisePanel
+* Added `TortoisePanel`
 
 ### 0.1.2
 
 * Removed SQL compiled query in favor of statement params
 * Added SQLAlchemy unregister
-* Added SQLPanel base class
+* Added `SQLPanel` base class
 
 ### 0.1.1
 
@@ -17,8 +17,8 @@
 
 ### 0.1.0
 
-* Added SQLAlchemy panel
-* Added LOGGING_COLORS to panel templates
+* Added `SQLAlchemyPanel`
+* Added `LOGGING_COLORS` to panel templates
 * Minor improvements
 
 ### 0.0.6
@@ -29,7 +29,7 @@
 ### 0.0.5
 
 * Fixed multiple profilers on the same thread
-* Fixed VersionsPanel Pypi url
+* Fixed `VersionsPanel` Pypi url
 
 ### 0.0.4
 
