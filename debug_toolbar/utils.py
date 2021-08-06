@@ -6,6 +6,7 @@ import typing as t
 
 from fastapi import Request
 from fastapi.routing import APIRoute
+from pydantic.color import Color
 from starlette.routing import Match
 from starlette.staticfiles import StaticFiles
 
@@ -85,7 +86,7 @@ def pluralize(value: float, arg: str = "s") -> str:
     return plural_suffix
 
 
-def color_generator() -> t.Generator[t.Tuple[int, ...], None, None]:
+def color_generator() -> t.Generator[Color, None, None]:
     triples = [
         (0, 1, 1),
         (1, 1, 0),
@@ -98,11 +99,11 @@ def color_generator() -> t.Generator[t.Tuple[int, ...], None, None]:
     so_far = [[0, 0, 0]]
     while True:
         if n == 0:
-            yield (0, 0, 0)
+            yield Color("black")
         copy_so_far = list(so_far)
         for triple in triples:
             for previous in copy_so_far:
                 rgb = [n * triple[i] + previous[i] for i in range(3)]
                 so_far.append(rgb)
-                yield tuple(rgb)
+                yield Color(f"rgb{tuple(rgb)}")
         n >>= 1

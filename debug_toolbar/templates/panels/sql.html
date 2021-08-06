@@ -2,7 +2,7 @@
   <ul>
     {% for alias, info in databases.items() %}
       <li>
-        <strong><span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ info.rgb_color }}"></span> {{ alias }}</strong>
+        <strong><span class="fastdt-color" data-fastdt-styles="backgroundColor:{{ info.rgb_color }}"></span> {{ alias }}</strong>
         {{ '%0.2f'|format(info.time_spent|float) }} ms ({% if info.num_queries == 1 %}{{ info.num_queries }} query{% else %}{{ info.num_queries }} queries{% endif %}
         {% if info.sim_count %}
             including <abbr title="Similar queries are queries with the same SQL, but potentially different parameters.">{{ info.sim_count }} similar</abbr>
@@ -35,7 +35,7 @@
     <tbody>
       {% for alias, query in queries %}
         <tr class="{% if query.is_slow %} fastDebugRowWarning{% endif %}" id="sqlMain_{{ loop.index }}">
-          <td><span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ databases[alias].rgb_color }}"></span></td>
+          <td><span class="fastdt-color" data-fastdt-styles="backgroundColor:{{ databases[alias].rgb_color }}"></span></td>
           <td class="fastdt-toggle">
             <button type="button" class="fastToggleSwitch" data-toggle-name="sqlMain" data-toggle-id="{{ loop.index }}">+</button>
           </td>
@@ -46,20 +46,20 @@
             </div>
             {% if query.sim_count %}
               <strong>
-                <span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ query.sim_color }}"></span>
+                <span class="fastdt-color" data-fastdt-styles="backgroundColor:{{ query.sim_color }}"></span>
                 {{ query.sim_count }} similar queries.
               </strong>
             {% endif %}
             {% if query.dup_count %}
               <strong>
-                <span class="fastdt-color" data-fastdt-styles="backgroundColor:rgb{{ query.trace_color }}"></span>
+                <span class="fastdt-color" data-fastdt-styles="backgroundColor:{{ query.trace_color }}"></span>
                 Duplicated {{ query.dup_count }} times.
               </strong>
             {% endif %}
           </td>
           <td>
             <svg class="fastDebugLineChart{% if query.is_slow %} fastDebugLineChartWarning{% endif %}" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 100 5" preserveAspectRatio="none" aria-label="{{ query.width_ratio }}%">
-              <rect x="{{ query.start_offset }}" y="0" height="5" width="{{ query.width_ratio }}" fill="rgb{{ query.trace_color }}" />
+              <rect x="{{ query.start_offset }}" y="0" height="5" width="{{ query.width_ratio }}" fill="{{ query.trace_color }}" />
             </svg>
           </td>
           <td class="fastdt-time">

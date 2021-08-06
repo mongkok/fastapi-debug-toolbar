@@ -6,6 +6,7 @@ from collections import defaultdict
 
 import sqlparse
 from fastapi import Request, Response
+from pydantic.color import Color
 from sqlparse import tokens as T
 
 from debug_toolbar.panels import Panel
@@ -72,7 +73,7 @@ class SQLPanel(Panel):
         self._sql_time: int = 0
         self._queries: t.List[t.Tuple[str, t.Dict[str, t.Any]]] = []
         self._databases: t.Dict[str, t.Dict[str, t.Any]] = {}
-        self._colors: t.Generator[t.Tuple[int, ...], None, None] = color_generator()
+        self._colors: t.Generator[Color, None, None] = color_generator()
 
     @property
     def nav_subtitle(self) -> str:
@@ -107,7 +108,7 @@ class SQLPanel(Panel):
         self._queries.append((alias, query))
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
-        trace_colors: t.Dict[t.Tuple[str, str], t.Tuple[int, ...]] = defaultdict(
+        trace_colors: t.Dict[t.Tuple[str, str], Color] = defaultdict(
             lambda: next(self._colors)
         )
         duplicates: t.Dict[str, t.Dict[t.Tuple[str, str], int]] = defaultdict(
