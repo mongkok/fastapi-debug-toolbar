@@ -30,10 +30,10 @@ Add `DebugToolbarMiddleware` middleware to your FastAPI application:
 
 ## How it works
 
-Once installed, the debug toolbar is displayed on the right-hand side of your browser.
+![Debug toolbar](img/tab.png){ class=dt-tab }
 
-The middleware add a script into your HTML templates to overwrite the [JSON.parse](https://www.w3schools.com/js/js_json_parse.asp) method. Once a request is sent, the middleware injects the stats into JSON response object to be parsed by this script to automatically update the Debug Toolbar with the new request.
+Once installed, the **debug toolbar tab** is displayed on the right side of any html page, just **click on it** to open the navbar.
 
-This process allows Debug Toolbar to provide support for [Swagger UI](https://swagger.io/tools/swagger-ui/) and [GraphiQL](https://github.com/graphql/graphiql) among other development tools.
+The debug toolbar can be used with [Swagger UI](https://swagger.io/tools/swagger-ui/) or [GraphiQL](https://github.com/graphql/graphiql) and it is automatically updated after any request using a cookie-based system.
 
 ![Swagger UI](img/Swagger.png)
