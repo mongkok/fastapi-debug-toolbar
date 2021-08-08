@@ -27,13 +27,13 @@ function pypiIndex() {
             rowVersion.innerHTML =
                 versionInfo(data.releases, rowVersion.textContent);
         }
-        let lastVersion = rowVersion.nextElementSibling;
+        const lastVersion = rowVersion.nextElementSibling;
         lastVersion.innerHTML = versionInfo(data.releases, data.version);
 
-        let python = lastVersion.nextElementSibling;
+        const python = lastVersion.nextElementSibling;
         python.innerHTML = data.requires_python;
 
-        let status = python.nextElementSibling;
+        const status = python.nextElementSibling;
         status.innerHTML = data.status ? data.status.slice(26) : "";
         status.nextElementSibling.innerHTML = link(data.home_page);
     }
@@ -60,7 +60,7 @@ function pypiIndex() {
         return new Promise((resolve) => {
             const name = row.firstElementChild.textContent.trim();
             const data = JSON.parse(localStorage.getItem(`pypi-${name}`));
-            let rowVersion = row.children.item(1);
+            const rowVersion = row.children.item(1);
 
             if (data === null || !(rowVersion.textContent in data.releases)) {
                 fetch(`https://pypi.org/pypi/${name}/json`)
@@ -84,10 +84,12 @@ function pypiIndex() {
             }
         });
     }
-    if (loader) {
+    if (loader && !loader.getAttribute("lock")) {
+        loader.setAttribute("lock", true);
+
         const table = loader.nextElementSibling;
         const queryResult = table.querySelectorAll("tbody > tr");
-        let promises = [];
+        const promises = [];
 
         for (let i = 0; i < queryResult.length; i++) {
             promises.push(updateRow(queryResult[i]));
