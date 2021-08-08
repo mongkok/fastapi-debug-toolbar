@@ -58,17 +58,20 @@ class SQLAlchemyPanel(SQLPanel):
 
         if hasattr(route, "dependant"):
             route = t.cast(APIRoute, route)
-
-            solved_result = await solve_dependencies(
-                request=request,
-                dependant=route.dependant,
-                dependency_overrides_provider=route.dependency_overrides_provider,
-            )
-            for value in solved_result[0].values():
-                if isinstance(value, Session):
-                    engine = value.get_bind()
-                    engines.append(engine)
-                    self.register(engine)
+            try:
+                solved_result = await solve_dependencies(
+                    request=request,
+                    dependant=route.dependant,
+                    dependency_overrides_provider=route.dependency_overrides_provider,
+                )
+            except Exception:
+                pass
+            else:
+                for value in solved_result[0].values():
+                    if isinstance(value, Session):
+                        engine = value.get_bind()
+                        engines.append(engine)
+                        self.register(engine)
         try:
             response = await super().process_request(request)
         finally:
