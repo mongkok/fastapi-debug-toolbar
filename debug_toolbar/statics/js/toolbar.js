@@ -255,21 +255,6 @@ const fastdt = {
         window.removeEventListener("resize", fastdt.ensure_handle_visibility);
     },
     cookie: {
-        get(key) {
-            if (!document.cookie.includes(key)) {
-                return null;
-            }
-
-            const cookieArray = document.cookie.split("; "),
-                cookies = {};
-
-            cookieArray.forEach(function (e) {
-                const parts = e.split("=");
-                cookies[parts[0]] = parts[1];
-            });
-
-            return cookies[key];
-        },
         set(key, value, options) {
             options = options || {};
 
