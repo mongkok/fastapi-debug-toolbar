@@ -39,9 +39,7 @@ class Panel:
         else:
             default = "on"
 
-        return (
-            self.toolbar.request.cookies.get(f"fastdt{self.panel_id}", default)
-        ) == "on"
+        return self.toolbar.request.cookies.get(f"dt{self.panel_id}", default) == "on"
 
     @property
     def nav_title(self) -> str:

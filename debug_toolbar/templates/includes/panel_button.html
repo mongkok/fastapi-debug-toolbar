@@ -1,5 +1,5 @@
 <li id="fastdt-{{ panel.panel_id }}" class="fastDebugPanelButton">
-  <input type="checkbox" data-cookie="fastdt{{ panel.panel_id }}" {% if panel.enabled %}checked title="Disable for next and successive requests"{% else %}title="Enable for next and successive requests"{% endif %}>
+  <input type="checkbox" data-cookie="dt{{ panel.panel_id }}" {% if panel.enabled %}checked title="Disable for next and successive requests"{% else %}title="Enable for next and successive requests"{% endif %}>
   {% if panel.has_content and panel.enabled %}
     <a href="#" title="{{ panel.title }}" class="{{ panel.panel_id }}">
   {% else %}
