@@ -5,7 +5,8 @@
 <script type="module" src="{{ url_for('debug_toolbar.static', path='js/refresh.js') }}" async></script>
 
 <div id="fastDebug" class="fastdt-hidden" dir="ltr"
-     {% if toolbar.store_id %}data-store-id="{{ toolbar.store_id }}" data-render-panel-url="{{ url_for('debug_toolbar.render_panel') }}"{% endif %}
+     data-store-id="{{ toolbar.store_id }}"
+     data-render-panel-url="{{ url_for('debug_toolbar.render_panel') }}"
      data-default-show="{% if toolbar.settings.SHOW_COLLAPSE %}false{% else %}true{% endif %}"
      {{ toolbar.settings.ROOT_TAG_EXTRA_ATTRS|safe }}>
   <div class="fastdt-hidden" id="fastDebugToolbar">
