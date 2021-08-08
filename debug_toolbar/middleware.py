@@ -3,8 +3,8 @@ import functools
 import json
 import re
 import typing as t
-from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor
+from urllib import parse
 
 from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.staticfiles import StaticFiles
@@ -80,26 +80,24 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         await toolbar.record_server_timing(response)
         toolbar.generate_server_timing_header(response)
 
-        async for body in response.body_iterator:  # type: ignore
-            if not isinstance(body, bytes):
-                body = body.encode(response.charset)
-
-        decoded = body.decode(response.charset)
-
         if is_html:
+            async for body in response.body_iterator:  # type: ignore
+                if not isinstance(body, bytes):
+                    body = body.encode(response.charset)
+
+            decoded = body.decode(response.charset)
             pattern = re.escape(self.settings.INSERT_BEFORE)
             bits = re.split(pattern, decoded, flags=re.IGNORECASE)
 
             if len(bits) > 1:
                 bits[-2] += toolbar.render_toolbar()
                 body = self.settings.INSERT_BEFORE.join(bits).encode(response.charset)
-        else:
-            data = json.loads(decoded, object_pairs_hook=OrderedDict)
-            data["debugToolbar"] = toolbar.refresh()
-            body = json.dumps(data).encode(response.charset)
+                response.headers["Content-Length"] = str(len(body))
 
-        async def stream() -> t.AsyncGenerator[bytes, None]:
-            yield body
+            async def stream() -> t.AsyncGenerator[bytes, None]:
+                yield body
+
+            response.body_iterator = stream()  # type: ignore
         else:
             data = parse.quote(json.dumps(toolbar.refresh()))
             response.set_cookie(key="dtRefresh", value=data)
