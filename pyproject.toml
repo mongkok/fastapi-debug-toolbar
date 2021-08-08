@@ -48,10 +48,11 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6.2"
 
 fastapi = ">= 0.62.0"
 aiofiles = ">= 0.2.1"
+anyio = ">= 3.0.0"
 Jinja2 = ">= 2.9"
 pyinstrument = ">= 3.0.0"
 sqlparse = ">= 0.2.0"

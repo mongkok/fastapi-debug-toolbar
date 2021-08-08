@@ -1,4 +1,3 @@
-import asyncio
 import functools
 import json
 import re
@@ -6,6 +5,7 @@ import typing as t
 from concurrent.futures import ThreadPoolExecutor
 from urllib import parse
 
+from anyio._backends._asyncio import get_running_loop
 from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
@@ -50,7 +50,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
             StaticFiles(packages=[__package__]),
             name="debug_toolbar.static",
         )
-        loop = asyncio.get_running_loop()
+        loop = get_running_loop()
         loop.set_default_executor(ThreadPoolExecutor(max_workers=1))
 
     async def dispatch(
