@@ -1,8 +1,10 @@
+import asyncio
 import functools
 import json
 import re
 import typing as t
 from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.staticfiles import StaticFiles
@@ -48,6 +50,8 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
             StaticFiles(packages=[__package__]),
             name="debug_toolbar.static",
         )
+        loop = asyncio.get_running_loop()
+        loop.set_default_executor(ThreadPoolExecutor(max_workers=1))
 
     async def dispatch(
         self,
@@ -96,9 +100,10 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
 
         async def stream() -> t.AsyncGenerator[bytes, None]:
             yield body
+        else:
+            data = parse.quote(json.dumps(toolbar.refresh()))
+            response.set_cookie(key="dtRefresh", value=data)
 
-        response.body_iterator = stream()  # type: ignore
-        response.headers["Content-Length"] = str(len(body))
         return response
 
     def require_show_toolbar(
