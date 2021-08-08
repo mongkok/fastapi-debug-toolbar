@@ -1,5 +1,12 @@
 # Changelog
 
+### 0.2.0
+
+* Fixed `ThreadPoolExecutor` for all sync endpoints
+* Added cookie-based refresh
+* Added exception handling for dependency resolution
+* Added minor improvements to `VersionPanel`
+
 ### 0.1.3
 
 * Added `TortoisePanel`
