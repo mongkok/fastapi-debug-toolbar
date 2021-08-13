@@ -1,8 +1,8 @@
-import asyncio
 import typing as t
 import uuid
 from collections import OrderedDict
 
+from anyio import create_task_group
 from fastapi import Request, Response
 from starlette.middleware.base import RequestResponseEndpoint
 
@@ -84,17 +84,14 @@ class DebugToolbar:
         return cls._store.get(store_id)
 
     async def record_stats(self, response: Response) -> None:
-        tasks = [
-            panel.record_stats(self.request, response) for panel in self.enabled_panels
-        ]
-        await asyncio.gather(*tasks)
+        async with create_task_group() as tg:
+            for panel in self.enabled_panels:
+                tg.start_soon(panel.record_stats, self.request, response)
 
     async def record_server_timing(self, response: Response) -> None:
-        tasks = [
-            panel.record_server_timing(self.request, response)
-            for panel in self.enabled_panels
-        ]
-        await asyncio.gather(*tasks)
+        async with create_task_group() as tg:
+            for panel in self.enabled_panels:
+                tg.start_soon(panel.record_server_timing, self.request, response)
 
     def refresh(self) -> t.Dict[str, t.Any]:
         self.store()
