@@ -78,9 +78,9 @@ mkdocstrings = "*"
 [tool.black]
 extend-exclude = '''
 /(
-  | .dist
   | .htmlcov
   | .mypy_cache
+  | dist
 )/
 '''
 
