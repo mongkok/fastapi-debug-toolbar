@@ -1,0 +1,34 @@
+{% if validations %}
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Ncalls</th>
+      <th>Cumtime</th>
+      <th>Percall</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for field_id, field in validations.items() %}
+      {% set parent_ids = field_id.split('-')[:-1] %}
+      <tr class="{% for n in range(parent_ids|length) %} fastToggleDetails_{{ parent_ids[:n + 1]|join('-') }}{% endfor %}" id="pydanticMain_{{ field_id }}">
+        <td>
+          <div data-fastdt-styles="paddingLeft:{{ (parent_ids|length) * 30 }}px">
+            {% if field.has_childs %}
+              <button type="button" class="fastProfileToggleDetails fastToggleSwitch" data-toggle-name="pydanticMain" data-toggle-id="{{ field_id }}">-</button>
+            {% else %}
+              <span class="fastNoToggleSwitch"></span>
+            {% endif %}
+            <span class="fastdt-stack"><span>{% if field.class_name %}{{ field.class_name }}.{% endif %}{{ field.obj.name }}</span>: <span class="fastdt-type">{{ field.obj._type_display() }}</span></span>
+          </div>
+        </td>
+        <td>{{ field.ncalls }}</td>
+        <td>{{ '%0.2f'|format(field.durations|sum|float) }}</td>
+        <td>{{ '%0.2f'|format(mean(field.durations)|float) }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p>No validations.</p>
+{% endif %}

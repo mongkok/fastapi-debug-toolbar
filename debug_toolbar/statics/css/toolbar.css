@@ -571,7 +571,7 @@
     color: #000;
     font-weight: bold;
 }
-#fastDebug .fastdt-stack span.fastdt-path,
+#fastDebug .fastdt-stack span.fastdt-type,
 #fastDebug .fastdt-stack pre.fastdt-locals,
 #fastDebug .fastdt-stack pre.fastdt-locals span {
     color: #777;
