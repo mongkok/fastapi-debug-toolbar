@@ -93,11 +93,18 @@ class PydanticPanel(Panel):
         return response
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
-        return {"validations": self._validations, "mean": statistics.mean}
+        return {
+            "validation_time": self._validation_time,
+            "validations": self._validations,
+            "mean": statistics.mean,
+        }
 
     async def generate_server_timing(
         self,
         request: Request,
         response: Response,
     ) -> ServerTiming:
-        return [("pydantic", "Pydantic validation time", self._validation_time)]
+        stats = self.get_stats()
+        return [
+            ("pydantic", "Pydantic validation time", stats.get("validation_time", 0)),
+        ]

@@ -10,7 +10,7 @@ from pydantic.color import Color
 from sqlparse import tokens as T
 
 from debug_toolbar.panels import Panel
-from debug_toolbar.types import Stats
+from debug_toolbar.types import ServerTiming, Stats
 from debug_toolbar.utils import color_generator
 
 __all__ = ["SQLPanel", "parse_sql", "raw_sql"]
@@ -65,6 +65,10 @@ def raw_sql(sql: str) -> str:
     return stack.run(sql)
 
 
+def nqueries(n: int) -> str:
+    return f"{n} {'query' if n == 1 else 'queries'}"
+
+
 class SQLPanel(Panel):
     template = "panels/sql.html"
 
@@ -77,11 +81,7 @@ class SQLPanel(Panel):
 
     @property
     def nav_subtitle(self) -> str:
-        count = len(self._queries)
-        return (
-            f"{count} {'query' if count == 1 else 'queries'}"
-            f" in {self._sql_time:.2f}ms"
-        )
+        return f"{nqueries(len(self._queries))} in {self._sql_time:.2f}ms"
 
     def add_query(self, alias: str, query: t.Dict[str, t.Any]) -> None:
         duration = query["duration"]
@@ -168,4 +168,14 @@ class SQLPanel(Panel):
         return {
             "databases": self._databases,
             "queries": self._queries,
+            "sql_time": self._sql_time,
         }
+
+    async def generate_server_timing(
+        self,
+        request: Request,
+        response: Response,
+    ) -> ServerTiming:
+        stats = self.get_stats()
+        n = len(stats.get("queries", []))
+        return [("sql", f"SQL {nqueries(n)}", stats.get("sql_time", 0))]
