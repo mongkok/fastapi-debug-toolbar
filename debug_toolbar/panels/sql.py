@@ -70,7 +70,7 @@ class SQLPanel(Panel):
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
-        self._sql_time: int = 0
+        self._sql_time: float = 0
         self._queries: t.List[t.Tuple[str, t.Dict[str, t.Any]]] = []
         self._databases: t.Dict[str, t.Dict[str, t.Any]] = {}
         self._colors: t.Generator[Color, None, None] = color_generator()

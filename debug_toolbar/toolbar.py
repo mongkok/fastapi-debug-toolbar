@@ -13,9 +13,12 @@ from debug_toolbar.utils import get_name_from_obj, import_string
 
 DT = t.TypeVar("DT", bound="DebugToolbar")
 
+if t.TYPE_CHECKING:
+    StoreDT = OrderedDict[str, DT]
+
 
 class DebugToolbar:
-    _store: "OrderedDict[str, DT]" = OrderedDict()  # type: ignore
+    _store: "StoreDT" = OrderedDict()
     _panel_classes: t.Optional[t.Sequence[t.Type[Panel]]] = None
 
     def __init__(
