@@ -627,3 +627,10 @@ iframe#profilingContent {
     display: inline;
     font-size: 11px;
 }
+
+#HeadersPanel table {
+    table-layout: fixed;
+}
+#HeadersPanel tbody td {
+    overflow-wrap: break-word;
+}
