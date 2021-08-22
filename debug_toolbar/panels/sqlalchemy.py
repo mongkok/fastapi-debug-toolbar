@@ -53,7 +53,7 @@ class SQLAlchemyPanel(SQLPanel):
         self.add_query(str(conn.engine.url), query)
 
     async def process_request(self, request: Request) -> Response:
-        engines: t.List[Engine] = []
+        engines: t.Set[Engine] = set()
         route = matched_route(request)
 
         if hasattr(route, "dependant"):
@@ -70,7 +70,7 @@ class SQLAlchemyPanel(SQLPanel):
                 for value in solved_result[0].values():
                     if isinstance(value, Session):
                         engine = value.get_bind()
-                        engines.append(engine)
+                        engines.add(engine)
                         self.register(engine)
         try:
             response = await super().process_request(request)
