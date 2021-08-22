@@ -69,7 +69,7 @@ pytest-asyncio = "*"
 pytest-cov = "*"
 python-multipart = "*"
 SQLAlchemy = "*"
-tortoise-orm = "*"
+tortoise-orm = "0.15.19"
 types-setuptools = "*"
 
 mkdocs = "*"
