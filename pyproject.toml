@@ -68,6 +68,8 @@ pytest = "*"
 pytest-asyncio = "*"
 pytest-cov = "*"
 python-multipart = "*"
+SQLAlchemy = "*"
+tortoise-orm = "*"
 types-setuptools = "*"
 
 mkdocs = "*"
