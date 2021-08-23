@@ -22,9 +22,7 @@ def test_invalid_store_id(client: TestClient) -> None:
 
 
 @override_settings(
-    panels=[
-        "debug_toolbar.panels.timer.TimerPanel",
-    ],
+    panels=["debug_toolbar.panels.timer.TimerPanel"],
     allowed_ips=[],
 )
 def test_not_allowed(client: TestClient) -> None:
