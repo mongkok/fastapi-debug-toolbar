@@ -1,7 +1,7 @@
 import typing as t
 
 import pytest
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -24,7 +24,6 @@ def client(app: FastAPI, get_index: t.Callable) -> TestClient:
 @override_panels(["debug_toolbar.panels.request.RequestPanel"])
 def test_session(client: TestClient) -> None:
     store_id = client.get_store_id("/session")
-    response = client.render_panel(store_id, "RequestPanel")
+    stats = client.get_stats(store_id, "RequestPanel")
 
-    assert response.status_code == status.HTTP_200_OK
-    assert "debug" in response.json()["content"]
+    assert stats["session"]["debug"]

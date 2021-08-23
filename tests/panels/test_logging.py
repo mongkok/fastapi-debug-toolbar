@@ -2,7 +2,7 @@ import logging
 import typing as t
 
 import pytest
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request
 from fastapi.logger import logger
 from fastapi.responses import HTMLResponse
 
@@ -29,7 +29,6 @@ def client(app: FastAPI, get_index: t.Callable) -> TestClient:
 @override_panels(["debug_toolbar.panels.logging.LoggingPanel"])
 def test_logging(client: TestClient, path: str, level: str) -> None:
     store_id = client.get_store_id(f"/log/{path}?level={level}")
-    response = client.render_panel(store_id, "LoggingPanel")
+    stats = client.get_stats(store_id, "LoggingPanel")
 
-    assert response.status_code == status.HTTP_200_OK
-    assert level in response.json()["content"]
+    assert stats["records"][0]["level"] == level
