@@ -22,23 +22,23 @@ class LogCollector:
                 "threading module is not available, "
                 "this panel cannot be used without it"
             )
-        self.collections: t.Dict[t.Any, t.List[t.Dict[str, t.Any]]] = {}
+        self.collections: t.Dict[int, t.List[t.Dict[str, t.Any]]] = {}
 
-    def get_collection(self, thread: t.Any = None) -> t.List[t.Dict[str, t.Any]]:
-        if thread is None:
-            thread = threading.current_thread()
-        if thread not in self.collections:
-            self.collections[thread] = []
-        return self.collections[thread]
+    def get_collection(self, thread_id: int = None) -> t.List[t.Dict[str, t.Any]]:
+        if thread_id is None:
+            thread_id = threading.get_ident()
+        if thread_id not in self.collections:
+            self.collections[thread_id] = []
+        return self.collections[thread_id]
 
-    def clear_collection(self, thread: t.Any = None) -> None:
-        if thread is None:
-            thread = threading.current_thread()
-        if thread in self.collections:
-            del self.collections[thread]
+    def clear_collection(self, thread_id: int = None) -> None:
+        if thread_id is None:
+            thread_id = threading.get_ident()
+        if thread_id in self.collections:
+            del self.collections[thread_id]
 
-    def collect(self, item: t.Dict[str, t.Any], thread: t.Any = None) -> None:
-        self.get_collection(thread).append(item)
+    def collect(self, item: t.Dict[str, t.Any], thread_id: int = None) -> None:
+        self.get_collection(thread_id).append(item)
 
 
 class ThreadTrackingHandler(logging.Handler):
@@ -91,15 +91,15 @@ class LoggingPanel(Panel):
             return await super().process_request(request)
 
         if is_coroutine(endpoint):
-            self.current_thread = threading.current_thread()
+            self.thread_id = threading.get_ident()
         else:
-            self.current_thread = await run_in_threadpool(threading.current_thread)
+            self.thread_id = await run_in_threadpool(threading.get_ident)
 
-        collector.clear_collection(thread=self.current_thread)
+        collector.clear_collection(thread_id=self.thread_id)
         return await super().process_request(request)
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
-        records = collector.get_collection(thread=self.current_thread)
-        self._records[self.current_thread] = records
-        collector.clear_collection(thread=self.current_thread)
+        records = collector.get_collection(thread_id=self.thread_id)
+        self._records[self.thread_id] = records
+        collector.clear_collection(thread_id=self.thread_id)
         return {"records": records}
