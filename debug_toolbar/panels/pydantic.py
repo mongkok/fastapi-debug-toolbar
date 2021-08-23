@@ -3,7 +3,6 @@ import statistics
 import typing as t
 from collections import OrderedDict
 from time import perf_counter
-from typing import TYPE_CHECKING
 
 from fastapi import Request, Response
 from pydantic import BaseModel
@@ -13,7 +12,7 @@ from debug_toolbar.panels import Panel
 from debug_toolbar.types import ServerTiming, Stats
 from debug_toolbar.utils import pluralize
 
-if TYPE_CHECKING:
+if t.TYPE_CHECKING:
     from pydantic.fields import LocStr, ValidateReturn
     from pydantic.types import ModelOrDc
 
