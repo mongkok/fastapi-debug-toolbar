@@ -1,6 +1,5 @@
 from fastapi import status
-
-from .testclient import TestClient
+from fastapi.testclient import TestClient
 
 
 def test_sync(client: TestClient) -> None:
@@ -10,6 +9,11 @@ def test_sync(client: TestClient) -> None:
 
 def test_async(client: TestClient) -> None:
     response = client.get("/async")
+    assert response.status_code == status.HTTP_200_OK
+
+
+def test_json(client: TestClient) -> None:
+    response = client.get("/openapi.json")
     assert response.status_code == status.HTTP_200_OK
 
 
