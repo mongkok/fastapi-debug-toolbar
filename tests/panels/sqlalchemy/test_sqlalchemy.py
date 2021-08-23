@@ -1,10 +1,10 @@
 from fastapi import status
 
-from ...mark import override_panels, skip_py36
+from ...mark import override_panels, skip_py
 from ...testclient import TestClient
 
 
-@skip_py36
+@skip_py(3, 7)
 @override_panels(["debug_toolbar.panels.sqlalchemy.SQLAlchemyPanel"])
 def test_sqlalchemy(client: TestClient) -> None:
     store_id = client.get_store_id("/sql")
