@@ -56,7 +56,7 @@
 
 <h4>Session data</h4>
 {% if session %}
-  {{ pprint_vars(session) }}
+  {{ pprint_vars(session.items()) }}
 {% else %}
   <p>No session data</p>
 {% endif %}

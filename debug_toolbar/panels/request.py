@@ -23,5 +23,5 @@ class RequestPanel(Panel):
             stats["form"] = await request.form()
 
         if "session" in request.scope:
-            stats["session"] = request.session.items()
+            stats["session"] = request.session
         return stats
