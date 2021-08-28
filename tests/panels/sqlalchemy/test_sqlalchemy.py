@@ -1,8 +1,7 @@
-from ...mark import override_panels, skip_py
+from ...mark import override_panels
 from ...testclient import TestClient
 
 
-@skip_py(3, 7)
 @override_panels(["debug_toolbar.panels.sqlalchemy.SQLAlchemyPanel"])
 def test_sqlalchemy(client: TestClient) -> None:
     store_id = client.get_store_id("/sql")
