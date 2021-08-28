@@ -2,7 +2,7 @@
 
 <p align="center">
     <a href="https://fastapi-debug-toolbar.domake.io">
-        <img src="https://user-images.githubusercontent.com/5514990/127749737-1a2b5ce7-a191-4f8b-96e4-fe94e0a08f6f.gif" alt="FastAPI Debug Toolbar">
+        <img src="https://user-images.githubusercontent.com/5514990/131232994-621774a8-1662-468d-87d8-2199b93387d6.gif" alt="FastAPI Debug Toolbar">
     </a>
 </p>
 <p align="center">
