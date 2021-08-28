@@ -28,7 +28,7 @@ def client(app: FastAPI, get_index: t.Callable) -> TestClient:
 @pytest.mark.parametrize("path", [pytest.param("sync", marks=skip_py(3, 8)), "async"])
 @override_panels(["debug_toolbar.panels.logging.LoggingPanel"])
 def test_logging(client: TestClient, path: str, level: str) -> None:
-    store_id = client.get_store_id(f"/log/{path}?level={level}")
+    store_id = client.get_store_id(f"/log/{path}", params={"level": level})
     stats = client.get_stats(store_id, "LoggingPanel")
 
     assert stats["records"][0]["level"] == level
