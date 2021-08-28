@@ -1,5 +1,13 @@
 # Changelog
 
+### 0.2.1
+
+* Added `PydanticPanel`
+* Removed `current_thread` in favor of `get_ident`
+* Added anyio task groups
+* Removed `get_running_loop` in favor of `get_event_loop`
+* Improved tables styles
+
 ### 0.2.0
 
 * Fixed `ThreadPoolExecutor` for all sync endpoints
