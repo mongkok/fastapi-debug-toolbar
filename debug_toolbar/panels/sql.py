@@ -72,13 +72,13 @@ def nqueries(n: int) -> str:
 
 
 class JsonSpecialTypesEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, UUID):
+    def default(self, o):
+        if isinstance(o, UUID):
             # if the obj is uuid, we simply return the value of uuid
-            return str(obj)
-        if isinstance(obj, (datetime, date)):
-            return obj.isoformat()
-        return json.JSONEncoder.default(self, obj)
+            return str(o)
+        if isinstance(o, (datetime, date)):
+            return o.isoformat()
+        return json.JSONEncoder.default(self, o)
 
 
 class SQLPanel(Panel):
