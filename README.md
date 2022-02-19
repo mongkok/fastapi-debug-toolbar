@@ -53,10 +53,39 @@ app.add_middleware(DebugToolbarMiddleware)
 
 Please make sure to use the *"Dependency Injection"* system as described in the [FastAPI docs](https://fastapi.tiangolo.com/tutorial/sql-databases/#create-a-dependency) and add the `SQLAlchemyPanel` to your panel list:
 
+```python
+# database.py
+from typing import Generator
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+engine = create_engine("sqlite://", connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(bind=engine)
+Base = declarative_base()
+
+Base.metadata.create_all(bind=engine)
+
+def get_db() -> Generator:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()  # sqlite will drop tables in memory
+        Base.metadata.create_all(bind=engine)  # create tables again
+```
+
 ```py
+# app.py
+from fastapi import FastAPI
+from debug_toolbar.middleware import DebugToolbarMiddleware
+
+app = FastAPI()
+
 app.add_middleware(
     DebugToolbarMiddleware,
     panels=["debug_toolbar.panels.sqlalchemy.SQLAlchemyPanel"],
+    session_generators=["database:get_db"]  # Add the full python path of your session generators
 )
 ```
 
@@ -65,6 +94,11 @@ app.add_middleware(
 Add the `TortoisePanel` to your panel list:
 
 ```py
+from fastapi import FastAPI
+from debug_toolbar.middleware import DebugToolbarMiddleware
+
+app = FastAPI()
+
 app.add_middleware(
     DebugToolbarMiddleware,
     panels=["debug_toolbar.panels.tortoise.TortoisePanel"],

@@ -25,6 +25,9 @@ class DebugToolbarSettings(BaseSettings):
             "want included in the toolbar."
         ),
     )
+    SESSION_GENERATORS: t.List[str] = Field(
+        [], description="Add full Python path for database session generators here."
+    )
     PANELS: t.List[str] = Field(
         [],
         description=(

@@ -1,8 +1,12 @@
 import typing as t
+from importlib import import_module
 from time import perf_counter
 
 from fastapi import Request, Response
-from fastapi.dependencies.utils import solve_dependencies
+from fastapi.dependencies.utils import (
+    solve_dependencies,
+    is_gen_callable,
+)
 from fastapi.routing import APIRoute
 from sqlalchemy import event
 from sqlalchemy.engine import Connection, Engine
@@ -50,7 +54,9 @@ class SQLAlchemyPanel(SQLPanel):
             "params": parameters,
             "is_select": context.invoked_statement.is_select,
         }
-        self.add_query(str(conn.engine.url), query)
+        url = conn.engine.url
+        name = f"{url.drivername}://****@****:{url.port}/{url.database}"
+        self.add_query(name, query)
 
     async def process_request(self, request: Request) -> Response:
         engines: t.Set[Engine] = set()
@@ -70,6 +76,28 @@ class SQLAlchemyPanel(SQLPanel):
                 for value in solved_result[0].values():
                     if isinstance(value, Session):
                         engine = value.get_bind()
+                        engines.add(engine)
+                        self.register(engine)
+        for generator_path in self.toolbar.settings.SESSION_GENERATORS:
+            generator_module = import_module(generator_path.split(":")[0])
+            generator = getattr(generator_module, generator_path.split(":")[1])
+            if is_gen_callable(generator):
+                try:
+                    value = next(generator())
+                except TypeError:
+                    value = next(generator(request))
+                engine = value.get_bind()
+                engines.add(engine)
+                self.register(engine)
+            else:
+                try:
+                    async for v in generator():
+                        engine = v.get_bind()
+                        engines.add(engine)
+                        self.register(engine)
+                except TypeError:
+                    async for v in generator(request):
+                        engine = v.get_bind()
                         engines.add(engine)
                         self.register(engine)
         try:

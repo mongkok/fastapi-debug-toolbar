@@ -68,6 +68,13 @@ collector = LogCollector()
 logging_handler = ThreadTrackingHandler(collector)
 logging.root.addHandler(logging_handler)
 
+try:
+    from loguru import logger as loguru_logger
+
+    loguru_logger.add(logging_handler)
+except ImportError:
+    pass
+
 
 class LoggingPanel(Panel):
     nav_title = "Logging"

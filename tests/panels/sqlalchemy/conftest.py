@@ -5,12 +5,11 @@ from fastapi import Depends, FastAPI, Request
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 
-from ...testclient import TestClient
 from .crud import create_user, get_user
 from .database import Base, SessionLocal, engine
+from ...testclient import TestClient
 
 Base.metadata.create_all(bind=engine)
-
 
 def get_db() -> t.Generator:
     db = SessionLocal()
@@ -18,6 +17,7 @@ def get_db() -> t.Generator:
         yield db
     finally:
         db.close()
+        Base.metadata.create_all(bind=engine)
 
 
 @pytest.fixture

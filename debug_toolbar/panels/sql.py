@@ -3,6 +3,8 @@ import json
 import re
 import typing as t
 from collections import defaultdict
+from datetime import datetime, date
+from uuid import UUID
 
 import sqlparse
 from fastapi import Request, Response
@@ -69,6 +71,16 @@ def nqueries(n: int) -> str:
     return f"{n} {'query' if n == 1 else 'queries'}"
 
 
+class JsonSpecialTypesEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, UUID):
+            # if the obj is uuid, we simply return the value of uuid
+            return str(obj)
+        if isinstance(obj, (datetime, date)):
+            return obj.isoformat()
+        return json.JSONEncoder.default(self, obj)
+
+
 class SQLPanel(Panel):
     template = "panels/sql.html"
 
@@ -118,7 +130,9 @@ class SQLPanel(Panel):
         width_ratio_tally = 0
 
         def dup_key(query: t.Dict[str, t.Any]) -> t.Tuple[str, str]:
-            return (query["sql"], json.dumps(query["params"]))
+            return query["sql"], json.dumps(
+                query["params"], cls=JsonSpecialTypesEncoder
+            )
 
         def sim_key(query: t.Dict[str, t.Any]) -> str:
             return query.get("raw", query.get("sql"))

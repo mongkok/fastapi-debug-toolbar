@@ -12,3 +12,5 @@ coverage.xml
 dist/
 htmlcov/
 site/
+
+.idea/
