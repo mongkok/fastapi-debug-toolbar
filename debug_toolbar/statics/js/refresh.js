@@ -9,8 +9,8 @@
     function deleteCookie(name) {
         document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
     }
-    JSON.parse = function(text) {
-        const data = parse(text);
+    JSON.parse = function(text, reviver) {
+        const data = parse(text, reviver);
         const cookie = getCookie("dtRefresh");
 
         if (!cookie) return data;
