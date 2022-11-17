@@ -41,7 +41,7 @@ function pypiIndex() {
         return {
             version: pypi.info.version,
             requires_python: pypi.info.requires_python,
-            home_page: pypi.info.home_page,
+            home_page: pypi.info.home_page || '',
             releases: Object.fromEntries(
                 Object.entries(pypi.releases).map(
                     function([k, v], i) {
