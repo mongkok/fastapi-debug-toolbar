@@ -77,7 +77,7 @@ class Panel:
         return await self.call_next(request)
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
-        pass
+        return {}
 
     def get_stats(self) -> Stats:
         return self.toolbar.stats.get(self.panel_id, {})
@@ -93,7 +93,7 @@ class Panel:
         request: Request,
         response: Response,
     ) -> ServerTiming:
-        pass
+        return []
 
     def get_server_timing_stats(self) -> ServerTiming:
         return self.toolbar.server_timing_stats.get(self.panel_id, [])
