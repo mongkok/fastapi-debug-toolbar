@@ -2,6 +2,7 @@ import typing as t
 from time import perf_counter
 
 from fastapi import Request, Response
+from fastapi.concurrency import AsyncExitStack
 from fastapi.dependencies.utils import solve_dependencies
 from fastapi.routing import APIRoute
 from sqlalchemy import event
@@ -58,6 +59,10 @@ class SQLAlchemyPanel(SQLPanel):
 
         if hasattr(route, "dependant"):
             route = t.cast(APIRoute, route)
+
+            if request.scope.get("fastapi_astack") is None:
+                async with AsyncExitStack() as stack:
+                    request.scope["fastapi_astack"] = stack
             try:
                 solved_result = await solve_dependencies(
                     request=request,
