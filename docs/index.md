@@ -2,10 +2,6 @@ A debug toolbar for FastAPI based on the original [django-debug-toolbar](https:/
 
 **Swagger UI** & **GraphQL** are supported.
 
-## Requirements
-
-Python 3.6+
-
 ## Installation
 
 ```sh

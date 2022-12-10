@@ -1,42 +1,36 @@
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.poetry]
+[project]
 name = "fastapi-debug-toolbar"
-version = "0.2.1"
 description = "A debug toolbar for FastAPI."
-license = "BSD"
-authors = ["Dani <dani@domake.io>"]
 readme = "README.md"
-include = ["LICENSE", "README.md"]
+license = "BSD-3-Clause"
+requires-python = ">=3.7"
+dynamic = ["version"]
+authors = [
+  { name = "Dani", email = "dani@domake.io" }
+]
 keywords = ["fastapi", "debug", "profiling"]
 
-homepage = "https://github.com/mongkok/fastapi-debug-toolbar"
-repository = "https://github.com/mongkok/fastapi-debug-toolbar"
-documentation = "https://fastapi-debug-toolbar.domake.io"
-
-packages = [
-    { include = "debug_toolbar" },
-]
-
 classifiers = [
-    "Intended Audience :: Information Technology",
-    "Intended Audience :: System Administrators",
-    "Operating System :: OS Independent",
     "License :: OSI Approved :: BSD License",
     "Development Status :: 2 - Pre-Alpha",
+    "Framework :: AnyIO",
+    "Framework :: FastAPI",
     "Environment :: Web Environment",
-    "Framework :: AsyncIO",
     "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
     "Typing :: Typed",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Topic :: Software Development",
     "Topic :: Software Development :: Debuggers",
     "Topic :: Software Development :: Libraries",
@@ -47,58 +41,54 @@ classifiers = [
     "Topic :: Utilities",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.6.2"
+dependencies = [
+    "fastapi >=0.70.0",
+    "aiofiles >= 0.2.1",
+    "anyio >=3.0.0",
+    "Jinja2 >=2.9",
+    "pyinstrument >=3.0.0",
+    "sqlparse >=0.2.0",
+]
 
-fastapi = ">= 0.62.0"
-aiofiles = ">= 0.2.1"
-anyio = ">= 3.0.0"
-Jinja2 = ">= 2.9"
-pyinstrument = ">= 3.0.0"
-sqlparse = ">= 0.2.0"
+[project.urls]
+homepage = "https://github.com/mongkok/fastapi-debug-toolbar"
+repository = "https://github.com/mongkok/fastapi-debug-toolbar"
+documentation = "https://fastapi-debug-toolbar.domake.io"
+changelog = "https://fastapi-debug-toolbar.domake.io/changelog/"
 
-[tool.poetry.dev-dependencies]
-black = "*"
-codecov = "*"
-flake8 = "*"
-isort = "*"
-itsdangerous = "*"
-mypy = "*"
-pytest = "*"
-pytest-asyncio = "*"
-pytest-cov = "*"
-python-multipart = "*"
-SQLAlchemy = "*"
-tortoise-orm = "0.15.19"
-types-setuptools = "*"
+[project.optional-dependencies]
+test = [
+    "black",
+    "codecov",
+    "flake8",
+    "httpx",
+    "isort",
+    "itsdangerous",
+    "mypy",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "python-multipart",
+    "SQLAlchemy",
+    "tortoise-orm ==0.15.19",
+    "types-setuptools",
+]
 
-mkdocs = "*"
-mkdocs-material = "*"
-markdown-include = "*"
-mkdocstrings = "*"
+doc = [
+    "mkdocs",
+    "mkdocs-material",
+    "markdown-include",
+    "mkdocstrings[python]",
+]
 
-[tool.black]
-extend-exclude = '''
-/(
-  | .htmlcov
-  | .mypy_cache
-  | dist
-)/
-'''
+[tool.hatch.version]
+path = "debug_toolbar/__init__.py"
 
 [tool.isort]
 profile = "black"
-known_first_party = ["debug_toolbar"]
 
 [tool.mypy]
-disallow_incomplete_defs = true
-disallow_untyped_calls = true
-disallow_untyped_decorators = true
-disallow_untyped_defs = true
 ignore_missing_imports = true
 
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "if t.TYPE_CHECKING:"
-]
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
