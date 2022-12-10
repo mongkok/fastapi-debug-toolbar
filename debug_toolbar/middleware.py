@@ -1,11 +1,11 @@
-import asyncio
 import functools
 import json
 import re
 import typing as t
-from concurrent.futures import ThreadPoolExecutor
 from urllib import parse
 
+from anyio import CapacityLimiter
+from anyio.lowlevel import RunVar
 from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
@@ -50,8 +50,10 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
             StaticFiles(packages=[__package__]),
             name="debug_toolbar.static",
         )
-        loop = asyncio.get_event_loop()
-        loop.set_default_executor(ThreadPoolExecutor(1))
+
+        @self.router.on_event("startup")
+        def set_default_thread_limiter():
+            RunVar("_default_thread_limiter").set(CapacityLimiter(1))
 
     async def dispatch(
         self,
