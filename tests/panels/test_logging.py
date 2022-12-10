@@ -6,7 +6,7 @@ from fastapi import FastAPI, Request
 from fastapi.logger import logger
 from fastapi.responses import HTMLResponse
 
-from ..mark import override_panels, skip_py
+from ..mark import override_panels
 from ..testclient import TestClient
 
 
@@ -25,7 +25,7 @@ def client(app: FastAPI, get_index: t.Callable) -> TestClient:
 
 
 @pytest.mark.parametrize("level", ["ERROR", "WARNING"])
-@pytest.mark.parametrize("path", [pytest.param("sync", marks=skip_py(3, 8)), "async"])
+@pytest.mark.parametrize("path", ["sync", "async"])
 @override_panels(["debug_toolbar.panels.logging.LoggingPanel"])
 def test_logging(client: TestClient, path: str, level: str) -> None:
     store_id = client.get_store_id(f"/log/{path}", params={"level": level})

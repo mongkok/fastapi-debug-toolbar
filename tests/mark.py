@@ -1,4 +1,3 @@
-import sys
 import typing as t
 
 import pytest
@@ -11,7 +10,3 @@ def override_settings(**settings: t.Any) -> MarkDecorator:
 
 def override_panels(panels: t.List[str]) -> MarkDecorator:
     return override_settings(panels=panels)
-
-
-def skip_py(*version: int) -> MarkDecorator:
-    return pytest.mark.skipif(sys.version_info < version, reason="?")
