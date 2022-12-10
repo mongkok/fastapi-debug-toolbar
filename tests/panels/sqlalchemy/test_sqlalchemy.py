@@ -9,6 +9,6 @@ def test_sqlalchemy(client: TestClient) -> None:
     stats = client.get_stats(store_id, "SQLAlchemyPanel")
     queries = stats["queries"]
 
-    assert len(queries) == 3
+    assert len(queries) == 4
     assert queries[0][1]["sql"].startswith("INSERT")
-    assert queries[1][1]["dup_count"] == 2
+    assert queries[2][1]["dup_count"] == 2

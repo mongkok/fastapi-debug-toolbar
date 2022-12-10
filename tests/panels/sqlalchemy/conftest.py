@@ -24,9 +24,9 @@ def get_db() -> t.Generator:
 def client(app: FastAPI, get_index: t.Callable) -> TestClient:
     @app.get("/sql", response_class=HTMLResponse)
     async def get_sql(request: Request, db: Session = Depends(get_db)) -> str:
-        create_user(db=db, username="test")
-        get_user(db=db, user_id=1)
-        get_user(db=db, user_id=1)
+        user = create_user(db=db, username="test")
+        get_user(db=db, user_id=user.id)
+        get_user(db=db, user_id=user.id)
         return get_index(request)
 
     return TestClient(app)
