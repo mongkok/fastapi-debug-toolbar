@@ -24,20 +24,27 @@ class LogCollector:
             )
         self.collections: t.Dict[int, t.List[t.Dict[str, t.Any]]] = {}
 
-    def get_collection(self, thread_id: int = None) -> t.List[t.Dict[str, t.Any]]:
+    def get_collection(
+        self,
+        thread_id: t.Optional[int] = None,
+    ) -> t.List[t.Dict[str, t.Any]]:
         if thread_id is None:
             thread_id = threading.get_ident()
         if thread_id not in self.collections:
             self.collections[thread_id] = []
         return self.collections[thread_id]
 
-    def clear_collection(self, thread_id: int = None) -> None:
+    def clear_collection(self, thread_id: t.Optional[int] = None) -> None:
         if thread_id is None:
             thread_id = threading.get_ident()
         if thread_id in self.collections:
             del self.collections[thread_id]
 
-    def collect(self, item: t.Dict[str, t.Any], thread_id: int = None) -> None:
+    def collect(
+        self,
+        item: t.Dict[str, t.Any],
+        thread_id: t.Optional[int] = None,
+    ) -> None:
         self.get_collection(thread_id).append(item)
 
 
