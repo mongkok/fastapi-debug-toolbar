@@ -8,7 +8,9 @@ __pycache__/
 .coverage
 .mypy_cache/
 .pytest_cache/
+.vscode/
 coverage.xml
 dist/
 htmlcov/
 site/
+venv/
