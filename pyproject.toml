@@ -43,7 +43,6 @@ classifiers = [
 
 dependencies = [
     "fastapi >=0.70.0",
-    "aiofiles >= 0.2.1",
     "anyio >=3.0.0",
     "Jinja2 >=2.9",
     "pyinstrument >=3.0.0",

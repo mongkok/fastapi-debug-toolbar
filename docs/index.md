@@ -13,7 +13,6 @@ pip install fastapi-debug-toolbar
     The following packages are automatically installed:
 
     * [Jinja2](https://github.com/pallets/jinja) for toolbar templates.
-    * [aiofiles](https://github.com/Tinche/aiofiles) to serve toolbar static files.
     * [pyinstrument](https://github.com/joerick/pyinstrument) for profiling support.
 
 ## Quickstart
