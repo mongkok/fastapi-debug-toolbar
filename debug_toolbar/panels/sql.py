@@ -6,6 +6,7 @@ from collections import defaultdict
 
 import sqlparse
 from fastapi import Request, Response
+from fastapi.encoders import jsonable_encoder
 from pydantic.color import Color
 from sqlparse import tokens as T
 
@@ -105,7 +106,7 @@ class SQLPanel(Panel):
             self._databases[alias]["num_queries"] += 1
 
         self._sql_time += duration
-        self._queries.append((alias, query))
+        self._queries.append((alias, jsonable_encoder(query)))
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
         trace_colors: t.Dict[t.Tuple[str, str], Color] = defaultdict(
