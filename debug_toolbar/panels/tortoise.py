@@ -4,7 +4,11 @@ from time import perf_counter
 
 from fastapi import Request, Response
 from tortoise.backends.base.client import BaseDBAsyncClient
-from tortoise.transactions import current_transaction_map
+
+try:
+    from tortoise.connection import connections
+except ImportError:
+    connections = None  # type: ignore
 
 from debug_toolbar.panels.sql import SQLPanel, raw_sql
 
@@ -31,7 +35,7 @@ class DBWrapper:
 
     async def execute_script(self, query: str) -> None:
         with self.on_execute(self.db, query):
-            self.db.execute_script(query)
+            await self.db.execute_script(query)
 
     async def execute_many(self, query: str, values: t.List[list]) -> None:
         with self.on_execute(self.db, query, values):
@@ -70,11 +74,14 @@ class TortoisePanel(SQLPanel):
             self.add_query(db.connection_name, query)
 
     async def process_request(self, request: Request) -> Response:
-        for db in current_transaction_map.values():
-            db.set(DBWrapper(db.get(), self.on_execute))
+        assert connections is not None, "tortoise-orm >= 0.19.0 is required"
+
+        for conn in connections.all():
+            db = DBWrapper(conn, self.on_execute)
+            connections.set(conn.connection_name, db)  # type: ignore
         try:
             response = await super().process_request(request)
         finally:
-            for db in current_transaction_map.values():
-                db.set(db.get().db)
+            for conn in connections.all():
+                connections.set(conn.connection_name, conn.db)  # type: ignore
         return response
