@@ -15,6 +15,10 @@ from debug_toolbar.panels.sql import SQLPanel
 class SQLAlchemyPanel(SQLPanel):
     title = "SQLAlchemy"
 
+    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.engines: t.Set[Engine] = set()
+
     def register(self, engine: Engine) -> None:
         event.listen(engine, "before_cursor_execute", self.before_execute)
         event.listen(engine, "after_cursor_execute", self.after_execute)
@@ -51,31 +55,31 @@ class SQLAlchemyPanel(SQLPanel):
         }
         self.add_query(str(conn.engine.url), query)
 
-    async def process_request(self, request: Request) -> Response:
-        engines: t.Set[Engine] = set()
+    async def add_engines(self, request: Request):
         route = request.scope["route"]
 
         if hasattr(route, "dependant"):
             if request.scope.get("fastapi_astack") is None:
                 async with AsyncExitStack() as stack:
                     request.scope["fastapi_astack"] = stack
-            try:
-                solved_result = await solve_dependencies(
-                    request=request,
-                    dependant=route.dependant,
-                    dependency_overrides_provider=route.dependency_overrides_provider,
-                )
-            except Exception:
-                pass
-            else:
-                for value in solved_result[0].values():
-                    if isinstance(value, Session):
-                        engine = value.get_bind()
-                        engines.add(engine)
-                        self.register(engine)
+
+            solved_result = await solve_dependencies(
+                request=request,
+                dependant=route.dependant,
+                dependency_overrides_provider=route.dependency_overrides_provider,
+            )
+            for value in solved_result[0].values():
+                if isinstance(value, Session):
+                    self.engines.add(value.get_bind())
+
+    async def process_request(self, request: Request) -> Response:
+        await self.add_engines(request)
+
+        for engine in self.engines:
+            self.register(engine)
         try:
             response = await super().process_request(request)
         finally:
-            for engine in engines:
+            for engine in self.engines:
                 self.unregister(engine)
         return response
