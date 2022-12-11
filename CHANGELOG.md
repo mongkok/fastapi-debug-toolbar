@@ -1,5 +1,14 @@
 # Changelog
 
+### 0.3.0
+
+* Added refresh cookie system and `JSON.parse` swap removed
+* Fixed SQL query encoding
+* Fixed `SQLAlchemyPanel` , added missing `fastapi_astack` to scope (`fastapi >= 0.74.0`)
+* Added `SQLAlchemyPanel.add_engines` method
+* Added `tortoise-orm >= 0.19.0` support
+* Fixed `VersionsPanel` JS, package home can be null
+
 ### 0.2.1
 
 * Added `PydanticPanel`
