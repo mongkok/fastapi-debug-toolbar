@@ -8,7 +8,6 @@ from fastapi import Request
 from fastapi.routing import APIRoute
 from pydantic.color import Color
 from starlette.routing import Match
-from starlette.staticfiles import StaticFiles
 
 
 def import_string(import_name: str) -> t.Any:
@@ -43,20 +42,11 @@ def get_name_from_obj(obj: t.Any) -> str:
 def matched_route(request: Request) -> t.Optional[APIRoute]:
     for route in request.app.routes:
         match, _ = route.matches(request.scope)
+
         if match == Match.FULL:
-            return route
-    return None
-
-
-def matched_endpoint(request: Request) -> t.Optional[t.Callable]:
-    route = matched_route(request)
-    if route is not None:
-        endpoint = getattr(route, "endpoint", None)
-
-        if endpoint is not None:
-            return endpoint
-        if not isinstance(route.app, StaticFiles):
-            return route.app
+            if hasattr(route, "endpoint"):
+                return route
+            break
     return None
 
 
