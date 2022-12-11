@@ -17,11 +17,11 @@
 }
 
 .md-nav__title,
-h3[id^="debug_toolbar.setting"] .doc-properties {
+h4[id^="debug_toolbar.setting"] .doc-label-class-attribute {
     display: none;
 }
 
-h3[id^="debug_toolbar"] > code :first-child {
+h4[id^="debug_toolbar"] > code :first-child {
     font-weight: bold;
     text-transform: lowercase;
 }

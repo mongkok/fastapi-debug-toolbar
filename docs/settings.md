@@ -3,11 +3,10 @@ Here's a list of settings available:
 ::: debug_toolbar.settings.DebugToolbarSettings
     handlers: python
     options:
-      show_root_heading: false
-      show_root_toc_entry: false
-      show_root_full_path: false
+      heading_level: 4
+      show_bases: false
       show_if_no_docstring: true
-      heading_level: 3
+      show_root_toc_entry: false
       filters:
         - "!^_"
         - "!Config$"
