@@ -35,7 +35,7 @@ class DBWrapper:
 
     async def execute_script(self, query: str) -> None:
         with self.on_execute(self.db, query):
-            self.db.execute_script(query)
+            await self.db.execute_script(query)
 
     async def execute_many(self, query: str, values: t.List[list]) -> None:
         with self.on_execute(self.db, query, values):
