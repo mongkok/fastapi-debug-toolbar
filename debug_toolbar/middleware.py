@@ -15,7 +15,7 @@ from starlette.types import ASGIApp
 from debug_toolbar.api import render_panel
 from debug_toolbar.settings import DebugToolbarSettings
 from debug_toolbar.toolbar import DebugToolbar
-from debug_toolbar.utils import import_string
+from debug_toolbar.utils import import_string, matched_route
 
 
 def show_toolbar(request: Request, settings: DebugToolbarSettings) -> bool:
@@ -60,8 +60,11 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         request: Request,
         call_next: RequestResponseEndpoint,
     ) -> Response:
+        request.scope["route"] = matched_route(request)
+
         if (
-            not self.show_toolbar(request, self.settings)
+            not request.scope["route"]
+            or not self.show_toolbar(request, self.settings)
             or self.settings.API_URL in request.url.path
         ):
             return await call_next(request)

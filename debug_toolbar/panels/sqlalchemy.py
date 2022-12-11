@@ -4,14 +4,12 @@ from time import perf_counter
 from fastapi import Request, Response
 from fastapi.concurrency import AsyncExitStack
 from fastapi.dependencies.utils import solve_dependencies
-from fastapi.routing import APIRoute
 from sqlalchemy import event
 from sqlalchemy.engine import Connection, Engine
 from sqlalchemy.engine.default import DefaultExecutionContext
 from sqlalchemy.orm import Session
 
 from debug_toolbar.panels.sql import SQLPanel
-from debug_toolbar.utils import matched_route
 
 
 class SQLAlchemyPanel(SQLPanel):
@@ -55,11 +53,9 @@ class SQLAlchemyPanel(SQLPanel):
 
     async def process_request(self, request: Request) -> Response:
         engines: t.Set[Engine] = set()
-        route = matched_route(request)
+        route = request.scope["route"]
 
         if hasattr(route, "dependant"):
-            route = t.cast(APIRoute, route)
-
             if request.scope.get("fastapi_astack") is None:
                 async with AsyncExitStack() as stack:
                     request.scope["fastapi_astack"] = stack

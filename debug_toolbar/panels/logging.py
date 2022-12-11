@@ -7,7 +7,7 @@ from starlette.concurrency import run_in_threadpool
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.types import Stats
-from debug_toolbar.utils import is_coroutine, matched_endpoint, pluralize
+from debug_toolbar.utils import is_coroutine, pluralize
 
 try:
     import threading
@@ -92,12 +92,7 @@ class LoggingPanel(Panel):
         return f"{record_count} message{pluralize(record_count)}"
 
     async def process_request(self, request: Request) -> Response:
-        endpoint = matched_endpoint(request)
-
-        if endpoint is None:
-            return await super().process_request(request)
-
-        if is_coroutine(endpoint):
+        if is_coroutine(request.scope["route"].endpoint):
             self.thread_id = threading.get_ident()
         else:
             self.thread_id = await run_in_threadpool(threading.get_ident)

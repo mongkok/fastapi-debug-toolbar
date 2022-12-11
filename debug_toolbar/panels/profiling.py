@@ -6,7 +6,7 @@ from starlette.concurrency import run_in_threadpool
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.types import Stats
-from debug_toolbar.utils import is_coroutine, matched_endpoint
+from debug_toolbar.utils import is_coroutine
 
 
 class ProfilingPanel(Panel):
@@ -15,12 +15,7 @@ class ProfilingPanel(Panel):
 
     async def process_request(self, request: Request) -> Response:
         self.profiler = Profiler(**self.toolbar.settings.PROFILER_OPTIONS)
-        endpoint = matched_endpoint(request)
-
-        if endpoint is None:
-            return await super().process_request(request)
-
-        is_async = is_coroutine(endpoint)
+        is_async = is_coroutine(request.scope["route"].endpoint)
 
         async def call(func: t.Callable) -> None:
             await run_in_threadpool(func) if not is_async else func()
