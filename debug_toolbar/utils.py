@@ -56,7 +56,7 @@ def is_coroutine(endpoint: t.Callable) -> bool:
     while isinstance(handler, functools.partial):
         handler = handler.func
     if not (inspect.ismethod(handler) or inspect.isfunction(handler)):
-        handler = handler.__call__  # type: ignore
+        handler = handler.__call__  # type: ignore[operator]
     return asyncio.iscoroutinefunction(handler)
 
 

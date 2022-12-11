@@ -78,7 +78,7 @@ class TortoisePanel(SQLPanel):
 
         for conn in connections.all():
             db = DBWrapper(conn, self.on_execute)
-            connections.set(conn.connection_name, db)  # type: ignore
+            connections.set(conn.connection_name, db)  # type: ignore[arg-type]
         try:
             response = await super().process_request(request)
         finally:

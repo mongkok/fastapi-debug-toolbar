@@ -9,7 +9,7 @@ from debug_toolbar.types import ServerTiming, Stats
 try:
     import resource
 except ImportError:
-    resource = None  # type: ignore
+    resource = None  # type: ignore[assignment]
 
 
 class TimerPanel(Panel):

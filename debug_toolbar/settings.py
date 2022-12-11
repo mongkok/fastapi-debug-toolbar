@@ -68,7 +68,7 @@ class DebugToolbarSettings(BaseSettings):
         description="URL prefix to use for toolbar endpoints.",
     )
     STATIC_URL: str = Field(
-        f"{API_URL.default}/static",  # type: ignore
+        f"{API_URL.default}/static",  # type: ignore[attr-defined]
         description="URL to use when referring to toolbar static files.",
     )
     SHOW_TOOLBAR_CALLBACK: str = Field(

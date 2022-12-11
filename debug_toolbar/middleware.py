@@ -30,7 +30,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         super().__init__(app)
         self.settings = DebugToolbarSettings(**settings)
         self.show_toolbar = import_string(self.settings.SHOW_TOOLBAR_CALLBACK)
-        self.router: APIRouter = app  # type: ignore
+        self.router: APIRouter = app  # type: ignore[assignment]
 
         while not isinstance(self.router, APIRouter):
             self.router = self.router.app
@@ -86,7 +86,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         toolbar.generate_server_timing_header(response)
 
         if is_html:
-            async for body in response.body_iterator:  # type: ignore
+            async for body in response.body_iterator:  # type: ignore[attr-defined]
                 if not isinstance(body, bytes):
                     body = body.encode(response.charset)
 
@@ -102,7 +102,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
             async def stream() -> t.AsyncGenerator[bytes, None]:
                 yield body
 
-            response.body_iterator = stream()  # type: ignore
+            response.body_iterator = stream()  # type: ignore[attr-defined]
         else:
             data = parse.quote(json.dumps(toolbar.refresh()))
             response.set_cookie(key="dtRefresh", value=data)

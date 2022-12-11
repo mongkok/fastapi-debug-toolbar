@@ -12,7 +12,7 @@ from debug_toolbar.utils import is_coroutine, pluralize
 try:
     import threading
 except ImportError:
-    threading = None  # type: ignore
+    threading = None  # type: ignore[assignment]
 
 
 class LogCollector:

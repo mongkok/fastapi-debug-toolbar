@@ -84,11 +84,11 @@ class PydanticPanel(Panel):
         return decorator
 
     async def process_request(self, request: Request) -> Response:
-        ModelField.validate = self.validate  # type: ignore
+        ModelField.validate = self.validate  # type: ignore[assignment]
         try:
             response = await super().process_request(request)
         finally:
-            ModelField.validate = _validate  # type: ignore
+            ModelField.validate = _validate  # type: ignore[assignment]
         return response
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
