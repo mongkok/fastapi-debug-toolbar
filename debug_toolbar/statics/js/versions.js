@@ -13,7 +13,7 @@ function pypiIndex() {
   function link(url) {
     return `
       <a href="${url}" target="_blank">
-          ${$$.truncatechars(url || "", 40)}
+          ${$$.truncatechars(url, 40)}
       </a>`;
   }
   function render(rowVersion, data) {
@@ -31,7 +31,10 @@ function pypiIndex() {
 
     const status = python.nextElementSibling;
     status.innerHTML = data.status ? data.status.slice(26) : "";
-    status.nextElementSibling.innerHTML = link(data.home_page);
+
+    if (data.home_page) {
+      status.nextElementSibling.innerHTML = link(data.home_page);
+    }
   }
   function getData(pypi) {
     return {
