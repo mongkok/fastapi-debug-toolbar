@@ -25,7 +25,6 @@ If you don't use dependencies then create a new class that inherits from `SQLAlc
       members:
         - add_engines
 
-
 ## Tortoise ORM
 
 Add the `TortoisePanel` to your panel list:

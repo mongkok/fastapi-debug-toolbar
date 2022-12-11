@@ -19,8 +19,7 @@ This method should return a dict with the panel stats.
 
     The `process_request()` method is **optional** and particularly useful for adding behavior that occurs before the request is processed.
 
-    Please see the [Panel](doc.md) class reference for further details.
-
+    Please see the [Panel](panel.md) class reference for further details.
 
 ## Writing the template
 

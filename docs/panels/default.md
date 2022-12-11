@@ -47,4 +47,3 @@ Profiling reports provided by [Pyinstrument](https://github.com/joerick/pyinstru
 ```py hl_lines="5"
 {!src/panels/profiling.py!}
 ```
-
