@@ -1,7 +1,6 @@
 import inspect
 import statistics
 import typing as t
-from collections import OrderedDict
 from time import perf_counter
 
 from fastapi import Request, Response
@@ -27,7 +26,7 @@ class PydanticPanel(Panel):
         super().__init__(*args, **kwargs)
         self._validation_time: float = 0
         self._parent_ids: t.Dict[t.Any, str] = {}
-        self._validations: t.Dict[str, t.Any] = OrderedDict()
+        self._validations: t.Dict[str, t.Any] = {}
 
     @property
     def nav_subtitle(self) -> str:

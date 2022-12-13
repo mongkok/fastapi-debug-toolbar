@@ -41,7 +41,7 @@ class DebugToolbar:
                 call_next = panel.process_request
 
         self.process_request = call_next
-        self._panels = OrderedDict()
+        self._panels = {}
 
         while panels:
             panel = panels.pop()
