@@ -9,7 +9,7 @@
   </thead>
   <tbody>
     <tr>
-      <td>{{ get_name_from_obj(request.scope.endpoint) }}</td>
+      <td>{{ get_name_from_obj(request.endpoint) }}</td>
       <td>
         {% if request.path_params %}
           {% for k, v in request.path_params.items() %}

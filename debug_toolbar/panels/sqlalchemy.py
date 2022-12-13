@@ -56,10 +56,10 @@ class SQLAlchemyPanel(SQLPanel):
         self.add_query(str(conn.engine.url), query)
 
     async def add_engines(self, request: Request):
-        route = request.scope["route"]
+        route = request["route"]
 
         if hasattr(route, "dependant"):
-            if request.scope.get("fastapi_astack") is None:
+            if "fastapi_astack" not in request:
                 async with AsyncExitStack() as stack:
                     request.scope["fastapi_astack"] = stack
 

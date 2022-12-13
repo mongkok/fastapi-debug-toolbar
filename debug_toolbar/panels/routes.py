@@ -11,5 +11,5 @@ class RoutesPanel(Panel):
     async def generate_stats(self, request: Request, response: Response) -> Stats:
         return {
             "routes": request.app.routes,
-            "endpoint": request.scope["endpoint"],
+            "endpoint": request["endpoint"],
         }
