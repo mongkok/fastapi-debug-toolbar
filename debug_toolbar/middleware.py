@@ -20,7 +20,7 @@ from debug_toolbar.utils import import_string, matched_route
 
 def show_toolbar(request: Request, settings: DebugToolbarSettings) -> bool:
     if settings.ALLOWED_IPS is not None:
-        remote_addr, _ = request.scope["client"]
+        remote_addr, _ = request["client"]
         return request.app.debug and remote_addr in settings.ALLOWED_IPS
     return request.app.debug
 
@@ -63,7 +63,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         request.scope["route"] = matched_route(request)
 
         if (
-            not request.scope["route"]
+            not request["route"]
             or not self.show_toolbar(request, self.settings)
             or self.settings.API_URL in request.url.path
         ):

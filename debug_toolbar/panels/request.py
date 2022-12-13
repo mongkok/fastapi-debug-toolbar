@@ -16,7 +16,7 @@ class RequestPanel(Panel):
         return get_name_from_obj(self.endpoint)
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
-        self.endpoint = request.scope["endpoint"]
+        self.endpoint = request["endpoint"]
         stats: t.Dict[str, t.Any] = {"request": request}
 
         if hasattr(self, "_form"):
