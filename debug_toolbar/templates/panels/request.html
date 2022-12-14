@@ -1,14 +1,16 @@
-<h4>Endpoint information</h4>
+<h4>Route information</h4>
 
 <table>
   <thead>
     <tr>
       <th>Name</th>
+      <th>Endpoint</th>
       <th>Path params</th>
     </tr>
   </thead>
   <tbody>
     <tr>
+      <td>{{ request.route.name }}</td>
       <td>{{ get_name_from_obj(request.endpoint) }}</td>
       <td>
         {% if request.path_params %}
@@ -36,7 +38,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for key, value in variables %}
+    {% for key, value in variables|sort %}
       <tr>
         <td><code>{{ key|pprint }}</code></td>
         <td><code>{{ value|pprint }}</code></td>
