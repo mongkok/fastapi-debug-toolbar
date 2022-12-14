@@ -74,10 +74,8 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         content_type = response.headers.get("Content-Type", "")
         is_html = content_type.startswith("text/html")
 
-        if (
-            not (is_html or content_type == "application/json")
-            or "gzip" in response.headers.get("Accept-Encoding", "")
-            or request.scope.get("endpoint") is None
+        if not (is_html or content_type == "application/json") or (
+            "gzip" in response.headers.get("Accept-Encoding", "")
         ):
             return response
 
