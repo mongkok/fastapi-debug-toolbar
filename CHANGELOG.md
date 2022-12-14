@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.3.1
+
+* Fixed pyproject.toml, added package data
+* Improved panel templates
+* Fixed profiling on Safari browser
+
 ### 0.3.0
 
 * Added refresh cookie system and `JSON.parse` swap removed
