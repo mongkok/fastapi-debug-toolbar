@@ -634,3 +634,14 @@ iframe#profilingContent {
 #HeadersPanel tbody td {
     overflow-wrap: break-word;
 }
+
+#RequestPanel tbody td:last-child code {
+    word-break: break-word;
+    white-space: normal;
+}
+
+#RoutesPanel tbody td code,
+#LoggingPanel tbody td code {
+    word-break: break-word;
+    white-space: pre-wrap;
+}

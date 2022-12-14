@@ -15,7 +15,7 @@
         <td>{% if route.methods %}{{ route.methods|sort|join(', ') }}{% endif %}</td>
         <td>{{ route.path }}</td>
         <td>{{ get_name_from_obj(route.endpoint) }}</td>
-        <td>{{ route.description }}</td>
+        <td><code>{{ route.description }}</code></td>
       </tr>
     {% endfor %}
   </tbody>
