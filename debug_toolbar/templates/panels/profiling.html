@@ -5,7 +5,7 @@
 
 <script>
 (function() {
-  let iframe = document.getElementById('profilingContent');
-  iframe.srcdoc = iframe.innerHTML;
+  const iframe = document.getElementById('profilingContent');
+  iframe.srcdoc = iframe.textContent;
 })();
 </script>
