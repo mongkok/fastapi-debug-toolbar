@@ -80,6 +80,12 @@ doc = [
     "mkdocstrings[python]",
 ]
 
+[tool.hatch.build.targets.sdist]
+include = ["debug_toolbar"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["debug_toolbar"]
+
 [tool.hatch.version]
 path = "debug_toolbar/__init__.py"
 
