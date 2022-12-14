@@ -34,8 +34,7 @@ def get_name_from_obj(obj: t.Any) -> str:
         name = obj.__class__.__name__
 
     if hasattr(obj, "__module__"):
-        module = obj.__module__
-        name = f"{module}.{name}"
+        name = f"{obj.__module__}.{name}"
     return name
 
 
@@ -60,7 +59,7 @@ def is_coroutine(endpoint: t.Callable) -> bool:
     return asyncio.iscoroutinefunction(handler)
 
 
-def pluralize(value: float, arg: str = "s") -> str:
+def pluralize(value: int, arg: str = "s") -> str:
     if "," not in arg:
         arg = f",{arg}"
 
@@ -71,7 +70,7 @@ def pluralize(value: float, arg: str = "s") -> str:
 
     singular_suffix, plural_suffix = bits[:2]
 
-    if float(value) == 1:
+    if value == 1:
         return singular_suffix
     return plural_suffix
 
