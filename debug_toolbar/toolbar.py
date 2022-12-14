@@ -124,6 +124,7 @@ class DebugToolbar:
             toolbar=self,
             url_for=self.request.url_for,
             get_name_from_obj=get_name_from_obj,
+            to_set=set,
             **context,
         )
 
