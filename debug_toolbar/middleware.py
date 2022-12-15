@@ -7,6 +7,7 @@ from urllib import parse
 from anyio import CapacityLimiter
 from anyio.lowlevel import RunVar
 from fastapi import APIRouter, HTTPException, Request, Response, status
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.routing import NoMatchFound
@@ -84,9 +85,12 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         toolbar.generate_server_timing_header(response)
 
         if is_html:
-            async for body in response.body_iterator:  # type: ignore[attr-defined]
-                if not isinstance(body, bytes):
-                    body = body.encode(response.charset)
+            body = b""
+
+            async for chunk in response.body_iterator:  # type: ignore[attr-defined]
+                if not isinstance(chunk, bytes):
+                    chunk = chunk.encode(response.charset)
+                body += chunk
 
             decoded = body.decode(response.charset)
             pattern = re.escape(self.settings.INSERT_BEFORE)
