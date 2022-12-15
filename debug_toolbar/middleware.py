@@ -71,7 +71,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         toolbar = DebugToolbar(request, call_next, self.settings)
-        response = await toolbar.process_request(request)
+        response = t.cast(StreamingResponse, await toolbar.process_request(request))
         content_type = response.headers.get("Content-Type", "")
         is_html = content_type.startswith("text/html")
 
@@ -87,7 +87,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         if is_html:
             body = b""
 
-            async for chunk in response.body_iterator:  # type: ignore[attr-defined]
+            async for chunk in response.body_iterator:
                 if not isinstance(chunk, bytes):
                     chunk = chunk.encode(response.charset)
                 body += chunk
@@ -104,7 +104,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
             async def stream() -> t.AsyncGenerator[bytes, None]:
                 yield body
 
-            response.body_iterator = stream()  # type: ignore[attr-defined]
+            response.body_iterator = stream()
         else:
             data = parse.quote(json.dumps(toolbar.refresh()))
             response.set_cookie(key="dtRefresh", value=data)
