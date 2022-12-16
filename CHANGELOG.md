@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.3.2
+
+* Fixed response body stream
+
 ### 0.3.1
 
 * Fixed pyproject.toml, added package data
