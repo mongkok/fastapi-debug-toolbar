@@ -7,6 +7,7 @@ from urllib import parse
 from anyio import CapacityLimiter
 from anyio.lowlevel import RunVar
 from fastapi import APIRouter, HTTPException, Request, Response, status
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.routing import NoMatchFound
@@ -70,7 +71,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         toolbar = DebugToolbar(request, call_next, self.settings)
-        response = await toolbar.process_request(request)
+        response = t.cast(StreamingResponse, await toolbar.process_request(request))
         content_type = response.headers.get("Content-Type", "")
         is_html = content_type.startswith("text/html")
 
@@ -84,9 +85,12 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         toolbar.generate_server_timing_header(response)
 
         if is_html:
-            async for body in response.body_iterator:  # type: ignore[attr-defined]
-                if not isinstance(body, bytes):
-                    body = body.encode(response.charset)
+            body = b""
+
+            async for chunk in response.body_iterator:
+                if not isinstance(chunk, bytes):
+                    chunk = chunk.encode(response.charset)
+                body += chunk
 
             decoded = body.decode(response.charset)
             pattern = re.escape(self.settings.INSERT_BEFORE)
@@ -100,7 +104,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
             async def stream() -> t.AsyncGenerator[bytes, None]:
                 yield body
 
-            response.body_iterator = stream()  # type: ignore[attr-defined]
+            response.body_iterator = stream()
         else:
             data = parse.quote(json.dumps(toolbar.refresh()))
             response.set_cookie(key="dtRefresh", value=data)
