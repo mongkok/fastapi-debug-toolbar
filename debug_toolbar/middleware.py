@@ -44,6 +44,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         self.router.get(
             self.settings.API_URL,
             name="debug_toolbar.render_panel",
+            include_in_schema=False,
         )(self.require_show_toolbar(render_panel))
 
         self.router.mount(
