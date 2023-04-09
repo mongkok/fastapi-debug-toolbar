@@ -1,6 +1,7 @@
 import typing as t
 
 from fastapi import Request, Response
+from starlette.datastructures import URL
 from starlette.middleware.base import RequestResponseEndpoint
 
 from debug_toolbar.types import ServerTiming, Stats
@@ -66,11 +67,11 @@ class Panel:
     def render(self, **context: t.Any) -> str:
         return self.toolbar.render(self.template, **context)
 
-    def url_for(self, name: str, **path_params: t.Any) -> str:
+    def url_for(self, name: str, **path_params: t.Any) -> URL:
         return self.toolbar.request.url_for(name, **path_params)
 
     @property
-    def scripts(self) -> t.List[str]:
+    def scripts(self) -> t.List[URL]:
         return []
 
     async def process_request(self, request: Request) -> Response:

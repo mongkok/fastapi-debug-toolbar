@@ -2,6 +2,7 @@ import typing as t
 from time import perf_counter
 
 from fastapi import Request, Response
+from starlette.datastructures import URL
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.types import ServerTiming, Stats
@@ -45,7 +46,7 @@ class TimerPanel(Panel):
         return self.render(rows=rows)
 
     @property
-    def scripts(self) -> t.List[str]:
+    def scripts(self) -> t.List[URL]:
         scripts = super().scripts
         scripts.append(self.url_for("debug_toolbar.static", path="js/timer.js"))
         return scripts
