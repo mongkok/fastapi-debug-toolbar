@@ -56,7 +56,6 @@ class DebugToolbar:
         cls: t.Type[DT],
         panels: t.Sequence[str],
     ) -> t.Sequence[t.Type[Panel]]:
-
         if cls._panel_classes is None:
             cls._panel_classes = [import_string(panel_path) for panel_path in panels]
         return cls._panel_classes
