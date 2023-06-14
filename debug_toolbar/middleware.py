@@ -36,7 +36,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
         while not isinstance(self.router, APIRouter):
             self.router = self.router.app
         try:
-            self.router.url_path_for(name="debug_toolbar.render_panel")
+            self.router.url_path_for("debug_toolbar.render_panel")
         except NoMatchFound:
             self.init_toolbar()
 
