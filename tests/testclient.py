@@ -26,8 +26,10 @@ class TestClient(BaseTestClient):
         return re.findall(r'"storeId": "(.+?)"', cookie)[0]
 
     def render_panel(self, store_id: str, panel_id: str) -> httpx.Response:
-        url = self.app.url_path_for("debug_toolbar.render_panel")  # type: ignore
-        return self.get(url, params={"store_id": store_id, "panel_id": panel_id})
+        return self.get(
+            "/_debug_toolbar",
+            params={"store_id": store_id, "panel_id": panel_id},
+        )
 
     def get_stats(self, store_id: str, panel_id: str) -> Stats:
         response = self.render_panel(store_id, panel_id)
