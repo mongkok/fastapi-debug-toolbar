@@ -1,6 +1,7 @@
 import typing as t
 
 from fastapi import Request, Response, __version__
+from starlette.datastructures import URL
 
 from debug_toolbar.panels import Panel
 from debug_toolbar.types import Stats
@@ -15,7 +16,7 @@ class VersionsPanel(Panel):
         return f"FastAPI {__version__}"
 
     @property
-    def scripts(self) -> t.List[str]:
+    def scripts(self) -> t.List[URL]:
         scripts = super().scripts
         scripts.append(self.url_for("debug_toolbar.static", path="js/versions.js"))
         return scripts
