@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.4.0
+
+* Fixed middleware `url_path_for`
+* Improved SQLAlchemy panel
+
 ### 0.3.2
 
 * Fixed response body stream
