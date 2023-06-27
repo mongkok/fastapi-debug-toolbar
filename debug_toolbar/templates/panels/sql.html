@@ -63,17 +63,6 @@
           <td class="fastdt-time">
             {{ '%0.2f'|format(query.duration|float) }}
           </td>
-          {# TODO: SELECT actions
-          <td class="fastdt-actions">
-            {% if query.params and query.is_select %}
-              <form method="post">
-                {{ query.form }}
-                <button formaction="{% url_for('debug_toolbar.sqlalchemy_select') %}" class="remoteCall">Sel</button>
-                <button formaction="{% url_for('debug_toolbar.sqlalchemy_explain') %}" class="remoteCall">Expl</button>
-              </form>
-              {% endif %}
-          </td>
-          #}
         </tr>
         <tr class="fastUnselected {% if query.is_slow %} fastDebugRowWarning{% endif %} fastToggleDetails_{{ loop.index }}" id="sqlDetails_{{ loop.index }}">
           <td colspan="2"></td>
