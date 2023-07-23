@@ -7,7 +7,7 @@ from collections import defaultdict
 import sqlparse
 from fastapi import Request, Response
 from fastapi.encoders import jsonable_encoder
-from pydantic.color import Color
+from pydantic_extra_types.color import Color
 from sqlparse import tokens as T
 
 from debug_toolbar.panels import Panel

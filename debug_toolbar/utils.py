@@ -6,7 +6,7 @@ import typing as t
 
 from fastapi import Request
 from fastapi.routing import APIRoute
-from pydantic.color import Color
+from pydantic_extra_types.color import Color
 from starlette.routing import Match
 
 

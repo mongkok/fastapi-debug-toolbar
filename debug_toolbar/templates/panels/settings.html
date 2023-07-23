@@ -1,5 +1,5 @@
 {% macro pprint_settings(settings, exclude=None) %}
-{% if settings.__config__.title %}<h4>{{ settings.__config__.title }}</h4>{% endif %}
+{% if settings.model_config.title %}<h4>{{ settings.model_config.title }}</h4>{% endif %}
 
 <table>
   <thead>

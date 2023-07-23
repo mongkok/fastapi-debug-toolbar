@@ -2,11 +2,18 @@ import typing as t
 
 from jinja2 import BaseLoader, ChoiceLoader, Environment, PackageLoader
 from jinja2.ext import Extension
-from pydantic import BaseSettings, Field, IPvAnyAddress, root_validator
-from pydantic.color import Color
+from pydantic import Field, IPvAnyAddress, model_validator
+from pydantic_extra_types.color import Color
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class DebugToolbarSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        title="Debug Toolbar",
+        env_prefix="DT_",
+        case_sensitive=False,
+    )
+
     DEFAULT_PANELS: t.List[str] = Field(
         [
             "debug_toolbar.panels.versions.VersionsPanel",
@@ -128,11 +135,6 @@ class DebugToolbarSettings(BaseSettings):
         ),
     )
 
-    class Config:
-        title = "Debug Toolbar"
-        env_prefix = "DT_"
-        case_sensitive = True
-
     def __init__(self, **settings: t.Any) -> None:
         super().__init__(**settings)
         loaders = self.JINJA_LOADERS + [PackageLoader("debug_toolbar", "templates")]
@@ -143,6 +145,6 @@ class DebugToolbarSettings(BaseSettings):
         for extension in self.JINJA_EXTENSIONS:
             self.JINJA_ENV.add_extension(extension)
 
-    @root_validator(pre=True)
-    def ci(cls, values: t.Dict[str, t.Any]) -> t.Dict[str, t.Any]:
-        return {k.upper(): v for k, v in values.items()}
+    @model_validator(mode="before")
+    def ci(cls, data: dict):
+        return {k.upper(): v for k, v in data.items()}
