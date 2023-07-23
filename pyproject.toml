@@ -45,6 +45,9 @@ dependencies = [
     "fastapi >=0.70.0",
     "anyio >=3.0.0",
     "Jinja2 >=2.9",
+    "pydantic >=2.0",
+    "pydantic-extra-types >=2.0.0",
+    "pydantic-settings >=2.0.0",
     "pyinstrument >=3.0.0",
     "sqlparse >=0.2.0",
 ]

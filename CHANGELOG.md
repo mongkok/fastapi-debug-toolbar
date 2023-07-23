@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.5.0
+
+* Added Pydantic v2 support
+* Removed Pydantic v1 support
+* Removed `PydanticPanel`
+
 ### 0.4.0
 
 * Fixed middleware `url_path_for`

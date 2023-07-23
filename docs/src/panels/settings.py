@@ -1,6 +1,7 @@
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from fastapi import FastAPI
-from pydantic import BaseSettings, SecretStr
+from pydantic import SecretStr
+from pydantic_settings import BaseSettings
 
 
 class APISettings(BaseSettings):

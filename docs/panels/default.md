@@ -26,10 +26,6 @@ Add your pydantic's [BaseSettings](https://pydantic-docs.helpmanual.io/usage/set
 
 ![Headers panel](../img/panels/Headers.png)
 
-## Pydantic
-
-![Pydantic panel](../img/panels/Pydantic.png)
-
 ## Routes
 
 ![Routes panel](../img/panels/Routes.png)
