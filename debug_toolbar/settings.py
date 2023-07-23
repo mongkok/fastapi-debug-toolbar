@@ -14,7 +14,6 @@ class DebugToolbarSettings(BaseSettings):
             "debug_toolbar.panels.settings.SettingsPanel",
             "debug_toolbar.panels.request.RequestPanel",
             "debug_toolbar.panels.headers.HeadersPanel",
-            "debug_toolbar.panels.pydantic.PydanticPanel",
             "debug_toolbar.panels.routes.RoutesPanel",
             "debug_toolbar.panels.logging.LoggingPanel",
             "debug_toolbar.panels.profiling.ProfilingPanel",
