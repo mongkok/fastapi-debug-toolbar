@@ -2,7 +2,10 @@ import typing as t
 from time import perf_counter
 
 from fastapi import Request, Response
-from contextlib import AsyncExitStack
+try:
+    from fastapi.concurrency import AsyncExitStack
+except ImportError:
+    from contextlib import AsyncExitStack
 from fastapi.dependencies.utils import solve_dependencies
 from sqlalchemy import event
 from sqlalchemy.engine import Connection, Engine, ExecutionContext
