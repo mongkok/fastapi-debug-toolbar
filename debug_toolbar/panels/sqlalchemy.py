@@ -52,6 +52,7 @@ class SQLAlchemyPanel(SQLPanel):
                 request=request,
                 dependant=route.dependant,
                 dependency_overrides_provider=route.dependency_overrides_provider,
+                async_exit_stack=AsyncExitStack(),
             )
             for value in solved_result[0].values():
                 if isinstance(value, Session):
