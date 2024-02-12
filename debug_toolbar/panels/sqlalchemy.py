@@ -1,8 +1,8 @@
 import typing as t
+from contextlib import AsyncExitStack
 from time import perf_counter
 
 from fastapi import Request, Response
-from fastapi.concurrency import AsyncExitStack
 from fastapi.dependencies.utils import solve_dependencies
 from sqlalchemy import event
 from sqlalchemy.engine import Connection, Engine, ExecutionContext
@@ -52,6 +52,7 @@ class SQLAlchemyPanel(SQLPanel):
                 request=request,
                 dependant=route.dependant,
                 dependency_overrides_provider=route.dependency_overrides_provider,
+                async_exit_stack=AsyncExitStack(),
             )
             for value in solved_result[0].values():
                 if isinstance(value, Session):

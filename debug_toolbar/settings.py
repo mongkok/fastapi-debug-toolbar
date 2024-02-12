@@ -2,7 +2,7 @@ import typing as t
 
 from jinja2 import BaseLoader, ChoiceLoader, Environment, PackageLoader
 from jinja2.ext import Extension
-from pydantic import Field, IPvAnyAddress, model_validator
+from pydantic import Field, model_validator
 from pydantic_extra_types.color import Color
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -45,11 +45,11 @@ class DebugToolbarSettings(BaseSettings):
             "want disabled (but still displayed) by default."
         ),
     )
-    ALLOWED_IPS: t.Optional[t.Sequence[IPvAnyAddress]] = Field(
+    ALLOWED_HOSTS: t.Optional[t.Sequence[str]] = Field(
         None,
         description=(
             "If it's set, the Debug Toolbar is shown only "
-            "if your IP address is listed."
+            "if the request host is listed."
         ),
     )
     JINJA_ENV: Environment = Field(

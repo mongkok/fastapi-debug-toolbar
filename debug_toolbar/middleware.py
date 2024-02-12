@@ -20,9 +20,8 @@ from debug_toolbar.utils import import_string, matched_route
 
 
 def show_toolbar(request: Request, settings: DebugToolbarSettings) -> bool:
-    if settings.ALLOWED_IPS is not None:
-        remote_addr, _ = request["client"]
-        return request.app.debug and remote_addr in settings.ALLOWED_IPS
+    if request.client is not None and settings.ALLOWED_HOSTS is not None:
+        return request.app.debug and request.client.host in settings.ALLOWED_HOSTS
     return request.app.debug
 
 

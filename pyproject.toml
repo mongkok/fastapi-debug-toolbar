@@ -7,7 +7,7 @@ name = "fastapi-debug-toolbar"
 description = "A debug toolbar for FastAPI."
 readme = "README.md"
 license = "BSD-3-Clause"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dynamic = ["version"]
 authors = [
   { name = "Dani", email = "dani@domake.io" }
@@ -26,11 +26,11 @@ classifiers = [
     "Typing :: Typed",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Software Development",
     "Topic :: Software Development :: Debuggers",
     "Topic :: Software Development :: Libraries",
@@ -42,7 +42,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "fastapi >=0.70.0",
+    "fastapi >=0.106.0",
     "anyio >=3.0.0",
     "Jinja2 >=2.9",
     "pydantic >=2.0",

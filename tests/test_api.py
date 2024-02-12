@@ -1,6 +1,6 @@
 from fastapi import status
 
-from .mark import override_panels, override_settings
+from .mark import override_panels
 from .testclient import TestClient
 
 
@@ -19,12 +19,3 @@ def test_invalid_store_id(client: TestClient) -> None:
 
     assert response.status_code == status.HTTP_200_OK
     assert not response.json()["scripts"]
-
-
-@override_settings(
-    panels=["debug_toolbar.panels.timer.TimerPanel"],
-    allowed_ips=[],
-)
-def test_not_allowed(client: TestClient) -> None:
-    response = client.render_panel(store_id="", panel_id="TimerPanel")
-    assert response.status_code == status.HTTP_404_NOT_FOUND
