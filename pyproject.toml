@@ -60,20 +60,17 @@ changelog = "https://fastapi-debug-toolbar.domake.io/changelog/"
 
 [project.optional-dependencies]
 test = [
-    "black",
-    "codecov",
-    "flake8",
+    "bandit",
+    "coverage",
     "httpx",
-    "isort",
     "itsdangerous",
     "mypy",
     "pytest",
     "pytest-asyncio",
-    "pytest-cov",
     "python-multipart",
+    "ruff",
     "SQLAlchemy",
-    "tortoise-orm >=0.19.0",
-    "types-setuptools",
+    "tortoise-orm",
 ]
 
 doc = [
@@ -92,11 +89,28 @@ packages = ["debug_toolbar"]
 [tool.hatch.version]
 path = "debug_toolbar/__init__.py"
 
-[tool.isort]
-profile = "black"
-
 [tool.mypy]
 ignore_missing_imports = true
 
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends"]
+
+[tool.bandit]
+skips = ["B101"]
+
 [tool.pytest.ini_options]
+addopts = ["--strict-config", "--strict-markers"]
 asyncio_mode = "auto"
+
+[tool.coverage.run]
+source_pkgs = ["app", "tests"]

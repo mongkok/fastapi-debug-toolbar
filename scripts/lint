@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+set -x
+
+ruff debug_toolbar tests scripts
+ruff format debug_toolbar tests --check
+bandit --configfile pyproject.toml --recursive debug_toolbar
+mypy --install-types --non-interactive debug_toolbar tests

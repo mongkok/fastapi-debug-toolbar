@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+set -x
+
+scripts/lint
+coverage run -m pytest $@
+coverage report --show-missing
+coverage xml
