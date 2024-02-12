@@ -15,8 +15,8 @@
     {% for package in packages %}
       <tr>
         <td>
-          <a href="https://pypi.org/project/{{ package.project_name }}/" target="_blank">
-            {{ package.project_name }}
+          <a href="https://pypi.org/project/{{ package.metadata.name }}/" target="_blank">
+            {{ package.metadata.name }}
           </a>
         </td>
         <td><code>{{ package.version }}</code></td>
