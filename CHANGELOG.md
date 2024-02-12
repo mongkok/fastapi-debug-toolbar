@@ -1,5 +1,13 @@
 # Changelog
 
+### 0.6.0
+
+* **SQLAlchemyPanel**: Added `async_exit_stack` arg to `solve_dependencies` function 
+* **DebugToolbarMiddleware**: Removed `settings.ALLOWED_IPS` in favor of `settings.ALLOWED_HOSTS`
+* **VersionsPanel**: Removed `pkg_resources` in favor of `importlib.metadata`
+* Added ruff and bandit and removed black and isort
+* Improved typing
+
 ### 0.5.0
 
 * Added Pydantic v2 support
