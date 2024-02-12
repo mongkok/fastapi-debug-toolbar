@@ -2,6 +2,7 @@ import typing as t
 from importlib import metadata
 
 from fastapi import Request, Response, __version__
+
 from debug_toolbar.panels import Panel
 from debug_toolbar.types import Stats
 
@@ -23,6 +24,6 @@ class VersionsPanel(Panel):
     async def generate_stats(self, request: Request, response: Response) -> Stats:
         packages = sorted(
             metadata.distributions(),
-            key=lambda dist: dist.metadata['name'].lower(),
+            key=lambda dist: dist.metadata["name"].lower(),
         )
         return {"packages": packages}
