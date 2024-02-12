@@ -48,7 +48,7 @@ class DebugToolbar:
             self._panels[panel.panel_id] = panel
 
         self.stats: Stats = {}
-        self.server_timing_stats: t.Dict[str, ServerTiming] = {}
+        self.server_timing_stats: dict[str, ServerTiming] = {}
         self.store_id: t.Optional[str] = None
 
     @classmethod
@@ -95,7 +95,7 @@ class DebugToolbar:
             for panel in self.enabled_panels:
                 tg.start_soon(panel.record_server_timing, self.request, response)
 
-    def refresh(self) -> t.Dict[str, t.Any]:
+    def refresh(self) -> dict[str, t.Any]:
         self.store()
         return {
             "storeId": self.store_id,

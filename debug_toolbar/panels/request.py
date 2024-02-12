@@ -17,7 +17,7 @@ class RequestPanel(Panel):
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
         self.endpoint = request["endpoint"]
-        stats: t.Dict[str, t.Any] = {"request": request}
+        stats: dict[str, t.Any] = {"request": request}
 
         if hasattr(self, "_form"):
             stats["form"] = await request.form()

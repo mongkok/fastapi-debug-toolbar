@@ -76,15 +76,15 @@ class SQLPanel(Panel):
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
         self._sql_time: float = 0
-        self._queries: t.List[t.Tuple[str, t.Dict[str, t.Any]]] = []
-        self._databases: t.Dict[str, t.Dict[str, t.Any]] = {}
+        self._queries: list[tuple[str, dict[str, t.Any]]] = []
+        self._databases: dict[str, dict[str, t.Any]] = {}
         self._colors: t.Generator[Color, None, None] = color_generator()
 
     @property
     def nav_subtitle(self) -> str:
         return f"{nqueries(len(self._queries))} in {self._sql_time:.2f}ms"
 
-    def add_query(self, alias: str, query: t.Dict[str, t.Any]) -> None:
+    def add_query(self, alias: str, query: dict[str, t.Any]) -> None:
         duration = query["duration"]
         sql = query["sql"]
 
@@ -109,19 +109,19 @@ class SQLPanel(Panel):
         self._queries.append((alias, jsonable_encoder(query)))
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
-        trace_colors: t.Dict[t.Tuple[str, str], Color] = defaultdict(
+        trace_colors: dict[tuple[str, str], Color] = defaultdict(
             lambda: next(self._colors)
         )
-        duplicates: t.Dict[str, t.Dict[t.Tuple[str, str], int]] = defaultdict(
+        duplicates: dict[str, dict[tuple[str, str], int]] = defaultdict(
             lambda: defaultdict(int)
         )
-        similar: t.Dict[str, t.Dict[str, t.Any]] = defaultdict(lambda: defaultdict(int))
+        similar: dict[str, dict[str, t.Any]] = defaultdict(lambda: defaultdict(int))
         width_ratio_tally = 0
 
-        def dup_key(query: t.Dict[str, t.Any]) -> t.Tuple[str, str]:
+        def dup_key(query: dict[str, t.Any]) -> tuple[str, str]:
             return (query["sql"], json.dumps(query["params"]))
 
-        def sim_key(query: t.Dict[str, t.Any]) -> str:
+        def sim_key(query: dict[str, t.Any]) -> str:
             return query.get("raw", query.get("sql"))
 
         for alias, query in self._queries:

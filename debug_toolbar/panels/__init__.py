@@ -70,7 +70,7 @@ class Panel:
         return str(self.toolbar.request.url_for(name, **path_params))
 
     @property
-    def scripts(self) -> t.List[str]:
+    def scripts(self) -> list[str]:
         return []
 
     async def process_request(self, request: Request) -> Response:

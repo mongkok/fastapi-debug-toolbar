@@ -1,4 +1,3 @@
-import typing as t
 from importlib import metadata
 
 from fastapi import Request, Response, __version__
@@ -16,7 +15,7 @@ class VersionsPanel(Panel):
         return f"FastAPI {__version__}"
 
     @property
-    def scripts(self) -> t.List[str]:
+    def scripts(self) -> list[str]:
         scripts = super().scripts
         scripts.append(self.url_for("debug_toolbar.static", path="js/versions.js"))
         return scripts

@@ -29,7 +29,7 @@ class DBWrapper:
         self,
         query: str,
         values: t.Optional[list] = None,
-    ) -> t.Tuple[int, t.Sequence[dict]]:
+    ) -> tuple[int, t.Sequence[dict]]:
         with self.on_execute(self.db, query, values):
             return await self.db.execute_query(query, values)
 
@@ -37,7 +37,7 @@ class DBWrapper:
         with self.on_execute(self.db, query):
             await self.db.execute_script(query)
 
-    async def execute_many(self, query: str, values: t.List[list]) -> None:
+    async def execute_many(self, query: str, values: list[list]) -> None:
         with self.on_execute(self.db, query, values):
             await self.db.execute_many(query, values)
 
@@ -45,7 +45,7 @@ class DBWrapper:
         self,
         query: str,
         values: t.Optional[list] = None,
-    ) -> t.List[dict]:
+    ) -> list[dict]:
         with self.on_execute(self.db, query, values):
             return await self.db.execute_query_dict(query, values)
 

@@ -22,12 +22,12 @@ class LogCollector:
                 "threading module is not available, "
                 "this panel cannot be used without it"
             )
-        self.collections: t.Dict[int, t.List[t.Dict[str, t.Any]]] = {}
+        self.collections: dict[int, list[dict[str, t.Any]]] = {}
 
     def get_collection(
         self,
         thread_id: t.Optional[int] = None,
-    ) -> t.List[t.Dict[str, t.Any]]:
+    ) -> list[dict[str, t.Any]]:
         if thread_id is None:
             thread_id = threading.get_ident()
         if thread_id not in self.collections:
@@ -42,7 +42,7 @@ class LogCollector:
 
     def collect(
         self,
-        item: t.Dict[str, t.Any],
+        item: dict[str, t.Any],
         thread_id: t.Optional[int] = None,
     ) -> None:
         self.get_collection(thread_id).append(item)
@@ -83,7 +83,7 @@ class LoggingPanel(Panel):
 
     def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
         super().__init__(*args, **kwargs)
-        self._records: t.Dict[t.Any, t.List[t.Dict[str, t.Any]]] = {}
+        self._records: dict[t.Any, list[dict[str, t.Any]]] = {}
 
     @property
     def nav_subtitle(self) -> str:
