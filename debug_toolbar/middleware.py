@@ -20,7 +20,7 @@ from debug_toolbar.utils import import_string, matched_route
 
 
 def show_toolbar(request: Request, settings: DebugToolbarSettings) -> bool:
-    if settings.ALLOWED_HOSTS is not None:
+    if request.client is not None and settings.ALLOWED_HOSTS is not None:
         return request.app.debug and request.client.host in settings.ALLOWED_HOSTS
     return request.app.debug
 
