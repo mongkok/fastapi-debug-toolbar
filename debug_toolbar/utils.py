@@ -24,7 +24,7 @@ def import_string(import_name: str) -> t.Any:
     try:
         return getattr(module, obj_name)
     except AttributeError as e:
-        raise ImportError(e)
+        raise ImportError(e) from None
 
 
 def get_name_from_obj(obj: t.Any) -> str:
