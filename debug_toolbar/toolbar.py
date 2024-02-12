@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing as t
 import uuid
 from collections import OrderedDict

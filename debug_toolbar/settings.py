@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing as t
 
 from jinja2 import BaseLoader, ChoiceLoader, Environment, PackageLoader
