@@ -13,12 +13,12 @@ from ..testclient import TestClient
 @pytest.fixture
 def client(app: FastAPI, get_index: t.Callable) -> TestClient:
     @app.get("/log/sync", response_class=HTMLResponse)
-    def get_log(request: Request, level: str) -> str:
+    def get_log(request: Request, level: str) -> HTMLResponse:
         logger.log(logging._nameToLevel[level], "")
         return get_index(request)
 
     @app.get("/log/async", response_class=HTMLResponse)
-    async def get_log_async(request: Request, level: str) -> str:
+    async def get_log_async(request: Request, level: str) -> HTMLResponse:
         return get_log(request, level)
 
     return TestClient(app)

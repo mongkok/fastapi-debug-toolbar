@@ -15,7 +15,7 @@ async def client(
     get_index: t.Callable,
 ) -> t.AsyncGenerator[TestClient, None]:
     @app.get("/sql", response_class=HTMLResponse)
-    async def get_sql(request: Request) -> str:
+    async def get_sql(request: Request) -> HTMLResponse:
         user = await create_user(username="test")
         await get_user(user_id=user.id)
         await get_user(user_id=user.id)

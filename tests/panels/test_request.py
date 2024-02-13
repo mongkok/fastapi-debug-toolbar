@@ -14,7 +14,7 @@ def client(app: FastAPI, get_index: t.Callable) -> TestClient:
     app.add_middleware(SessionMiddleware, secret_key="")
 
     @app.get("/session", response_class=HTMLResponse)
-    async def get_session(request: Request) -> str:
+    async def get_session(request: Request) -> HTMLResponse:
         request.session["debug"] = True
         return get_index(request)
 

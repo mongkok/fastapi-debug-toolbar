@@ -36,8 +36,8 @@ def templates() -> Jinja2Templates:
 
 @pytest.fixture
 def get_index(templates: Jinja2Templates) -> t.Callable:
-    def func(request: Request) -> str:
-        return templates.TemplateResponse("index.html", {"request": request})
+    def func(request: Request) -> HTMLResponse:
+        return templates.TemplateResponse(name="index.html", request=request)
 
     return func
 
@@ -47,7 +47,7 @@ def client(app: FastAPI, get_index: t.Callable) -> TestClient:
     app.get("/sync", response_class=HTMLResponse)(get_index)
 
     @app.get("/async", response_class=HTMLResponse)
-    async def get_async(request: Request) -> str:
+    async def get_async(request: Request) -> HTMLResponse:
         return get_index(request)
 
     return TestClient(app)
