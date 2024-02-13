@@ -44,7 +44,7 @@ function pypiIndex() {
       releases: Object.fromEntries(
         Object.entries(pypi.releases).map(function ([k, v], i) {
           return [k, v.length ? v[0].upload_time : null];
-        })
+        }),
       ),
       status: pypi.info.classifiers.find(function (classifier) {
         return classifier.startsWith("Development Status");

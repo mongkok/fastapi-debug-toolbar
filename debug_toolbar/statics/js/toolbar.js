@@ -41,14 +41,14 @@ const fastdt = {
             fastDebug.dispatchEvent(
               new CustomEvent("fastdt.panel.render", {
                 detail: { panelId: panelId },
-              })
+              }),
             );
           });
         } else {
           fastDebug.dispatchEvent(
             new CustomEvent("fastdt.panel.render", {
               detail: { panelId: panelId },
-            })
+            }),
           );
         }
       }
