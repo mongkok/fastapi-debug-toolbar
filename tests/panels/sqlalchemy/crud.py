@@ -1,5 +1,3 @@
-import typing as t
-
 from sqlalchemy import Column
 from sqlalchemy.orm import Session
 
@@ -13,7 +11,7 @@ def create_user(db: Session, username: str) -> models.User:
     return user
 
 
-def get_user(db: Session, user_id: Column[int]) -> t.Optional[models.User]:
+def get_user(db: Session, user_id: Column[int]) -> models.User | None:
     query = db.query(models.User).filter(models.User.id == user_id)
 
     if query is not None:

@@ -47,7 +47,7 @@ class DebugToolbarSettings(BaseSettings):
             "want disabled (but still displayed) by default."
         ),
     )
-    ALLOWED_HOSTS: t.Optional[t.Sequence[str]] = Field(
+    ALLOWED_HOSTS: t.Sequence[str] | None = Field(
         None,
         description=(
             "If it's set, the Debug Toolbar is shown only "

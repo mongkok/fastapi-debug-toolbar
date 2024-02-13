@@ -21,7 +21,7 @@ if t.TYPE_CHECKING:
 
 class DebugToolbar:
     _store: "StoreDT" = OrderedDict()
-    _panel_classes: t.Optional[t.Sequence[t.Type[Panel]]] = None
+    _panel_classes: t.Sequence[t.Type[Panel]] | None = None
 
     def __init__(
         self,
@@ -51,7 +51,7 @@ class DebugToolbar:
 
         self.stats: Stats = {}
         self.server_timing_stats: dict[str, ServerTiming] = {}
-        self.store_id: t.Optional[str] = None
+        self.store_id: str | None = None
 
     @classmethod
     def get_panel_classes(
@@ -84,7 +84,7 @@ class DebugToolbar:
             self._store.popitem(last=False)
 
     @classmethod
-    def fetch(cls: t.Type[DT], store_id: str) -> t.Optional[DT]:
+    def fetch(cls: t.Type[DT], store_id: str) -> DT | None:
         return cls._store.get(store_id)
 
     async def record_stats(self, response: Response) -> None:

@@ -38,7 +38,7 @@ def get_name_from_obj(obj: t.Any) -> str:
     return name
 
 
-def matched_route(request: Request) -> t.Optional[APIRoute]:
+def matched_route(request: Request) -> APIRoute | None:
     for route in request.app.routes:
         match, _ = route.matches(request.scope)
 

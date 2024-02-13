@@ -30,7 +30,7 @@ class DBWrapper:
     async def execute_query(
         self,
         query: str,
-        values: t.Optional[list] = None,
+        values: list | None = None,
     ) -> tuple[int, t.Sequence[dict]]:
         with self.on_execute(self.db, query, values):
             return await self.db.execute_query(query, values)
@@ -46,7 +46,7 @@ class DBWrapper:
     async def execute_query_dict(
         self,
         query: str,
-        values: t.Optional[list] = None,
+        values: list | None = None,
     ) -> list[dict]:
         with self.on_execute(self.db, query, values):
             return await self.db.execute_query_dict(query, values)

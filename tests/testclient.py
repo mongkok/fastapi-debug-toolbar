@@ -14,7 +14,7 @@ class TestClient(BaseTestClient):
     def get_store_id(
         self,
         path: str,
-        method: t.Optional[str] = None,
+        method: str | None = None,
         **kwargs: t.Any,
     ) -> str:
         response = getattr(self, (method or "get"))(path, **kwargs)
