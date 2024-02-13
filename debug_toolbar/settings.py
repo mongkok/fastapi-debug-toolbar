@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import typing as t
 
 from jinja2 import BaseLoader, ChoiceLoader, Environment, PackageLoader
@@ -16,7 +14,7 @@ class DebugToolbarSettings(BaseSettings):
         case_sensitive=False,
     )
 
-    DEFAULT_PANELS: list[str] = Field(
+    DEFAULT_PANELS: t.List[str] = Field(
         [
             "debug_toolbar.panels.versions.VersionsPanel",
             "debug_toolbar.panels.timer.TimerPanel",
@@ -33,7 +31,7 @@ class DebugToolbarSettings(BaseSettings):
             "want included in the toolbar."
         ),
     )
-    PANELS: list[str] = Field(
+    PANELS: t.List[str] = Field(
         [],
         description=(
             "A list of the full Python paths to each panel that you "
@@ -58,7 +56,7 @@ class DebugToolbarSettings(BaseSettings):
         Environment(autoescape=True),
         description="The Jinja environment instance used to render the toolbar.",
     )
-    JINJA_LOADERS: list[BaseLoader] = Field(
+    JINJA_LOADERS: t.List[BaseLoader] = Field(
         [],
         description=(
             "Jinja `BaseLoader` subclasses used to load templates "
@@ -108,7 +106,7 @@ class DebugToolbarSettings(BaseSettings):
         25,
         description="The toolbar keeps up to this many results in memory.",
     )
-    PROFILER_OPTIONS: dict[str, t.Any] = Field(
+    PROFILER_OPTIONS: t.Dict[str, t.Any] = Field(
         {"interval": 0.0001},
         description="A list of arguments can be supplied to the Profiler.",
     )
@@ -119,7 +117,7 @@ class DebugToolbarSettings(BaseSettings):
             "displayed on the `SettingsPanel`."
         ),
     )
-    LOGGING_COLORS: dict[str, Color] = Field(
+    LOGGING_COLORS: t.Dict[str, Color] = Field(
         {
             "CRITICAL": Color("rgba(255, 0, 0, .4)"),
             "ERROR": Color("rgba(255, 0, 0, .2)"),
