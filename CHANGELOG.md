@@ -2,7 +2,7 @@
 
 ### 0.6.2
 
-* **SQLAlchemyPanel**:: Handled HTTPException from dependencies
+* **SQLAlchemyPanel**: Handled HTTPException from dependencies
 * Remove pydantic future annotations
 
 ### 0.6.1
