@@ -44,10 +44,6 @@ class SQLAlchemyPanel(SQLPanel):
         route = request["route"]
 
         if hasattr(route, "dependant"):
-            if "fastapi_astack" not in request:
-                async with AsyncExitStack() as stack:
-                    request.scope["fastapi_astack"] = stack
-
             solved_result = await solve_dependencies(
                 request=request,
                 dependant=route.dependant,
