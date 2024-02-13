@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.6.1
+
+* Removed deprecated `fastapi_astack` scope
+* Fixed `0.6` release tag.
+
 ### 0.6.0
 
 * **SQLAlchemyPanel**: Added `async_exit_stack` arg to `solve_dependencies` function 
