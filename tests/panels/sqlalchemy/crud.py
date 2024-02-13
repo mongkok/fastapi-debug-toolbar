@@ -12,8 +12,4 @@ def create_user(db: Session, username: str) -> models.User:
 
 
 def get_user(db: Session, user_id: Column[int]) -> models.User | None:
-    query = db.query(models.User).filter(models.User.id == user_id)
-
-    if query is not None:
-        return query.first()
-    return query
+    return db.query(models.User).filter(models.User.id == user_id).first()
