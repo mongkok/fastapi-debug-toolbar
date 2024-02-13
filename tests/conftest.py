@@ -5,11 +5,11 @@ import typing as t
 import pytest
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 from debug_toolbar.middleware import DebugToolbarMiddleware
 from debug_toolbar.toolbar import DebugToolbar
 
-from .templates import Jinja2Templates
 from .testclient import TestClient
 
 
