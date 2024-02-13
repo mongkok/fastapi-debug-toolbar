@@ -2,7 +2,7 @@ import typing as t
 from contextlib import AsyncExitStack
 from time import perf_counter
 
-from fastapi import Request, Response
+from fastapi import HTTPException, Request, Response
 from fastapi.dependencies.utils import solve_dependencies
 from sqlalchemy import event
 from sqlalchemy.engine import Connection, Engine, ExecutionContext
@@ -44,20 +44,24 @@ class SQLAlchemyPanel(SQLPanel):
         route = request["route"]
 
         if hasattr(route, "dependant"):
-            solved_result = await solve_dependencies(
-                request=request,
-                dependant=route.dependant,
-                dependency_overrides_provider=route.dependency_overrides_provider,
-                async_exit_stack=AsyncExitStack(),
-            )
-            for value in solved_result[0].values():
-                if isinstance(value, Session):
-                    bind = value.get_bind()
+            try:
+                solved_result = await solve_dependencies(
+                    request=request,
+                    dependant=route.dependant,
+                    dependency_overrides_provider=route.dependency_overrides_provider,
+                    async_exit_stack=AsyncExitStack(),
+                )
+            except HTTPException:
+                pass
+            else:
+                for value in solved_result[0].values():
+                    if isinstance(value, Session):
+                        bind = value.get_bind()
 
-                    if isinstance(bind, Connection):
-                        self.engines.add(bind.engine)
-                    else:
-                        self.engines.add(bind)
+                        if isinstance(bind, Connection):
+                            self.engines.add(bind.engine)
+                        else:
+                            self.engines.add(bind)
 
     async def process_request(self, request: Request) -> Response:
         await self.add_engines(request)
