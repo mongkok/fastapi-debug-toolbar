@@ -9,9 +9,7 @@ class HeadersPanel(Panel):
     template = "panels/headers.html"
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
-        request_headers = dict(request.headers)
-
-        if "cookie" in request_headers:
+        if "cookie" in (request_headers := dict(request.headers)):
             request_headers["cookie"] = "=> see Request panel"
 
         return {

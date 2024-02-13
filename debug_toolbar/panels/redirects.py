@@ -15,9 +15,7 @@ class RedirectsPanel(Panel):
         response = await super().process_request(request)
 
         if 300 <= response.status_code < 400:
-            redirect_to = response.headers.get("Location")
-
-            if redirect_to:
+            if redirect_to := response.headers.get("Location"):
 
                 async def content() -> t.AsyncGenerator[str, None]:
                     yield self.render(

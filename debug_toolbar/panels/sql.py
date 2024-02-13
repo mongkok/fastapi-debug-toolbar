@@ -24,8 +24,7 @@ Stream = t.Generator[t.Tuple[T._TokenType, str], None, None]
 class BoldKeywordFilter:
     def process(self, stream: Stream) -> Stream:
         for token_type, value in stream:
-            is_keyword = token_type in T.Keyword
-            if is_keyword:
+            if is_keyword := token_type in T.Keyword:
                 yield T.Text, "<strong>"
             yield token_type, html.escape(value)
             if is_keyword:
