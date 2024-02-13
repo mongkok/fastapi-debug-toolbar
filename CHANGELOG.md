@@ -6,7 +6,8 @@
 * **DebugToolbarMiddleware**: Removed `settings.ALLOWED_IPS` in favor of `settings.ALLOWED_HOSTS`
 * **VersionsPanel**: Removed `pkg_resources` in favor of `importlib.metadata`
 * Added ruff and bandit and removed black and isort
-* Improved typing
+* Removed deprecated `on_event`
+* Added minor improvements
 
 ### 0.5.0
 
