@@ -4,6 +4,6 @@ set -e
 set -x
 
 scripts/lint
-coverage run -m pytest $@
+coverage run -m pytest tests $@
 coverage report --show-missing
 coverage xml
