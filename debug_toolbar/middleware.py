@@ -52,9 +52,10 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
             name="debug_toolbar.static",
         )
 
-        @self.router.on_event("startup")
-        def set_default_thread_limiter():
-            RunVar("_default_thread_limiter").set(CapacityLimiter(1))
+        _default_thread_limiter: RunVar[CapacityLimiter] = RunVar(
+            "_default_thread_limiter"
+        )
+        _default_thread_limiter.set(CapacityLimiter(1))
 
     async def dispatch(
         self,
