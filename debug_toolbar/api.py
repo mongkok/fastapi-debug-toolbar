@@ -18,7 +18,6 @@ def render_panel(request: Request, store_id: str, panel_id: str) -> t.Any:
         scripts = []
     else:
         panel = toolbar.get_panel_by_id(panel_id)
-        content = panel.content
-        scripts = panel.scripts
+        content, scripts = panel.content, panel.scripts
 
     return {"content": content, "scripts": scripts}
