@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.6.2
+
+* **SQLAlchemyPanel**:: Handled HTTPException from dependencies
+* Remove pydantic future annotations
+
 ### 0.6.1
 
 * Removed deprecated `fastapi_astack` scope
