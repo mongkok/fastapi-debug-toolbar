@@ -41,7 +41,7 @@ class SQLAlchemyPanel(SQLPanel):
         }
         self.add_query(str(context.engine.url), query)
 
-    async def add_engines(self, request: Request):
+    async def add_engines(self, request: Request):  # noqa: C901
         def add_bind_to_engines(bind: Connection | Engine):
             if isinstance(bind, Connection):
                 self.engines.add(bind.engine)
@@ -63,9 +63,9 @@ class SQLAlchemyPanel(SQLPanel):
             else:
                 for value in solved_result[0].values():
                     if isinstance(value, AsyncSession):
-                        value = getattr(value, "sync_session")
+                        value = getattr(value, "sync_session", None)
                     if isinstance(value, Session):
-                        binds = getattr(value, "_Session__binds")
+                        binds = getattr(value, "_Session__binds", None)
                         if binds:
                             for bind in binds.values():
                                 add_bind_to_engines(bind)
