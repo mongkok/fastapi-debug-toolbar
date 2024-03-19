@@ -6,6 +6,7 @@ from fastapi import HTTPException, Request, Response
 from fastapi.dependencies.utils import solve_dependencies
 from sqlalchemy import event
 from sqlalchemy.engine import Connection, Engine, ExecutionContext
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 from debug_toolbar.panels.sql import SQLPanel
@@ -40,7 +41,13 @@ class SQLAlchemyPanel(SQLPanel):
         }
         self.add_query(str(context.engine.url), query)
 
-    async def add_engines(self, request: Request):
+    async def add_engines(self, request: Request):  # noqa: C901
+        def add_bind_to_engines(bind: t.Union[Connection, Engine]):
+            if isinstance(bind, Connection):
+                self.engines.add(bind.engine)
+            else:
+                self.engines.add(bind)
+
         route = request["route"]
 
         if hasattr(route, "dependant"):
@@ -55,13 +62,16 @@ class SQLAlchemyPanel(SQLPanel):
                 pass
             else:
                 for value in solved_result[0].values():
+                    if isinstance(value, AsyncSession):
+                        value = getattr(value, "sync_session", None)
                     if isinstance(value, Session):
-                        bind = value.get_bind()
-
-                        if isinstance(bind, Connection):
-                            self.engines.add(bind.engine)
+                        binds = getattr(value, "_Session__binds", None)
+                        if binds:
+                            for bind in binds.values():
+                                add_bind_to_engines(bind)
                         else:
-                            self.engines.add(bind)
+                            bind = value.get_bind()
+                            add_bind_to_engines(bind)
 
     async def process_request(self, request: Request) -> Response:
         await self.add_engines(request)
