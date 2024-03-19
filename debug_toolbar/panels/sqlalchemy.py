@@ -42,7 +42,7 @@ class SQLAlchemyPanel(SQLPanel):
         self.add_query(str(context.engine.url), query)
 
     async def add_engines(self, request: Request):  # noqa: C901
-        def add_bind_to_engines(bind: Connection | Engine):
+        def add_bind_to_engines(bind: t.Union[Connection, Engine]):
             if isinstance(bind, Connection):
                 self.engines.add(bind.engine)
             else:
