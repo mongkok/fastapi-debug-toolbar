@@ -1,17 +1,16 @@
 from __future__ import annotations
 
 import typing as t
-from contextlib import AsyncExitStack
 from time import perf_counter
 
-from fastapi import HTTPException, Request, Response
-from fastapi.dependencies.utils import solve_dependencies
+from fastapi import Request, Response
 from sqlalchemy import event
 from sqlalchemy.engine import Connection, Engine, ExecutionContext
 from sqlalchemy.exc import UnboundExecutionError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
+from debug_toolbar.dependencies import get_dependencies
 from debug_toolbar.panels.sql import SQLPanel
 
 
@@ -50,32 +49,22 @@ class SQLAlchemyPanel(SQLPanel):
         else:
             self.engines.add(bind)
 
-    async def add_engines(self, request: Request):  # noqa: C901
-        route = request["route"]
+    async def add_engines(self, request: Request):
+        dependencies = await get_dependencies(request)
 
-        if hasattr(route, "dependant"):
-            try:
-                solved_result = await solve_dependencies(
-                    request=request,
-                    dependant=route.dependant,
-                    dependency_overrides_provider=route.dependency_overrides_provider,
-                    async_exit_stack=AsyncExitStack(),
-                )
-            except HTTPException:
-                pass
-            else:
-                for value in solved_result[0].values():
-                    if isinstance(value, AsyncSession):
-                        value = value.sync_session
+        if dependencies is not None:
+            for value in dependencies.values():
+                if isinstance(value, AsyncSession):
+                    value = value.sync_session
 
-                    if isinstance(value, Session):
-                        try:
-                            bind = value.get_bind()
-                        except UnboundExecutionError:
-                            for bind in value._Session__binds.values():  # type: ignore[attr-defined]
-                                self.add_bind(bind)
-                        else:
+                if isinstance(value, Session):
+                    try:
+                        bind = value.get_bind()
+                    except UnboundExecutionError:
+                        for bind in value._Session__binds.values():  # type: ignore[attr-defined]
                             self.add_bind(bind)
+                    else:
+                        self.add_bind(bind)
 
     async def process_request(self, request: Request) -> Response:
         await self.add_engines(request)
