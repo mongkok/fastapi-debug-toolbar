@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for key, value in settings.dict(exclude=exclude).items() %}
+    {% for key, value in settings.model_dump(exclude=exclude).items() %}
       <tr>
         <td>{{ key|escape }}</td>
         <td><code>{{ value|pprint|escape }}</code></td>
