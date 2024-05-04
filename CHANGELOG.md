@@ -1,9 +1,13 @@
 # Changelog
 
+### 0.6.3
+
+* Added support to SQLAlchemy `AsyncSession` and multiple binds
+
 ### 0.6.2
 
 * **SQLAlchemyPanel**: Handled HTTPException from dependencies
-* Remove pydantic future annotations
+* Removed pydantic future annotations
 
 ### 0.6.1
 
