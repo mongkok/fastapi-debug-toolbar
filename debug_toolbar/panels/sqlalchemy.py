@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing as t
 from contextlib import AsyncExitStack
 from time import perf_counter
@@ -41,13 +43,13 @@ class SQLAlchemyPanel(SQLPanel):
         }
         self.add_query(str(context.engine.url), query)
 
-    async def add_engines(self, request: Request):  # noqa: C901
-        def add_bind_to_engines(bind: t.Union[Connection, Engine]):
-            if isinstance(bind, Connection):
-                self.engines.add(bind.engine)
-            else:
-                self.engines.add(bind)
+    def add_bind(self, bind: Connection | Engine):
+        if isinstance(bind, Connection):
+            self.engines.add(bind.engine)
+        else:
+            self.engines.add(bind)
 
+    async def add_engines(self, request: Request):  # noqa: C901
         route = request["route"]
 
         if hasattr(route, "dependant"):
@@ -68,10 +70,10 @@ class SQLAlchemyPanel(SQLPanel):
                         binds = getattr(value, "_Session__binds", None)
                         if binds:
                             for bind in binds.values():
-                                add_bind_to_engines(bind)
+                                self.add_bind(bind)
                         else:
                             bind = value.get_bind()
-                            add_bind_to_engines(bind)
+                            self.add_bind(bind)
 
     async def process_request(self, request: Request) -> Response:
         await self.add_engines(request)
