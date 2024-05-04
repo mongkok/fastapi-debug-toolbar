@@ -8,6 +8,7 @@ from fastapi import HTTPException, Request, Response
 from fastapi.dependencies.utils import solve_dependencies
 from sqlalchemy import event
 from sqlalchemy.engine import Connection, Engine, ExecutionContext
+from sqlalchemy.exc import UnboundExecutionError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
@@ -65,14 +66,15 @@ class SQLAlchemyPanel(SQLPanel):
             else:
                 for value in solved_result[0].values():
                     if isinstance(value, AsyncSession):
-                        value = getattr(value, "sync_session", None)
+                        value = value.sync_session
+
                     if isinstance(value, Session):
-                        binds = getattr(value, "_Session__binds", None)
-                        if binds:
-                            for bind in binds.values():
+                        try:
+                            bind = value.get_bind()
+                        except UnboundExecutionError:
+                            for bind in value._Session__binds.values():  # type: ignore[attr-defined]
                                 self.add_bind(bind)
                         else:
-                            bind = value.get_bind()
                             self.add_bind(bind)
 
     async def process_request(self, request: Request) -> Response:
