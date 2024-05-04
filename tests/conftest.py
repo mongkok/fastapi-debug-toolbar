@@ -36,10 +36,10 @@ def templates() -> Jinja2Templates:
 
 @pytest.fixture
 def get_index(templates: Jinja2Templates) -> t.Callable:
-    def func(request: Request) -> HTMLResponse:
+    def f(request: Request) -> HTMLResponse:
         return templates.TemplateResponse(name="index.html", request=request)
 
-    return func
+    return f
 
 
 @pytest.fixture

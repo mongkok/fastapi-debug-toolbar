@@ -17,8 +17,8 @@ class ProfilingPanel(Panel):
         self.profiler = Profiler(**self.toolbar.settings.PROFILER_OPTIONS)
         is_async = is_coroutine(request["route"].endpoint)
 
-        async def call(func: t.Callable) -> None:
-            await run_in_threadpool(func) if not is_async else func()
+        async def call(f: t.Callable) -> None:
+            await run_in_threadpool(f) if not is_async else f()
 
         await call(self.profiler.start)
 
