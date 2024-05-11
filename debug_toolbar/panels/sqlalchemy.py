@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing as t
 from contextlib import AsyncExitStack
 from time import perf_counter
@@ -6,6 +8,7 @@ from fastapi import HTTPException, Request, Response
 from fastapi.dependencies.utils import solve_dependencies
 from sqlalchemy import event
 from sqlalchemy.engine import Connection, Engine, ExecutionContext
+from sqlalchemy.exc import UnboundExecutionError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
@@ -42,7 +45,7 @@ class SQLAlchemyPanel(SQLPanel):
         self.add_query(str(context.engine.url), query)
 
     async def add_engines(self, request: Request):  # noqa: C901
-        def add_bind_to_engines(bind: t.Union[Connection, Engine]):
+        def add_bind(bind: Connection | Engine):
             if isinstance(bind, Connection):
                 self.engines.add(bind.engine)
             else:
@@ -63,15 +66,16 @@ class SQLAlchemyPanel(SQLPanel):
             else:
                 for value in solved_result[0].values():
                     if isinstance(value, AsyncSession):
-                        value = getattr(value, "sync_session", None)
+                        value = value.sync_session
                     if isinstance(value, Session):
-                        binds = getattr(value, "_Session__binds", None)
-                        if binds:
-                            for bind in binds.values():
-                                add_bind_to_engines(bind)
-                        else:
+                        try:
                             bind = value.get_bind()
-                            add_bind_to_engines(bind)
+                            add_bind(bind)
+                        except UnboundExecutionError:
+                            binds = value._Session__binds
+                            for bind in binds.values():
+                                add_bind(bind)
+
 
     async def process_request(self, request: Request) -> Response:
         await self.add_engines(request)
