@@ -17,9 +17,10 @@ async def get_dependencies(request: Request) -> dict[str, t.Any] | None:
                 dependant=route.dependant,
                 dependency_overrides_provider=route.dependency_overrides_provider,
                 async_exit_stack=AsyncExitStack(),
+                embed_body_fields=False,
             )
         except HTTPException:
             pass
         else:
-            return solved_result[0]
+            return solved_result.values
     return None
