@@ -23,8 +23,10 @@ class VersionsPanel(Panel):
         return scripts
 
     async def generate_stats(self, request: Request, response: Response) -> Stats:
+        dists = {d.metadata.get("name", None): d for d in
+                 metadata.distributions()}
         packages = sorted(
-            metadata.distributions(),
-            key=lambda dist: dist.metadata["name"].lower(),
+            dists,
+            key=lambda dist: dist.lower() if dist else "",
         )
         return {"packages": packages}
