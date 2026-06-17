@@ -9,7 +9,40 @@ import typing as t
 from fastapi import Request
 from fastapi.routing import APIRoute
 from pydantic_extra_types.color import Color
-from starlette.routing import Match
+from starlette.routing import BaseRoute, Match
+
+
+@functools.lru_cache(maxsize=1)
+def _included_router_cls() -> type | None:
+    # FastAPI >= 0.137 uses lazy router inclusion and exposes the internal
+    # node type here. Absent on older versions.
+    try:
+        from fastapi.routing import _IncludedRouter
+
+        return _IncludedRouter
+    except ImportError:
+        return None
+
+
+def iter_effective_routes(
+    routes: t.Iterable[BaseRoute],
+) -> t.Iterator[BaseRoute]:
+    """Yield concrete, matchable/displayable routes.
+
+    FastAPI >= 0.137 introduced lazy router inclusion: ``include_router``
+    appends an internal ``_IncludedRouter`` node (a ``BaseRoute`` with no
+    ``.path``) to ``app.routes`` instead of eagerly flattening the included
+    routes. Expand those nodes into their effective, correctly-prefixed route
+    contexts (each exposing ``.path``/``.name``/``.methods``/``.endpoint`` and
+    a working ``.matches``) so callers can treat every entry uniformly. A
+    no-op on FastAPI versions without ``_IncludedRouter``.
+    """
+    included = _included_router_cls()
+    for route in routes:
+        if included is not None and isinstance(route, included):
+            yield from route.effective_route_contexts()
+        else:
+            yield route
 
 
 def import_string(import_name: str) -> t.Any:
@@ -41,12 +74,15 @@ def get_name_from_obj(obj: t.Any) -> str:
 
 
 def matched_route(request: Request) -> APIRoute | None:
-    for route in request.app.routes:
+    for route in iter_effective_routes(request.app.routes):
         match, _ = route.matches(request.scope)
 
         if match == Match.FULL:
             if hasattr(route, "endpoint"):
-                return route
+                # For expanded _IncludedRouter contexts, hand back the real
+                # underlying route object (FastAPI stores the same in
+                # ``scope["route"]``); plain routes are returned as-is.
+                return getattr(route, "original_route", route)
             break
     return None
 
