@@ -10,6 +10,7 @@ from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.responses import JSONResponse
 from starlette.routing import NoMatchFound
 from starlette.types import ASGIApp
 
@@ -44,6 +45,7 @@ class DebugToolbarMiddleware(BaseHTTPMiddleware):
             self.settings.API_URL,
             name="debug_toolbar.render_panel",
             include_in_schema=False,
+            response_class=JSONResponse,
         )(self.require_show_toolbar(render_panel))
 
         self.router.mount(

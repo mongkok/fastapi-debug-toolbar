@@ -44,10 +44,15 @@ def matched_route(request: Request) -> APIRoute | None:
     for route in request.app.routes:
         match, _ = route.matches(request.scope)
 
-        if match == Match.FULL:
-            if hasattr(route, "endpoint"):
-                return route
-            break
+        if match != Match.FULL:
+            continue
+        if hasattr(route, "endpoint"):
+            return route
+        if contexts := getattr(route, "effective_route_contexts", None):
+            for context in contexts():
+                match, _ = context.matches(request.scope)
+                if match == Match.FULL and hasattr(context.original_route, "endpoint"):
+                    return context.original_route
     return None
 
 
