@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request, status
+from fastapi import APIRouter, FastAPI, Request, status
+from fastapi.responses import HTMLResponse
 
 from debug_toolbar.middleware import show_toolbar
 from debug_toolbar.settings import DebugToolbarSettings
@@ -16,6 +17,18 @@ def test_async(client: TestClient) -> None:
 
 def test_json(client: TestClient) -> None:
     assert client.get_store_id("/openapi.json")
+
+
+def test_included_router(app: FastAPI) -> None:
+    router = APIRouter()
+
+    @router.get("/included", response_class=HTMLResponse)
+    async def included() -> str:
+        return "<html><body>Included</body></html>"
+
+    app.include_router(router)
+
+    assert TestClient(app).get_store_id("/included")
 
 
 def test_404(client: TestClient) -> None:
